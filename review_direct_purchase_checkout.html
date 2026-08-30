@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>System//Field — Project Review</title>
+<style>
+:root{
+  --bg:#07152d;
+  --bg2:#0b1d3d;
+  --panel:rgba(6,17,39,.78);
+  --panel2:rgba(8,20,44,.92);
+  --line:rgba(228,134,199,.46);
+  --line-soft:rgba(255,255,255,.18);
+  --text:#f4f3f7;
+  --muted:#c7c3cf;
+  --pink:#ef83c2;
+  --pink2:#f5a2d1;
+  --purple:#a78bd2;
+  --cyan:#39a8dd;
+  --green:#7de2c5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:#07152d;
+  color:var(--text);
+  font-family:"Courier New",Courier,monospace;
+  overflow-x:hidden;
+}
+button,a,input{font:inherit}
+a{color:inherit}
+
+.scene{position:fixed;inset:0;z-index:-5;overflow:hidden;background:
+  radial-gradient(circle at 82% 8%,rgba(245,171,221,.42),transparent 22%),
+  radial-gradient(circle at 50% 35%,rgba(244,117,196,.22),transparent 20%),
+  linear-gradient(180deg,#0b1830 0%,#10284d 47%,#0a1d3c 100%);
+}
+.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,11,27,.68),transparent 24%,transparent 74%,rgba(6,13,31,.2));}
+.city{position:absolute;bottom:0;width:32%;height:86%;opacity:.72}
+.city.left{left:-5%}.city.right{right:-5%;transform:scaleX(-1)}
+.tower{position:absolute;bottom:0;left:var(--x);width:var(--w);height:var(--h);border:1px solid rgba(120,148,208,.14);border-radius:45% 45% 7% 7%/6% 6% 2% 2%;background:linear-gradient(90deg,rgba(5,14,33,.98),rgba(24,44,83,.94) 48%,rgba(69,47,102,.72) 74%,rgba(8,20,43,.98));box-shadow:inset 14px 0 26px rgba(63,166,220,.06),inset -12px 0 30px rgba(239,111,191,.08),0 0 26px rgba(47,128,180,.08)}
+.tower:before{content:"";position:absolute;left:50%;top:-78px;transform:translateX(-50%);width:3px;height:86px;background:linear-gradient(180deg,rgba(249,180,222,.95),rgba(117,82,177,.48));box-shadow:0 0 16px rgba(245,130,199,.42)}
+.tower:after{content:"";position:absolute;left:-18%;width:136%;height:22px;bottom:var(--ring);border-radius:50%;border:1px solid rgba(111,150,208,.18);background:linear-gradient(180deg,rgba(43,60,104,.74),rgba(12,25,51,.92));box-shadow:0 -1px 0 rgba(246,115,194,.15),0 0 18px rgba(56,132,184,.10)}
+.t1{--x:0%;--w:27%;--h:56%;--ring:24%}.t2{--x:20%;--w:25%;--h:75%;--ring:38%}.t3{--x:42%;--w:19%;--h:63%;--ring:52%}.t4{--x:59%;--w:21%;--h:48%;--ring:29%}.t5{--x:77%;--w:18%;--h:70%;--ring:44%}
+.water{position:absolute;left:17%;right:0;bottom:0;height:42%;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(38,128,182,.18),rgba(7,21,45,.78)),repeating-linear-gradient(90deg,transparent 0 12%,rgba(47,167,219,.08) 12.3%,transparent 13% 25%,rgba(237,91,182,.06) 25.4%,transparent 26%);border-top:1px solid rgba(76,174,222,.15)}
+.haze{position:absolute;inset:0;background:radial-gradient(ellipse at 57% 45%,rgba(250,152,214,.28),transparent 28%),radial-gradient(ellipse at 26% 75%,rgba(236,89,179,.18),transparent 26%);filter:blur(18px)}
+.scan{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.012) 0 1px,transparent 1px 4px);mix-blend-mode:soft-light;z-index:50}
+
+.page{width:min(1120px,100%);margin:0 auto;min-height:100vh;padding:0 28px 46px;position:relative}
+.page:before,.page:after{content:"";position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none}.page:before{left:14px}.page:after{right:14px}
+header{min-height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.23);position:relative;z-index:3}
+.brand{font-weight:700;letter-spacing:.02em;font-size:16px}.dot{color:var(--pink)}
+.status{font-size:12px;color:var(--muted)}.status strong{color:var(--green);font-weight:400}
+
+.top{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;padding:36px 6px 18px}
+.crumb{font-size:12px;color:var(--muted);margin-bottom:30px}.crumb .active{color:var(--pink)}
+h1{font-size:48px;line-height:1.03;font-weight:400;margin:0 0 18px;letter-spacing:-.02em}h1 span{color:var(--pink)}
+.lead{max-width:650px;color:#ebe6ef;line-height:1.65;font-size:14px;margin:0}
+.project-id{border:1px solid var(--line);background:rgba(10,20,45,.66);padding:24px;align-self:end;backdrop-filter:blur(8px)}
+.project-id .label{font-size:11px;color:var(--muted);margin-bottom:10px}.project-id .id{font-size:24px;color:var(--pink);margin-bottom:20px}.project-id .mini{font-size:11px;line-height:1.7;color:#cfc8d7}
+
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 345px;gap:22px;padding:10px 6px 0}
+.stack{display:flex;flex-direction:column;gap:12px}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(7,17,39,.82),rgba(10,22,47,.76));padding:22px 24px;backdrop-filter:blur(8px)}
+.card-head{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:14px}.card-title{font-size:12px;color:var(--pink);letter-spacing:.03em}.card-num{font-size:11px;color:#878198}
+.big-copy{font-size:18px;line-height:1.55;margin:0;color:#faf8fb}
+.small-copy{font-size:13px;line-height:1.6;color:#d0c9d8;margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}.tag{border:1px solid rgba(190,180,206,.34);padding:8px 10px;font-size:11px;background:rgba(17,25,49,.55)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini-card{border:1px solid rgba(190,180,206,.24);padding:15px;background:rgba(8,17,36,.35)}.mini-label{font-size:10px;color:var(--muted);margin-bottom:8px}.mini-value{font-size:13px;line-height:1.5}
+
+.quote{position:sticky;top:18px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(9,18,40,.94),rgba(15,25,52,.9));padding:22px;backdrop-filter:blur(10px);box-shadow:0 20px 50px rgba(0,0,0,.14)}
+.quote-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.quote-kicker{font-size:11px;color:var(--pink);margin-bottom:7px}.quote h2{font-size:22px;font-weight:400;margin:0;line-height:1.15}.badge{border:1px solid rgba(125,226,197,.4);color:var(--green);padding:7px 8px;font-size:10px;white-space:nowrap}
+.price{font-size:48px;line-height:1;color:#fff;margin:22px 0 6px}.price-note{font-size:11px;color:var(--muted);margin-bottom:22px}
+.includes{border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);padding:16px 0;margin-bottom:18px}.include{display:flex;gap:10px;font-size:12px;line-height:1.45;margin:8px 0;color:#ddd7e4}.check{color:var(--pink)}
+.btn{width:100%;border:1px solid var(--line);background:rgba(7,15,34,.52);color:var(--text);padding:15px 16px;cursor:pointer;text-align:center}.btn.primary{background:var(--pink);border-color:var(--pink);color:#111329;font-weight:700}.btn+.btn{margin-top:10px}.btn:hover{filter:brightness(1.05)}
+.quote-foot{font-size:10px;color:#9f99aa;line-height:1.5;margin-top:14px;text-align:center}
+
+.checkout-wrap{display:none;margin:26px 6px 0;border:1px solid var(--line);background:rgba(6,16,37,.86);backdrop-filter:blur(10px)}
+.checkout-wrap.show{display:grid;grid-template-columns:1fr 360px}
+.checkout-main{padding:28px}.checkout-side{border-left:1px solid rgba(255,255,255,.16);padding:28px;background:rgba(12,24,49,.7)}
+.checkout-title{font-size:30px;font-weight:400;margin:0 0 6px}.checkout-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.field{margin-bottom:14px}.field label{display:block;font-size:10px;color:#d6cfdd;margin-bottom:7px}.field input{width:100%;border:1px solid rgba(190,180,206,.34);background:rgba(20,31,56,.85);color:#fff;padding:12px 13px;outline:none}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.secure{font-size:10px;color:var(--green);margin-top:10px}.order-line{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1)}.order-total{display:flex;justify-content:space-between;font-size:18px;padding-top:18px}
+.demo-note{font-size:10px;line-height:1.5;color:#9f99aa;margin-top:14px}
+.success{display:none;padding:34px;text-align:center}.success.show{display:block}.success .ring{width:66px;height:66px;border:1px solid var(--pink);border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;color:var(--pink);font-size:26px;box-shadow:0 0 30px rgba(239,131,194,.14)}
+.success h3{font-size:25px;font-weight:400;margin:0 0 10px}.success p{font-size:13px;color:var(--muted);line-height:1.6;margin:0 auto;max-width:500px}
+
+footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between;gap:20px;font-size:11px;color:#aaa4b5}
+
+@media(max-width:900px){
+  .top,.grid{grid-template-columns:1fr}.project-id{align-self:auto}.quote{position:relative;top:auto}.checkout-wrap.show{grid-template-columns:1fr}.checkout-side{border-left:0;border-top:1px solid rgba(255,255,255,.16)}}
+@media(max-width:600px){
+  .page{padding:0 12px 28px}.page:before{left:4px}.page:after{right:4px}header{min-height:60px}.brand{font-size:14px}.status{font-size:10px}
+  .top{padding:28px 8px 12px}.grid{padding:8px}.crumb{margin-bottom:22px}h1{font-size:38px}.project-id{padding:18px}.card{padding:18px}.split{grid-template-columns:1fr}.quote{padding:19px}.price{font-size:42px}.checkout-wrap{margin:20px 8px 0}.checkout-main,.checkout-side{padding:20px}.row{grid-template-columns:1fr}footer{margin-left:8px;margin-right:8px;flex-direction:column}}
+</style>
+
+<style>
+  .compact-top{padding:34px 6px 12px}
+  .compact-shell{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding:8px 6px 0}
+  .summary-card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(7,17,39,.84),rgba(10,22,47,.78));padding:20px 24px;backdrop-filter:blur(8px)}
+  .summary-kicker{font-size:11px;color:var(--pink);margin-bottom:8px}
+  .summary-card h2{font-size:28px;font-weight:400;margin:0 0 12px}
+  .summary-copy{font-size:15px;line-height:1.7;color:#ece7ef;margin:0}
+  details.answers{border:1px solid rgba(255,255,255,.18);background:rgba(8,18,39,.64);backdrop-filter:blur(8px)}
+  details.answers summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:13px}
+  details.answers summary::-webkit-details-marker{display:none}
+  .answer-count{color:var(--muted);font-size:11px}
+  .answer-grid{border-top:1px solid rgba(255,255,255,.13);padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .answer-item{border:1px solid rgba(190,180,206,.23);background:rgba(8,17,36,.38);padding:14px}
+  .answer-label{font-size:10px;color:var(--pink);margin-bottom:7px}
+  .answer-value{font-size:12px;line-height:1.55;color:#ded8e5}
+  .pricing-head{padding:14px 0 2px}
+  .pricing-head .kicker{font-size:11px;color:var(--pink);margin-bottom:8px}
+  .pricing-head h2{font-size:32px;font-weight:400;margin:0 0 8px}
+  .pricing-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .tier{border:1px solid var(--line);background:linear-gradient(180deg,rgba(8,18,40,.9),rgba(13,24,51,.86));padding:22px;display:flex;flex-direction:column;min-height:650px;backdrop-filter:blur(9px)}
+  .tier.recommended{box-shadow:0 0 0 1px rgba(239,131,194,.18) inset}
+  .tier-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .tier-code{font-size:11px;color:var(--pink);margin-bottom:8px}
+  .tier h3{font-size:22px;font-weight:400;margin:0}
+  .rec{font-size:9px;border:1px solid rgba(125,226,197,.45);color:var(--green);padding:6px 7px}
+  .tier-price{font-size:42px;line-height:1;margin:22px 0 4px}
+  .tier-note{font-size:10px;color:var(--muted);margin-bottom:16px}
+  .tier-desc{font-size:12px;line-height:1.55;color:#d9d3df;margin:0 0 16px}
+  .feature{font-size:11px;line-height:1.45;color:#ddd7e4;margin:8px 0;display:flex;gap:8px}
+  .feature .plus{color:var(--pink)}
+  .best-for{margin:2px 0 16px;padding:10px 11px;border-left:2px solid var(--pink);background:rgba(239,131,194,.055);font-size:10px;line-height:1.5;color:#cfc9d7}
+  .best-for strong{color:var(--pink2);font-weight:400}
+  .feature-group{margin:3px 0 13px;font-size:10px;color:#fff;letter-spacing:.04em}
+  .tier-confidence{margin:14px 0 16px;padding-top:13px;border-top:1px solid rgba(255,255,255,.12);font-size:10px;line-height:1.55;color:#aaa4b6}
+  .tier-confidence strong{color:#e9e4ec;font-weight:400}
+  .purchase{margin-top:auto;width:100%;border:1px solid var(--pink);background:var(--pink);color:#111329;font-weight:700;padding:14px 16px;cursor:pointer}
+  .purchase:hover{background:var(--pink2);border-color:var(--pink2)}
+  .selected{outline:2px solid var(--pink);outline-offset:2px}
+  .selection-bar{margin-top:18px;border:1px solid rgba(255,255,255,.16);background:rgba(8,18,39,.82);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .selection-bar .small{font-size:10px;color:var(--muted)}
+  .selection-bar .choice{font-size:13px;color:#fff;margin-top:4px}
+  .continue{border:1px solid var(--pink);background:var(--pink);color:#111329;padding:13px 18px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .continue:disabled{opacity:.45;cursor:not-allowed}
+  @media(max-width:900px){.tiers{grid-template-columns:1fr}.tier{min-height:0}.answer-grid{grid-template-columns:1fr}}
+  @media(max-width:600px){.compact-top{padding:30px 8px 14px}.compact-shell{padding:6px 8px 0}.summary-card{padding:19px}.pricing-head h2{font-size:27px}.selection-bar{align-items:stretch;flex-direction:column}.continue{width:100%}}
+</style>
+
+</head>
+
+<body>
+<div class="scene" aria-hidden="true">
+  <div class="city left"><div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div></div>
+  <div class="city right"><div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div></div>
+  <div class="water"></div><div class="haze"></div>
+</div>
+<div class="scan"></div>
+
+<main class="page">
+  <header>
+    <div class="brand"><span class="dot">●</span> SYSTEM//FIELD</div>
+    <div class="status">REQUEST STATUS: <strong>READY</strong></div>
+  </header>
+
+  <section class="compact-top">
+    <div class="crumb">01 INTAKE &nbsp;→&nbsp; <span class="active">02 REVIEW + CHOOSE</span> &nbsp;→&nbsp; 03 CHECKOUT</div>
+    <h1>YOUR REQUEST IS<br><span>READY.</span></h1>
+    <p class="lead">Review your request, then choose your build.</p>
+  </section>
+
+  <section class="compact-shell">
+    <div class="summary-card">
+      <div class="summary-kicker">● WHAT WE UNDERSTAND</div>
+      <p class="summary-copy" id="understandText">You want a better way to organize and compare remote job opportunities, keep track of applications, and quickly see what needs your attention.</p>
+    </div>
+
+    <details class="answers">
+      <summary>
+        <span>REVIEW MY ANSWERS</span>
+        <span class="answer-count">7 QUESTIONS COMPLETED ↓</span>
+      </summary>
+      <div class="answer-grid">
+        <div class="answer-item"><div class="answer-label">WHAT YOU NEED HELP WITH</div><div class="answer-value" id="aProblem">—</div></div>
+        <div class="answer-item"><div class="answer-label">WHAT'S MAKING IT HARD</div><div class="answer-value" id="aDifficult">—</div></div>
+        <div class="answer-item"><div class="answer-label">WHAT WOULD HELP</div><div class="answer-value" id="aSuccess">—</div></div>
+        <div class="answer-item"><div class="answer-label">WHAT YOU HAVE</div><div class="answer-value" id="aMaterials">—</div></div>
+        <div class="answer-item"><div class="answer-label">WHAT YOU WANT TO DO</div><div class="answer-value" id="aActions">—</div></div>
+        <div class="answer-item"><div class="answer-label">HOW YOU'LL USE IT</div><div class="answer-value" id="aUse">—</div></div>
+        <div class="answer-item"><div class="answer-label">STYLE</div><div class="answer-value" id="aStyle">—</div></div>
+      </div>
+    </details>
+
+    <div class="pricing-head">
+      <div class="kicker">● CHOOSE YOUR BUILD</div>
+      <h2>HOW MUCH HELP DO YOU NEED?</h2>
+    </div>
+
+    <div class="tiers">
+      <article class="tier" data-code="FIELD//01" data-tier="CORE" data-price="50">
+        <div class="tier-top">
+          <div><div class="tier-code">FIELD//01</div><h3>CORE</h3></div>
+        </div>
+        <div class="tier-price">$50</div>
+        <div class="tier-note">ONE-TIME PROJECT</div>
+        <p class="tier-desc">A focused project built around one clear thing you need researched, organized, simplified, or created.</p>
+        <div class="best-for"><strong>BEST FOR:</strong> One clear request — like researching a topic, organizing information, comparing options, or building a simple custom solution.</div>
+        <div class="feature-group">WHAT YOU CAN GET</div>
+        <div class="feature"><span class="plus">+</span><span>Focused research around one question or goal</span></div>
+        <div class="feature"><span class="plus">+</span><span>Organized findings, notes, links, or information</span></div>
+        <div class="feature"><span class="plus">+</span><span>Side-by-side comparisons when useful</span></div>
+        <div class="feature"><span class="plus">+</span><span>Simple recommendations or takeaways</span></div>
+        <div class="feature"><span class="plus">+</span><span>A clean tracker, list, or simple custom tool if needed</span></div>
+        <div class="feature"><span class="plus">+</span><span>Clear categories, labels, and structure</span></div>
+        <div class="feature"><span class="plus">+</span><span>A finished result built around your specific request</span></div>
+        <div class="tier-confidence"><strong>GOOD TO KNOW:</strong> CORE is for one focused outcome. Your project does not have to include a tool — research or organization by itself can fit here.</div>
+        <button class="purchase" type="button">PURCHASE →</button>
+      </article>
+
+      <article class="tier recommended" data-code="FIELD//02" data-tier="SYSTEM" data-price="100">
+        <div class="tier-top">
+          <div><div class="tier-code">FIELD//02</div><h3>SYSTEM</h3></div>
+          <div class="rec">RECOMMENDED</div>
+        </div>
+        <div class="tier-price">$100</div>
+        <div class="tier-note">ONE-TIME PROJECT</div>
+        <p class="tier-desc">For projects with several connected needs — deeper research, more organization, more comparison, or a more complete custom setup.</p>
+        <div class="best-for"><strong>BEST FOR:</strong> Projects where you need more depth — like research plus organization, multiple comparisons, several moving parts, or a more complete custom solution.</div>
+        <div class="feature-group">EVERYTHING IN CORE, PLUS</div>
+        <div class="feature"><span class="plus">+</span><span>Deeper research across multiple questions, sources, or options</span></div>
+        <div class="feature"><span class="plus">+</span><span>More detailed comparisons, sorting, and prioritization</span></div>
+        <div class="feature"><span class="plus">+</span><span>Multiple organized sections for different parts of the project</span></div>
+        <div class="feature"><span class="plus">+</span><span>Ratings, scoring, or calculations when useful</span></div>
+        <div class="feature"><span class="plus">+</span><span>Progress, status, dates, deadlines, or next-step tracking</span></div>
+        <div class="feature"><span class="plus">+</span><span>Clear summaries showing what matters most</span></div>
+        <div class="feature"><span class="plus">+</span><span>A fuller custom tool or dashboard when the project calls for one</span></div>
+        <div class="feature"><span class="plus">+</span><span>More control over how everything is structured and presented</span></div>
+        <div class="tier-confidence"><strong>GOOD TO KNOW:</strong> SYSTEM is the best fit for most projects because it gives enough room to research, organize, compare, and build as needed without overcomplicating the result.</div>
+        <button class="purchase" type="button">PURCHASE →</button>
+      </article>
+
+      <article class="tier" data-code="FIELD//03" data-tier="COMMAND" data-price="150">
+        <div class="tier-top">
+          <div><div class="tier-code">FIELD//03</div><h3>COMMAND</h3></div>
+        </div>
+        <div class="tier-price">$150</div>
+        <div class="tier-note">ONE-TIME PROJECT</div>
+        <p class="tier-desc">For larger projects with multiple parts, more research, more information, and a deeper finished result.</p>
+        <div class="best-for"><strong>BEST FOR:</strong> Larger personal or business projects involving multiple research areas, lots of information, several decisions, or a combined research + organization + custom tool setup.</div>
+        <div class="feature-group">EVERYTHING IN SYSTEM, PLUS</div>
+        <div class="feature"><span class="plus">+</span><span>Broader or deeper research across more sources and categories</span></div>
+        <div class="feature"><span class="plus">+</span><span>Multiple connected sections covering different parts of the project</span></div>
+        <div class="feature"><span class="plus">+</span><span>More advanced comparisons, scoring, calculations, or custom rules</span></div>
+        <div class="feature"><span class="plus">+</span><span>Handles larger amounts of information without becoming messy</span></div>
+        <div class="feature"><span class="plus">+</span><span>Detailed summaries, findings, and at-a-glance views</span></div>
+        <div class="feature"><span class="plus">+</span><span>Deeper tracking across clients, jobs, projects, money, inventory, or other moving parts</span></div>
+        <div class="feature"><span class="plus">+</span><span>Custom sections built around the way you actually need to use the result</span></div>
+        <div class="feature"><span class="plus">+</span><span>A complete dashboard or interactive tool when it makes sense</span></div>
+        <div class="feature"><span class="plus">+</span><span>More room for unique requests, custom structure, and presentation</span></div>
+        <div class="tier-confidence"><strong>GOOD TO KNOW:</strong> COMMAND is for larger projects where the answer may involve research, organization, comparison, and a custom tool working together — not just one simple deliverable.</div>
+        <button class="purchase" type="button">PURCHASE →</button>
+      </article>
+    </div>
+
+  </section>
+
+  <footer>
+    <div><span class="dot">●</span> OBSIDIAN//SYSTEMS — BUILDING CLARITY OUT OF CHAOS.</div>
+    <div>REVIEW + BUILD SELECTION</div>
+  </footer>
+</main>
+
+<script>
+const tiers=[...document.querySelectorAll('.tier')];
+const selectionText=document.getElementById('selectionText');
+const continueBtn=document.getElementById('continueBtn');
+
+function selectTier(card){
+  tiers.forEach(x=>x.classList.remove('selected'));
+  card.classList.add('selected');
+  const choice={
+    code:card.dataset.code,
+    tier:card.dataset.tier,
+    price:Number(card.dataset.price)
+  };
+  localStorage.setItem('systemFieldSelectedTier',JSON.stringify(choice));
+  if(selectionText) selectionText.textContent=`${choice.code} — ${choice.tier} — $${choice.price}`;
+  if(continueBtn) continueBtn.disabled=false;
+}
+
+tiers.forEach(card=>{
+  card.querySelector('.purchase').addEventListener('click',()=>{
+    selectTier(card);
+    window.location.href='checkout.html';
+  });
+});
+
+if(continueBtn){
+  continueBtn.addEventListener('click',()=>{
+    window.location.href='checkout.html';
+  });
+}
+
+try{
+  const saved=JSON.parse(localStorage.getItem('systemFieldIntake')||'null');
+  if(saved){
+    const join=v=>Array.isArray(v)&&v.length?v.join(', '):(v||'—');
+    document.getElementById('aProblem').textContent=join(saved.problem);
+    document.getElementById('aDifficult').textContent=join(saved.difficult);
+    document.getElementById('aSuccess').textContent=join(saved.success);
+    document.getElementById('aMaterials').textContent=join(saved.materials);
+    document.getElementById('aActions').textContent=join(saved.actions);
+    document.getElementById('aUse').textContent=[saved.device,saved.users].filter(Boolean).join(' / ')||'—';
+    document.getElementById('aStyle').textContent=join(saved.style);
+
+    if(saved.problem){
+      let sentence=String(saved.problem).trim();
+      document.getElementById('understandText').textContent=sentence;
+    }
+  }
+
+  const prior=JSON.parse(localStorage.getItem('systemFieldSelectedTier')||'null');
+  if(prior){
+    const match=tiers.find(x=>x.dataset.code===prior.code);
+    if(match) selectTier(match);
+  }
+}catch(e){}
+</script>
+</body>
+</html>
