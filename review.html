@@ -143,7 +143,7 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   @media(max-width:900px){.tiers{grid-template-columns:1fr}.tier{min-height:0}.answer-grid{grid-template-columns:1fr}}
   @media(max-width:600px){.compact-top{padding:30px 8px 14px}.compact-shell{padding:6px 8px 0}.summary-card{padding:19px}.pricing-head h2{font-size:27px}.selection-bar{align-items:stretch;flex-direction:column}.continue{width:100%}}
 </style>
-
+<script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -267,10 +267,36 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
         <div class="small">YOUR SELECTION</div>
         <div class="choice" id="selectionText">Choose an option above to continue.</div>
       </div>
-      <button class="continue" id="continueBtn" type="button" disabled>CONTINUE TO CHECKOUT →</button>
+      
     </div>
   </section>
+<section id="stripeCheckout" style="display:none; margin:24px 0;">
+  <div class="selection-bar" style="display:block;">
+    
+    <div class="small">SECURE PAYMENT</div>
 
+    <div style="font-size:28px; margin:10px 0 22px;">
+      TOTAL: <span id="stripeAmount">$0</span>
+    </div>
+
+    <div id="payment-element" style="margin-bottom:20px;"></div>
+
+    <button
+      class="continue"
+      id="payStripeBtn"
+      type="button"
+      style="width:100%;"
+    >
+      COMPLETE PAYMENT →
+    </button>
+
+    <div
+      id="paymentMessage"
+      style="margin-top:14px; font-size:12px;"
+    ></div>
+
+  </div>
+</section>
   <footer>
     <div><span class="dot">●</span> OBSIDIAN//SYSTEMS — BUILDING CLARITY OUT OF CHAOS.</div>
     <div>REVIEW + BUILD SELECTION</div>
@@ -280,7 +306,7 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
 <script>
 const tiers=[...document.querySelectorAll('.tier')];
 const selectionText=document.getElementById('selectionText');
-const continueBtn=document.getElementById('continueBtn');
+
 
 function selectTier(card){
   tiers.forEach(x=>x.classList.remove('selected'));
@@ -292,17 +318,127 @@ function selectTier(card){
   };
   localStorage.setItem('systemFieldSelectedTier',JSON.stringify(choice));
   selectionText.textContent=`${choice.code} — ${choice.tier} — $${choice.price}`;
-  continueBtn.disabled=false;
+
 }
 
 tiers.forEach(card=>{
-  card.querySelector('.purchase').addEventListener('click',()=>selectTier(card));
-});
+  card.querySelector('.purchase').addEventListener('click',async()=>{
+    selectTier(card);
 
-continueBtn.addEventListener('click',()=>{
-  window.location.href='system_field_checkout_page.html';
-});
+    const choice={
+      code:card.dataset.code,
+      tier:card.dataset.tier,
+      price:Number(card.dataset.price)
+    };
 
+    localStorage.setItem(
+      'systemFieldSelectedTier',
+      JSON.stringify(choice)
+    );
+
+    document.getElementById('stripeCheckout').style.display='block';
+    document.getElementById('stripeCheckout').scrollIntoView({
+      behavior:'smooth',
+      block:'start'
+    });
+
+    await startStripeCheckout(choice);
+  });
+});
+let stripe;
+let elements;
+let paymentElement;
+
+async function startStripeCheckout(choice){
+  try{
+    const response = await fetch(
+      'https://monos-beta.vercel.app/api/create-checkout-session',
+      {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          tier:choice.tier
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if(!response.ok || !data.clientSecret){
+      throw new Error(data.error || 'Unable to start checkout');
+    }
+
+    if(!stripe){
+      stripe = Stripe('pk_test_51SZR11JY6klL7p4GnNnVWrHI0Mpuf27kNXXn0DEsv2j5kfjGgfoVRhZXQ6gmyiXZ14UZKT7nkcZmjcfTDJhDNFoI00olhHKkk9');
+    }
+
+    if(paymentElement){
+      paymentElement.destroy();
+    }
+
+    elements = stripe.elements({
+      clientSecret:data.clientSecret,
+      appearance:{
+        theme:'night'
+      }
+    });
+
+    paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    document.getElementById('stripeAmount').textContent =
+      `$${choice.price}`;
+
+  }catch(error){
+    console.error(error);
+    document.getElementById('paymentMessage').textContent =
+      'Unable to load payment. Please try again.';
+  }
+}
+  document.getElementById('payStripeBtn').addEventListener('click', async()=>{
+  const btn = document.getElementById('payStripeBtn');
+  const message = document.getElementById('paymentMessage');
+
+  if(!stripe || !elements){
+    message.textContent = 'Payment form is not ready yet.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'PROCESSING...';
+  message.textContent = '';
+
+  const {error, paymentIntent} = await stripe.confirmPayment({
+    elements,
+    redirect:'if_required'
+  });
+
+  if(error){
+    message.textContent = error.message;
+    btn.disabled = false;
+    btn.textContent = 'COMPLETE PAYMENT →';
+    return;
+  }
+
+  if(paymentIntent && paymentIntent.status === 'succeeded'){
+    message.textContent = 'PAYMENT SUCCESSFUL ✓';
+    btn.textContent = 'PAYMENT COMPLETE ✓';
+
+    localStorage.setItem(
+      'systemFieldPaymentStatus',
+      JSON.stringify({
+        paid:true,
+        paymentIntent:paymentIntent.id
+      })
+    );
+  }else{
+    message.textContent = 'Payment is being processed.';
+    btn.disabled = false;
+    btn.textContent = 'COMPLETE PAYMENT →';
+  }
+});
 try{
   const saved=JSON.parse(localStorage.getItem('systemFieldIntake')||'null');
   if(saved){
