@@ -461,9 +461,11 @@ document.getElementById('sendBtn').addEventListener('click',()=>{
     files:[...fileInput.files].map(f=>f.name)
   };
   localStorage.setItem('systemFieldIntake',JSON.stringify(payload));
-  const t=document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),1700);
+const t=document.getElementById('toast');
+t.classList.add('show');
+setTimeout(()=>{
+  window.location.href='review.html';
+},450);
 });
 </script>
 </body>
