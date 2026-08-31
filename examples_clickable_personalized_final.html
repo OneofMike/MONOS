@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Examples — MONOS</title>
+<style>
+:root{
+  --bg:#07152d;--bg2:#0b1d3d;--panel:rgba(6,17,39,.76);--panel2:rgba(8,20,44,.9);
+  --line:rgba(228,134,199,.46);--line-soft:rgba(255,255,255,.20);--text:#f4f3f7;
+  --muted:#c7c3cf;--pink:#ef83c2;--pink2:#f5a2d1;--purple:#a78bd2;--cyan:#39a8dd;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#07152d;color:var(--text);font-family:"Courier New",Courier,monospace;overflow-x:hidden}button,a{font:inherit}a{color:inherit}
+.scene{position:fixed;inset:0;z-index:-5;overflow:hidden;background:radial-gradient(circle at 82% 8%,rgba(245,171,221,.42),transparent 22%),radial-gradient(circle at 50% 35%,rgba(244,117,196,.22),transparent 20%),linear-gradient(180deg,#0b1830 0%,#10284d 47%,#0a1d3c 100%)}
+.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,11,27,.65),transparent 24%,transparent 74%,rgba(6,13,31,.18))}.city{position:absolute;bottom:0;width:32%;height:86%}.city.left{left:-5%}.city.right{right:-5%;transform:scaleX(-1)}.tower{position:absolute;bottom:0;left:var(--x);width:var(--w);height:var(--h);border:1px solid rgba(120,148,208,.14);border-radius:45% 45% 7% 7%/6% 6% 2% 2%;background:linear-gradient(90deg,rgba(5,14,33,.98),rgba(24,44,83,.94) 48%,rgba(69,47,102,.72) 74%,rgba(8,20,43,.98));box-shadow:inset 14px 0 26px rgba(63,166,220,.06),inset -12px 0 30px rgba(239,111,191,.08),0 0 26px rgba(47,128,180,.08)}
+.tower:before{content:"";position:absolute;left:50%;top:-78px;transform:translateX(-50%);width:3px;height:86px;background:linear-gradient(180deg,rgba(249,180,222,.95),rgba(117,82,177,.48));box-shadow:0 0 16px rgba(245,130,199,.42)}.tower:after{content:"";position:absolute;left:-18%;width:136%;height:22px;bottom:var(--ring);border-radius:50%;border:1px solid rgba(111,150,208,.18);background:linear-gradient(180deg,rgba(43,60,104,.74),rgba(12,25,51,.92));box-shadow:0 -1px 0 rgba(246,115,194,.15),0 0 18px rgba(56,132,184,.10)}
+.t1{--x:0%;--w:27%;--h:56%;--ring:24%}.t2{--x:20%;--w:25%;--h:75%;--ring:38%}.t3{--x:42%;--w:19%;--h:63%;--ring:52%}.t4{--x:59%;--w:21%;--h:48%;--ring:29%}.t5{--x:77%;--w:18%;--h:70%;--ring:44%}.water{position:absolute;left:17%;right:0;bottom:0;height:42%;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(38,128,182,.18),rgba(7,21,45,.78)),repeating-linear-gradient(90deg,transparent 0 12%,rgba(47,167,219,.08) 12.3%,transparent 13% 25%,rgba(237,91,182,.06) 25.4%,transparent 26%);border-top:1px solid rgba(76,174,222,.15)}.bridge{position:absolute;left:20%;right:-6%;bottom:36%;height:6%;transform:perspective(900px) rotateX(65deg);transform-origin:bottom;background:linear-gradient(180deg,rgba(21,45,79,.18),rgba(6,18,40,.58));border-top:1px solid rgba(68,176,224,.18);border-bottom:1px solid rgba(244,118,194,.13)}.haze{position:absolute;inset:0;background:radial-gradient(ellipse at 57% 45%,rgba(250,152,214,.28),transparent 28%),radial-gradient(ellipse at 26% 75%,rgba(236,89,179,.18),transparent 26%);filter:blur(18px)}
+.page{width:min(1024px,100%);margin:0 auto;min-height:100vh;position:relative;padding:0 28px 26px;background:linear-gradient(90deg,rgba(4,13,31,.20),transparent 28%,transparent 72%,rgba(6,14,30,.08))}.page:before,.page:after{content:"";position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.14);pointer-events:none}.page:before{left:14px}.page:after{right:14px}
+header{min-height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.26);position:relative;z-index:3}.brand{font-weight:700;letter-spacing:.02em;font-size:16px}.dot{color:var(--pink);margin-right:9px}nav{display:flex;align-items:center;gap:34px;font-size:14px}nav a{text-decoration:none}.nav-cta{border:1px solid rgba(239,122,189,.36);padding:12px 24px}.nav-cta:hover{background:rgba(239,122,189,.12)}
+.intro{padding:52px 22px 48px;border-bottom:1px solid rgba(255,255,255,.2);position:relative}.crumb{font-size:13px;margin-bottom:48px}.intro h1{font-size:54px;line-height:1.06;font-weight:400;margin:0 0 20px}.intro h1 span{color:var(--pink)}.rule{width:50px;height:2px;background:var(--pink);margin:20px 0 24px}.lead{max-width:690px;font-size:16px;line-height:1.7;color:#f1edf4}.lead strong{color:var(--pink2);font-weight:400}
+.section{padding:44px 22px;border-bottom:1px solid rgba(255,255,255,.18)}.section-title{font-size:14px;letter-spacing:.02em;margin-bottom:24px}.section-title .dot{color:var(--pink)}
+.case{display:grid;grid-template-columns:1.08fr .92fr;border:1px solid rgba(239,131,194,.38);background:linear-gradient(135deg,rgba(5,14,33,.84),rgba(20,28,62,.72));margin-bottom:22px;min-height:330px;box-shadow:0 18px 42px rgba(0,0,0,.18)}.case-copy{padding:28px}.case-num{color:var(--pink);font-size:12px;margin-bottom:18px}.case h2{font-size:28px;font-weight:400;margin:0 0 13px;line-height:1.15}.case p{color:#d8d2dc;line-height:1.62;font-size:14px;margin:0 0 18px}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.tag{border:1px solid rgba(167,139,210,.45);padding:7px 9px;color:#d9ccec;font-size:11px;background:rgba(20,17,45,.28)}
+.case-visual{position:relative;border-left:1px solid rgba(255,255,255,.14);padding:24px;background:linear-gradient(180deg,rgba(9,21,47,.88),rgba(6,16,36,.92));overflow:hidden}.case-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(239,131,194,.04));pointer-events:none}.terminal-head{display:flex;justify-content:space-between;color:#b8adc0;font-size:10px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:11px;margin-bottom:16px}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{border:1px solid rgba(57,168,221,.28);padding:12px;background:rgba(10,28,58,.55)}.metric small{display:block;color:#a9a4b0;font-size:9px;margin-bottom:7px}.metric b{font-size:18px;font-weight:400;color:#f4f3f7}.metric.pink b{color:var(--pink2)}.bar{height:7px;background:rgba(255,255,255,.08);margin-top:12px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));width:var(--w)}.list-row{display:grid;grid-template-columns:1.4fr .7fr .7fr;gap:8px;border-bottom:1px solid rgba(255,255,255,.10);padding:10px 0;font-size:10px;color:#d8d2dc}.list-row:first-of-type{color:#958ba0}.status{color:var(--pink2)}
+.built-note{display:inline-flex;gap:7px;align-items:center;color:#cfc5d3;font-size:11px;margin-bottom:12px}.built-note span{width:6px;height:6px;background:var(--pink);border-radius:50%;box-shadow:0 0 8px var(--pink)}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.problem{border:1px solid rgba(255,255,255,.18);padding:20px;background:rgba(6,17,39,.62);min-height:165px}.problem .type{color:var(--pink);font-size:10px;margin-bottom:14px}.problem h3{font-size:15px;font-weight:400;margin:0 0 10px}.problem p{font-size:12px;line-height:1.55;color:#cfc9d3;margin:0}
+.cta-block{text-align:center;padding:58px 22px 64px}.cta-block h2{font-size:34px;font-weight:400;margin:0 0 16px}.cta-block p{max-width:620px;margin:0 auto 28px;color:#d8d2dc;line-height:1.6}.btn{display:inline-block;border:1px solid var(--line);padding:16px 22px;text-align:center;text-decoration:none;background:rgba(7,15,34,.52)}.btn.primary{background:var(--pink);color:#101426;border-color:var(--pink);font-weight:700}.btn:hover{filter:brightness(1.05)}
+footer{display:flex;justify-content:space-between;gap:20px;padding:28px 22px 6px;font-size:11px;color:#bbb3c1;line-height:1.7}.footer-right{text-align:right}.footer-cta{color:#f2d6e7;text-decoration:none}
+@media(max-width:760px){.page{padding:0 16px 20px}.page:before{left:7px}.page:after{right:7px}header{min-height:64px}.brand{font-size:13px}nav{gap:12px;font-size:10px}nav a:nth-child(2){display:none}.nav-cta{padding:9px 11px}.intro{padding:38px 10px 38px}.crumb{margin-bottom:34px}.intro h1{font-size:39px}.lead{font-size:14px}.section{padding:34px 10px}.case{grid-template-columns:1fr}.case-copy{padding:22px}.case h2{font-size:23px}.case-visual{border-left:0;border-top:1px solid rgba(255,255,255,.14);min-height:280px}.problem-grid{grid-template-columns:1fr}.cta-block{padding:44px 10px 50px}.cta-block h2{font-size:28px}footer{flex-direction:column}.footer-right{text-align:left}}
+
+
+.examples-shell{
+  max-width:1180px;
+  margin:0 auto;
+  padding:72px 28px 96px;
+}
+.examples-head{
+  margin-bottom:42px;
+}
+.examples-kicker{
+  color:var(--pink,#ef83c2);
+  letter-spacing:.18em;
+  font-size:12px;
+  margin-bottom:14px;
+}
+.examples-title{
+  font-size:clamp(38px,6vw,76px);
+  line-height:.95;
+  margin:0 0 18px;
+}
+.examples-sub{
+  max-width:720px;
+  opacity:.82;
+  line-height:1.65;
+}
+.project-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+}
+.project-card{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(5,14,35,.72);
+  backdrop-filter:blur(10px);
+  padding:28px;
+  min-height:265px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 0 0 1px rgba(239,131,194,.03) inset;
+}
+.project-index{
+  color:var(--pink,#ef83c2);
+  font-size:12px;
+  letter-spacing:.14em;
+  margin-bottom:28px;
+}
+.project-name{
+  font-size:24px;
+  line-height:1.15;
+  margin:0 0 14px;
+}
+.project-desc{
+  opacity:.8;
+  line-height:1.6;
+  margin:0 0 28px;
+}
+.view-project{
+  margin-top:auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:max-content;
+  min-width:150px;
+  padding:13px 18px;
+  background:var(--pink,#ef83c2);
+  color:#07152d !important;
+  text-decoration:none;
+  font-weight:800;
+  letter-spacing:.05em;
+  border:1px solid var(--pink,#ef83c2);
+  transition:.18s ease;
+}
+.view-project:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+}
+.examples-note{
+  margin-top:28px;
+  font-size:12px;
+  opacity:.56;
+}
+@media(max-width:850px){
+  .project-grid{grid-template-columns:1fr;}
+  .project-card{min-height:230px;}
+}
+
+.personalization-note{
+  max-width:900px;
+  margin:0 0 28px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.75;
+}
+
+</style>
+</head>
+<body>
+
+<header><div class="brand"><span class="dot">●</span>SYSTEM//FIELD</div><nav><a href="index.html">HOME</a><a href="examples.html">EXAMPLES</a><a class="nav-cta" href="intake.html">GET STARTED</a></nav></header>
+<main class="examples-shell">
+  <section class="examples-head">
+    <div class="examples-kicker">● SELECTED WORK</div>
+    <h1 class="examples-title">SEE WHAT<br>I'VE BUILT.</h1>
+    <p class="examples-sub">A few examples of how I turn research, information, and messy problems into something clear and usable.</p>
+  </section>
+
+  
+  <p class="personalization-note">I don’t start with a solution and try to fit you into it. I start with your situation and figure out what should exist.</p>
+
+  <section class="project-grid">
+
+<article class="project-card">
+        <div class="project-index">PERSONAL//01</div>
+        <h2 class="project-name">ANDRE // FINDING HIS NEXT CAR</h2>
+        <p class="project-desc">Andre was trying to choose his next performance car without buying something that looked good on paper but became expensive to own. He was concerned about mileage, reliability, hidden repair risks, maintenance costs, AWD, and whether each car was actually worth the money. He needed all of that research organized into one place so he could compare the cars clearly before buying.</p>
+        <a class="view-project" href="andre_car_buying_review.html">VIEW PROJECT →</a>
+      </article>
+
+<article class="project-card">
+        <div class="project-index">BUSINESS//02</div>
+        <h2 class="project-name">NIA // RUNNING HER BAKERY</h2>
+        <p class="project-desc">Nia was running custom cake orders while working a full-time job, and too much of the business was scattered across Instagram DMs, payment apps, design changes, and pickup messages. She was stressed about missing deposits, forgetting changes, underpricing orders, and losing track of what needed to be baked or bought. She needed one place to organize each order from the first message through payment, production, and pickup.</p>
+        <a class="view-project" href="nia_bakery.html">VIEW PROJECT →</a>
+      </article>
+
+<article class="project-card">
+        <div class="project-index">PERSONAL//03</div>
+        <h2 class="project-name">ETHAN // CHOOSING WHERE TO LIVE</h2>
+        <p class="project-desc">Ethan wanted to move but had a very specific mix of things that mattered to him: warm weather, affordable rent, serious boxing or Muay Thai gyms, and easy access to a major airport. The problem was that every city looked good for a different reason, and comparing them across dozens of scattered searches was getting messy. He needed the research organized around his actual priorities so he could see which city fit his life best.</p>
+        <a class="view-project" href="ethan_relocation.html">VIEW PROJECT →</a>
+      </article>
+
+<article class="project-card">
+        <div class="project-index">BUSINESS//04</div>
+        <h2 class="project-name">TREVOR // SIDE BUSINESS ANALYSIS</h2>
+        <p class="project-desc">Trevor had $4,000 saved and wanted to start a weekend side business without wasting the money on the wrong idea. He was comparing detailing, pressure washing, carpet cleaning, and junk removal, but was concerned about startup costs, demand, job time, equipment, break-even, and whether any of them realistically fit around his full-time job. He needed the numbers organized into a decision system that showed what each option would actually require.</p>
+        <a class="view-project" href="trevor_side_business.html">VIEW PROJECT →</a>
+      </article>
+
+<article class="project-card">
+        <div class="project-index">PERSONAL//05</div>
+        <h2 class="project-name">BETWEEN TWO HOMES</h2>
+        <p class="project-desc">Ava lives between two homes, and her dad was constantly trying to remember what she already had at each house, what needed to travel with her, and what had to be ready before the next handoff. The repeated checklists and last-minute searching were becoming stressful and easy to get wrong. He needed a simple way to organize Ava’s belongings and automatically see what needed attention before every switch.</p>
+        <a class="view-project" href="between_two_homes.html">VIEW PROJECT →</a>
+      </article>
+
+<article class="project-card">
+        <div class="project-index">BUSINESS//06</div>
+        <h2 class="project-name">JADE // SKIN STUDIO</h2>
+        <p class="project-desc">Jade was running her esthetics studio on her own and trying to grow without filling her schedule with services that were not actually making enough money. She was concerned about open appointment gaps, treatment costs, product restocks, monthly expenses, rebooking, and which services were worth pushing. She needed her bookings, service economics, expenses, and monthly priorities organized in one working view.</p>
+        <a class="view-project" href="jade_skin_studio.html">VIEW PROJECT →</a>
+      </article>
+
+  </section>
+</main>
+
+</body>
+</html>
