@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System//Field Intake</title>
+<style>
+:root{
+  --pink:#ef7abd;
+  --pink2:#f4a0cf;
+  --text:#f3eff7;
+  --muted:#b9b2c5;
+  --line:rgba(190,180,206,.34);
+  --panel:rgba(10,19,41,.84);
+  --panel2:rgba(17,28,53,.76);
+  --bg:#081229;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Courier New",Courier,monospace;
+  overflow-x:hidden;
+}
+.page{
+  position:relative;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 72% 8%,rgba(190,120,207,.28),transparent 24%),
+    radial-gradient(circle at 12% 42%,rgba(241,112,186,.16),transparent 28%),
+    linear-gradient(180deg,#091329 0%,#121a38 45%,#16183a 70%,#08142b 100%);
+}
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
+  pointer-events:none;
+}
+.bg .glow{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 16% 72%,rgba(238,104,184,.16),transparent 26%),
+    radial-gradient(ellipse at 84% 74%,rgba(70,164,216,.13),transparent 29%);
+  filter:blur(16px);
+}
+.bg .line{
+  position:absolute;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,rgba(241,118,193,.16),rgba(241,118,193,.02) 55%,transparent 85%);
+}
+.l1{left:1.5%}.l2{left:18%}.l3{right:18%}.l4{right:1.5%}
+.city{
+  position:absolute;bottom:0;width:28%;height:60%;
+}
+.city.left{left:-2%}
+.city.right{right:-2%;transform:scaleX(-1)}
+.tower{
+  position:absolute;bottom:0;left:var(--x);width:var(--w);height:var(--h);
+  background:linear-gradient(90deg,#071226 0%,#172752 48%,#332e69 72%,#08152c 100%);
+  border:1px solid rgba(105,132,199,.14);
+  border-radius:45% 45% 6% 6%/8% 8% 2% 2%;
+  box-shadow:inset 12px 0 25px rgba(70,151,207,.06),inset -8px 0 23px rgba(239,105,188,.05);
+}
+.tower:before{
+  content:"";position:absolute;left:50%;top:-70px;transform:translateX(-50%);
+  width:3px;height:78px;background:linear-gradient(180deg,rgba(247,141,209,.9),rgba(85,79,167,.45));
+  box-shadow:0 0 14px rgba(239,107,191,.32);
+}
+.tower:after{
+  content:"";position:absolute;left:-14%;width:128%;height:18px;bottom:var(--rb);
+  border-radius:50%;border:1px solid rgba(111,148,203,.2);
+  background:linear-gradient(180deg,rgba(29,44,83,.7),rgba(9,18,40,.85));
+  box-shadow:0 -1px 0 rgba(239,107,191,.14),0 0 14px rgba(30,90,148,.08);
+}
+.t1{--x:0%;--w:24%;--h:48%;--rb:22%}
+.t2{--x:18%;--w:22%;--h:70%;--rb:37%}
+.t3{--x:38%;--w:18%;--h:56%;--rb:52%}
+.t4{--x:55%;--w:21%;--h:42%;--rb:28%}
+.t5{--x:72%;--w:18%;--h:60%;--rb:45%}
+.t6{--x:87%;--w:16%;--h:35%;--rb:22%}
+.canal{
+  position:absolute;left:6%;right:6%;bottom:-2%;height:30%;
+  clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);
+  background:linear-gradient(180deg,rgba(41,124,180,.12),rgba(7,20,43,.62));
+  border-top:1px solid rgba(73,176,224,.16);
+}
+.bridge{
+  position:absolute;left:-6%;right:-6%;bottom:17%;height:10%;
+  transform:perspective(800px) rotateX(66deg);transform-origin:bottom;
+  background:linear-gradient(180deg,rgba(12,25,53,.06),rgba(8,17,38,.45));
+  border-top:1px solid rgba(73,177,223,.14);
+  border-bottom:1px solid rgba(239,109,189,.10);
+}
+.scan{
+  position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.015) 0 1px,transparent 1px 4px);
+  mix-blend-mode:soft-light;
+}
+.shell{
+  width:min(1024px,100%);
+  margin:0 auto;
+  padding:22px 16px 28px;
+}
+.topbar{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:0 14px 14px;
+  font-size:14px;
+}
+.brand{font-weight:700}
+.dot{color:var(--pink)}
+.tagline{font-size:12px;line-height:1.5;text-align:right;color:#eeeaf4}
+.layout{
+  display:grid;
+  grid-template-columns:237px minmax(0,1fr);
+  gap:18px;
+  align-items:start;
+}
+.sidebar{
+  position:sticky;top:16px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(10,18,38,.84),rgba(17,27,52,.73));
+  backdrop-filter:blur(8px);
+  padding:18px 22px 22px;
+  min-height:660px;
+}
+.side-head{font-size:13px;color:var(--pink);margin-bottom:20px}
+.side-title{font-size:29px;line-height:1.03;font-weight:400;margin:0 0 18px}
+.side-title span{color:var(--pink)}
+.side-copy{font-size:13px;line-height:1.78;color:#c8c2d1}
+.side-rule{height:1px;background:linear-gradient(90deg,var(--pink),rgba(194,181,210,.18));margin:24px 0}
+.progress-title{color:var(--pink);font-size:13px;margin-bottom:18px}
+.progress{position:relative}
+.progress:before{
+  content:"";position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:rgba(180,172,198,.43)
+}
+.pstep{
+  display:flex;align-items:center;gap:10px;position:relative;
+  margin-bottom:24px;font-size:13px;color:#aaa4b6
+}
+.pstep .b{
+  width:17px;height:17px;border-radius:50%;
+  border:1px solid rgba(185,178,202,.56);background:#11172d;z-index:1;flex:none
+}
+.pstep.active{color:var(--pink)}
+.pstep.active .b{background:var(--pink);border-color:var(--pink)}
+.main{display:flex;flex-direction:column;gap:8px}
+.card{
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(10,19,41,.82),rgba(17,28,53,.74));
+  backdrop-filter:blur(8px);
+  display:grid;
+  grid-template-columns:72px 1fr;
+  gap:8px;
+  padding:18px 21px 14px;
+}
+.num{font-size:41px;line-height:1;color:var(--pink);letter-spacing:-.06em}
+.content h2{font-size:17px;line-height:1.28;font-weight:400;margin:2px 0 5px}
+.sub{font-size:12px;color:#dbd5e4;margin-bottom:9px}
+textarea,input[type=text]{
+  width:100%;border:1px solid rgba(177,173,193,.37);
+  background:rgba(24,34,55,.82);color:#fff;
+  font-family:inherit;font-size:13px;outline:none;padding:11px 13px
+}
+textarea{resize:vertical;min-height:65px}
+textarea:focus,input[type=text]:focus{border-color:var(--pink2)}
+.options{display:flex;flex-wrap:wrap;gap:7px}
+.opt{
+  border:1px solid rgba(178,171,197,.39);
+  background:rgba(8,15,31,.24);
+  color:#eeeaf3;
+  font-family:inherit;font-size:12px;
+  padding:8px 10px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:34px
+}
+.opt:hover{border-color:rgba(239,120,189,.78);background:rgba(239,120,189,.07)}
+.opt.selected{border-color:var(--pink);background:rgba(239,120,189,.16);box-shadow:0 0 14px rgba(239,120,189,.11)}
+.icon{color:var(--pink);font-size:15px}
+.field-label{font-size:11px;color:#ddd7e4;margin:8px 0 6px}
+.upload{
+  border:1px dashed rgba(239,120,189,.55);
+  min-height:42px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:#ddd5e5;font-size:12px;background:rgba(10,17,33,.20)
+}
+#fileInput{display:none}
+.file-name{font-size:11px;color:var(--pink2);text-align:center;margin-top:4px}
+.footerrow{
+  display:grid;grid-template-columns:1fr 1.05fr;gap:70px;
+  align-items:end;margin:10px 4px 0
+}
+.note{
+  border:1px solid var(--line);
+  background:rgba(9,17,35,.84);
+  backdrop-filter:blur(8px);
+  padding:20px;font-size:13px;line-height:1.55;color:#c8c2d0;
+  min-height:88px
+}
+.send{
+  min-height:72px;border:0;background:linear-gradient(90deg,#e96fb7,#f08bc7);
+  color:#111329;font-family:inherit;cursor:pointer;font-size:20px;
+  text-transform:uppercase;letter-spacing:.03em
+}
+.send small{display:block;font-size:11px;margin-top:7px}
+.toast{
+  position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(16px);
+  background:#0d1730;color:#f4a7d0;border:1px solid var(--pink);padding:11px 15px;
+  font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:40
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* MOBILE: FIXES THE CROPPING PROBLEM */
+@media(max-width:760px){
+  .shell{padding:12px 10px 24px}
+  .topbar{padding:0 4px 10px}
+  .tagline{display:none}
+  .layout{grid-template-columns:1fr;gap:10px}
+  .sidebar{
+    position:relative;
+    top:0;
+    min-height:auto;
+    padding:16px;
+  }
+  .side-head{margin-bottom:12px}
+  .side-title{font-size:26px;margin-bottom:12px}
+  .side-copy{font-size:12px;line-height:1.6}
+  .side-rule{margin:14px 0}
+  .progress-title{margin-bottom:10px}
+  .progress{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px 10px;
+  }
+  .progress:before{display:none}
+  .pstep{margin:0;font-size:11px;gap:7px}
+  .pstep .b{width:13px;height:13px}
+  .main{gap:8px}
+  .card{
+    grid-template-columns:48px minmax(0,1fr);
+    padding:14px 12px;
+  }
+  .num{font-size:31px}
+  .content h2{font-size:15px}
+  .sub{font-size:11px}
+  .opt{font-size:11px;padding:7px 8px}
+  .footerrow{grid-template-columns:1fr;gap:10px}
+  .note{min-height:auto}
+  .send{min-height:66px;font-size:18px}
+  .city{width:42%;height:48%;opacity:.78}
+  .canal{height:22%}
+}
+@media(max-width:430px){
+  .progress{grid-template-columns:1fr}
+  .card{grid-template-columns:40px 1fr;padding:12px 10px}
+  .num{font-size:28px}
+  .content h2{font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="glow"></div>
+  <div class="line l1"></div><div class="line l2"></div><div class="line l3"></div><div class="line l4"></div>
+  <div class="city left">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div>
+    <div class="tower t4"></div><div class="tower t5"></div><div class="tower t6"></div>
+  </div>
+  <div class="city right">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div>
+    <div class="tower t4"></div><div class="tower t5"></div><div class="tower t6"></div>
+  </div>
+  <div class="bridge"></div><div class="canal"></div>
+</div>
+<div class="scan"></div>
+
+<div class="page">
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand"><span class="dot">●</span> SYSTEM//FIELD</div>
+      <div class="tagline">WE BUILD SOLUTIONS AROUND<br>EXACTLY WHAT YOU NEED.</div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="side-head">● &nbsp;INTAKE</div>
+        <h1 class="side-title">LET’S GET<br><span>STARTED.</span></h1>
+        <div class="side-copy">A few questions so I can understand what you need and figure out the right solution for you.</div>
+        <div class="side-rule"></div>
+        <div class="progress-title">YOUR PROGRESS</div>
+        <div class="progress">
+          <div class="pstep active"><span class="b"></span><span>01 THE PROBLEM</span></div>
+          <div class="pstep"><span class="b"></span><span>02 WHAT’S HARD</span></div>
+          <div class="pstep"><span class="b"></span><span>03 WHAT WOULD HELP</span></div>
+          <div class="pstep"><span class="b"></span><span>04 WHAT YOU HAVE</span></div>
+          <div class="pstep"><span class="b"></span><span>05 WHAT YOU WANT TO DO</span></div>
+          <div class="pstep"><span class="b"></span><span>06 HOW YOU’LL USE IT</span></div>
+          <div class="pstep"><span class="b"></span><span>07 MAKE IT YOURS</span></div>
+          <div class="pstep"><span class="b"></span><span>REVIEW & SEND</span></div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="card">
+          <div class="num">01</div>
+          <div class="content">
+            <h2>WHAT DO YOU NEED HELP MAKING SENSE OF?</h2>
+            <div class="sub">Tell me about it in your own words.</div>
+            <textarea id="problem" placeholder="Type your answer here..."></textarea>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="num">02</div>
+          <div class="content">
+            <h2>WHAT’S MAKING IT DIFFICULT RIGHT NOW?</h2>
+            <div class="sub">Select all that apply.</div>
+            <div class="options" data-group="difficult">
+              <button class="opt"><span class="icon">◌</span>Information is everywhere</button>
+              <button class="opt"><span class="icon">⚖</span>Hard to compare things</button>
+              <button class="opt"><span class="icon">◉</span>Too much to remember</button>
+              <button class="opt"><span class="icon">⟳</span>Repetitive work</button>
+              <button class="opt"><span class="icon">?</span>Hard to make decisions</button>
+              <button class="opt"><span class="icon">△</span>Current setup isn’t working</button>
+              <button class="opt"><span class="icon">•••</span>Something else</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="num">03</div>
+          <div class="content">
+            <h2>IF I COULD MAKE THIS EASIER FOR YOU,<br>WHAT WOULD YOU WANT TO BE ABLE TO DO?</h2>
+            <div class="sub">What would success look like for you?</div>
+            <textarea id="success" placeholder="Type your answer here..."></textarea>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="num">04</div>
+          <div class="content">
+            <h2>WHAT ARE YOU WORKING WITH RIGHT NOW?</h2>
+            <div class="sub">Select all that apply.</div>
+            <div class="options" data-group="materials">
+              <button class="opt"><span class="icon">▤</span>Notes</button>
+              <button class="opt"><span class="icon">▦</span>Spreadsheets</button>
+              <button class="opt"><span class="icon">▧</span>Screenshots / Photos</button>
+              <button class="opt"><span class="icon">▥</span>Documents</button>
+              <button class="opt"><span class="icon">◎</span>Websites / Online Listings</button>
+              <button class="opt"><span class="icon">✉</span>Emails / Messages</button>
+              <button class="opt"><span class="icon">◔</span>Information in my head</button>
+              <button class="opt"><span class="icon">○</span>Nothing organized yet</button>
+              <button class="opt"><span class="icon">•••</span>Other</button>
+            </div>
+            <div class="field-label">Where is this information currently stored?</div>
+            <input id="storage" type="text" placeholder="Type your answer here...">
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="num">05</div>
+          <div class="content">
+            <h2>WHAT WOULD YOU LIKE TO BE ABLE TO DO WITH IT?</h2>
+            <div class="sub">Select all that apply.</div>
+            <div class="options" data-group="actions">
+              <button class="opt"><span class="icon">⌕</span>Search</button>
+              <button class="opt"><span class="icon">＋</span>Add / Update</button>
+              <button class="opt"><span class="icon">⚖</span>Compare Options</button>
+              <button class="opt"><span class="icon">☆</span>See What’s Important</button>
+              <button class="opt"><span class="icon">▣</span>Calculate Things</button>
+              <button class="opt"><span class="icon">⌁</span>Keep Track of Progress</button>
+              <button class="opt"><span class="icon">▣</span>See Dates / Deadlines</button>
+              <button class="opt"><span class="icon">⌘</span>Get Ratings / Recommendations</button>
+              <button class="opt"><span class="icon">◉</span>I’m not sure — you figure it out</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="num">06</div>
+          <div class="content">
+            <h2>HOW WILL YOU MOSTLY USE IT?</h2>
+            <div class="sub">Select all that apply.</div>
+            <div class="options single" data-group="device">
+              <button class="opt"><span class="icon">▯</span>Phone</button>
+              <button class="opt"><span class="icon">▱</span>Computer</button>
+              <button class="opt"><span class="icon">▯▯</span>Both</button>
+            </div>
+            <div class="field-label">Who is this for?</div>
+            <div class="options single" data-group="users">
+              <button class="opt"><span class="icon">♙</span>Just me</button>
+              <button class="opt"><span class="icon">♙♙</span>Other people too</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="num">07</div>
+          <div class="content">
+            <h2>MAKE IT YOURS.</h2>
+            <div class="sub">What kind of look or feeling do you want?</div>
+            <div class="options" data-group="style">
+              <button class="opt">Minimal</button>
+              <button class="opt">Dark</button>
+              <button class="opt">Clean / Professional</button>
+              <button class="opt">Colorful</button>
+              <button class="opt">Futuristic</button>
+              <button class="opt">Soft</button>
+              <button class="opt">Luxury</button>
+              <button class="opt">Playful</button>
+              <button class="opt">Technical / Data Heavy</button>
+              <button class="opt">Something Else</button>
+            </div>
+            <div class="field-label">Any inspiration? (Optional)</div>
+            <label class="upload" for="fileInput">⇧ &nbsp; Upload images or add links (optional)</label>
+            <input id="fileInput" type="file" multiple accept="image/*,.pdf,.csv,.xlsx,.xls,.doc,.docx,.txt">
+            <div id="fileName" class="file-name"></div>
+          </div>
+        </section>
+
+        <div class="footerrow">
+          <div class="note"><span class="dot">●</span> &nbsp; I’LL REVIEW YOUR ANSWERS AND FOLLOW UP<br>&nbsp;&nbsp;&nbsp;IF I NEED ANYTHING ELSE.</div>
+          <button class="send" id="sendBtn">SEND IT TO ME →<small>REVIEW YOUR ANSWERS ON THE NEXT STEP</small></button>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Answers saved locally.</div>
+
+<script>
+document.querySelectorAll('.options').forEach(group=>{
+  const single=group.classList.contains('single');
+  group.querySelectorAll('.opt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(single){
+        group.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
+        btn.classList.add('selected');
+      }else btn.classList.toggle('selected');
+    });
+  });
+});
+const fileInput=document.getElementById('fileInput');
+const fileName=document.getElementById('fileName');
+fileInput.addEventListener('change',()=>{
+  fileName.textContent=!fileInput.files.length?'':fileInput.files.length===1?fileInput.files[0].name:`${fileInput.files.length} files selected`;
+});
+const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)].map(x=>x.innerText.trim());
+document.getElementById('sendBtn').addEventListener('click',()=>{
+  const payload={
+    problem:document.getElementById('problem').value.trim(),
+    difficult:vals('difficult'),
+    success:document.getElementById('success').value.trim(),
+    materials:vals('materials'),
+    storage:document.getElementById('storage').value.trim(),
+    actions:vals('actions'),
+    device:vals('device')[0]||'',
+    users:vals('users')[0]||'',
+    style:vals('style'),
+    files:[...fileInput.files].map(f=>f.name)
+  };
+  localStorage.setItem('systemFieldIntake',JSON.stringify(payload));
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1700);
+});
+</script>
+</body>
+</html>
