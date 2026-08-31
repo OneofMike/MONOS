@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>System//Field</title>
+<style>
+:root{
+  --bg:#07152d;
+  --bg2:#0b1d3d;
+  --panel:rgba(6,17,39,.72);
+  --panel2:rgba(8,20,44,.86);
+  --line:rgba(228,134,199,.46);
+  --line-soft:rgba(255,255,255,.20);
+  --text:#f4f3f7;
+  --muted:#c7c3cf;
+  --pink:#ef83c2;
+  --pink2:#f5a2d1;
+  --purple:#a78bd2;
+  --cyan:#39a8dd;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:#07152d;
+  color:var(--text);
+  font-family:"Courier New",Courier,monospace;
+  overflow-x:hidden;
+}
+button,a{font:inherit}
+a{color:inherit}
+
+/* ---------- code-built environment ---------- */
+.scene{
+  position:fixed;
+  inset:0;
+  z-index:-5;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 82% 8%,rgba(245,171,221,.42),transparent 22%),
+    radial-gradient(circle at 50% 35%,rgba(244,117,196,.22),transparent 20%),
+    linear-gradient(180deg,#0b1830 0%,#10284d 47%,#0a1d3c 100%);
+}
+.scene:after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(4,11,27,.65),transparent 24%,transparent 74%,rgba(6,13,31,.18));
+}
+.city{
+  position:absolute;
+  bottom:0;
+  width:32%;
+  height:86%;
+}
+.city.left{left:-5%}
+.city.right{right:-5%;transform:scaleX(-1)}
+.tower{
+  position:absolute;
+  bottom:0;
+  left:var(--x);
+  width:var(--w);
+  height:var(--h);
+  border:1px solid rgba(120,148,208,.14);
+  border-radius:45% 45% 7% 7%/6% 6% 2% 2%;
+  background:
+    linear-gradient(90deg,rgba(5,14,33,.98),rgba(24,44,83,.94) 48%,rgba(69,47,102,.72) 74%,rgba(8,20,43,.98));
+  box-shadow:
+    inset 14px 0 26px rgba(63,166,220,.06),
+    inset -12px 0 30px rgba(239,111,191,.08),
+    0 0 26px rgba(47,128,180,.08);
+}
+.tower:before{
+  content:"";position:absolute;left:50%;top:-78px;transform:translateX(-50%);
+  width:3px;height:86px;
+  background:linear-gradient(180deg,rgba(249,180,222,.95),rgba(117,82,177,.48));
+  box-shadow:0 0 16px rgba(245,130,199,.42);
+}
+.tower:after{
+  content:"";position:absolute;left:-18%;width:136%;height:22px;bottom:var(--ring);
+  border-radius:50%;
+  border:1px solid rgba(111,150,208,.18);
+  background:linear-gradient(180deg,rgba(43,60,104,.74),rgba(12,25,51,.92));
+  box-shadow:0 -1px 0 rgba(246,115,194,.15),0 0 18px rgba(56,132,184,.10);
+}
+.t1{--x:0%;--w:27%;--h:56%;--ring:24%}
+.t2{--x:20%;--w:25%;--h:75%;--ring:38%}
+.t3{--x:42%;--w:19%;--h:63%;--ring:52%}
+.t4{--x:59%;--w:21%;--h:48%;--ring:29%}
+.t5{--x:77%;--w:18%;--h:70%;--ring:44%}
+.water{
+  position:absolute;left:17%;right:0;bottom:0;height:42%;
+  clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);
+  background:
+    linear-gradient(180deg,rgba(38,128,182,.18),rgba(7,21,45,.78)),
+    repeating-linear-gradient(90deg,transparent 0 12%,rgba(47,167,219,.08) 12.3%,transparent 13% 25%,rgba(237,91,182,.06) 25.4%,transparent 26%);
+  border-top:1px solid rgba(76,174,222,.15);
+}
+.bridge{
+  position:absolute;left:20%;right:-6%;bottom:36%;height:6%;
+  transform:perspective(900px) rotateX(65deg);
+  transform-origin:bottom;
+  background:linear-gradient(180deg,rgba(21,45,79,.18),rgba(6,18,40,.58));
+  border-top:1px solid rgba(68,176,224,.18);
+  border-bottom:1px solid rgba(244,118,194,.13);
+}
+.haze{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 57% 45%,rgba(250,152,214,.28),transparent 28%),
+    radial-gradient(ellipse at 26% 75%,rgba(236,89,179,.18),transparent 26%);
+  filter:blur(18px);
+}
+
+/* ---------- global page ---------- */
+.page{
+  width:min(1024px,100%);
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+  padding:0 28px 26px;
+  background:linear-gradient(90deg,rgba(4,13,31,.20),transparent 28%,transparent 72%,rgba(6,14,30,.08));
+}
+.page:before,.page:after{
+  content:"";position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.14);pointer-events:none
+}
+.page:before{left:14px}.page:after{right:14px}
+
+header{
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.26);
+  position:relative;
+  z-index:3;
+}
+.brand{
+  font-weight:700;
+  letter-spacing:.02em;
+  font-size:16px;
+}
+.brand .dot{color:var(--pink);margin-right:9px}
+nav{display:flex;align-items:center;gap:34px;font-size:14px}
+nav a{text-decoration:none}
+.nav-cta{
+  border:1px solid rgba(239,122,189,.36);
+  padding:12px 24px;
+}
+.nav-cta:hover{background:rgba(239,122,189,.12)}
+
+.hero{
+  min-height:720px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  position:relative;
+  z-index:2;
+  align-items:start;
+}
+.hero-left{
+  padding:18px 0 40px 22px;
+  max-width:480px;
+}
+.crumb{
+  color:#fff;
+  font-size:13px;
+  margin-bottom:94px;
+}
+.crumb .dot{color:var(--pink)}
+.hero h1{
+  font-size:60px;
+  line-height:1.08;
+  font-weight:400;
+  letter-spacing:.01em;
+  margin:0 0 20px;
+}
+.hero h1 span{color:var(--pink)}
+.hero-rule{
+  width:50px;height:2px;background:var(--pink);margin:20px 0 24px;
+}
+.hero-copy{
+  font-size:15px;
+  line-height:1.55;
+  color:#f1edf4;
+  max-width:325px;
+  margin-bottom:20px;
+  text-shadow:0 1px 12px rgba(0,0,0,.22);
+}
+.actions{display:flex;flex-direction:column;gap:14px;width:270px}
+.btn{
+  border:1px solid var(--line);
+  padding:16px 18px;
+  text-align:center;
+  text-decoration:none;
+  cursor:pointer;
+  background:rgba(7,15,34,.52);
+}
+.btn.primary{
+  background:var(--pink);
+  color:#101426;
+  border-color:var(--pink);
+  font-weight:700;
+}
+.btn:hover{filter:brightness(1.05)}
+.node{
+  position:absolute;
+  right:0;
+  top:38px;
+  width:100px;
+  padding:18px 14px 20px;
+  border:1px solid rgba(236,139,202,.25);
+  background:rgba(40,49,90,.25);
+  color:#c7b8cc;
+  font-size:12px;
+  line-height:1.55;
+}
+.node .on{color:#eab0cf}
+
+/* ---------- sections ---------- */
+.section{
+  position:relative;
+  z-index:2;
+  padding:28px 18px 24px;
+}
+.section-title{
+  display:flex;align-items:center;gap:12px;
+  font-size:13px;
+  margin-bottom:16px;
+}
+.section-title .dot{color:var(--pink)}
+.section-title:after{
+  content:"";height:1px;flex:1;background:linear-gradient(90deg,rgba(237,132,194,.55),rgba(255,255,255,.18));
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.card{
+  min-height:278px;
+  border:1px solid var(--line);
+  background:rgba(6,16,37,.78);
+  padding:32px 26px 22px;
+  backdrop-filter:blur(6px);
+  text-decoration:none;
+  transition:.18s ease;
+}
+.card:hover{
+  transform:translateY(-2px);
+  background:rgba(16,27,54,.88);
+  box-shadow:0 0 26px rgba(239,123,189,.09);
+}
+.card-icon{
+  font-size:34px;
+  color:var(--pink);
+  margin-bottom:18px;
+}
+.card:nth-child(2) .card-icon{color:#aa8bd1}
+.card:nth-child(3) .card-icon{color:#ef7abd}
+.card:nth-child(4) .card-icon{color:#b18bd0}
+.card h3{
+  font-size:16px;
+  font-weight:400;
+  margin:0 0 14px;
+}
+.card p{
+  color:#d5d0dd;
+  font-size:13px;
+  line-height:1.55;
+  margin:0 0 18px;
+}
+.arrow{color:var(--pink);font-size:22px}
+
+.how-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:26px;
+}
+.step{
+  min-height:170px;
+  padding:0 30px 18px 12px;
+}
+.step+.step{border-left:1px solid rgba(255,255,255,.24);padding-left:36px}
+.step-num{
+  font-size:28px;
+  color:var(--pink);
+  margin-bottom:18px;
+}
+.step-num span{color:#868098}
+.step h3{
+  font-size:16px;font-weight:400;margin:0 0 10px;
+}
+.step p{
+  margin:0;
+  color:#d5d0dd;
+  font-size:13px;
+  line-height:1.55;
+}
+footer{
+  position:relative;
+  z-index:2;
+  border:1px solid rgba(255,255,255,.28);
+  margin:20px 0 0;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#aaa7b6;
+  font-size:13px;
+  line-height:1.55;
+}
+.footer-right{text-align:right}
+.footer-cta{color:var(--pink);text-decoration:none}
+
+/* ---------- responsive ---------- */
+@media(max-width:820px){
+  .page{padding:0 16px 20px}
+  header{min-height:64px}
+  nav{gap:18px;font-size:12px}
+  .nav-cta{padding:10px 14px}
+  .hero{
+    grid-template-columns:1fr;
+    min-height:690px;
+  }
+  .hero-left{
+    padding:16px 8px 34px;
+    max-width:540px;
+  }
+  .crumb{margin-bottom:72px}
+  .hero h1{font-size:52px}
+  .node{right:12px}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .card{min-height:245px}
+}
+@media(max-width:600px){
+  .page{
+    width:100%;
+    padding:0 12px 18px;
+  }
+  .page:before{left:4px}.page:after{right:4px}
+  header{
+    padding:0 4px;
+    min-height:60px;
+  }
+  .brand{font-size:14px}
+  nav a:not(.nav-cta){display:none}
+  .nav-cta{padding:9px 12px;font-size:11px}
+  .hero{
+    min-height:auto;
+    display:block;
+    padding-bottom:40px;
+  }
+  .hero-left{
+    padding:18px 8px 24px;
+    max-width:none;
+  }
+  .crumb{margin-bottom:52px}
+  .hero h1{
+    font-size:42px;
+    line-height:1.05;
+    max-width:350px;
+  }
+  .hero-copy{
+    font-size:14px;
+    max-width:340px;
+  }
+  .actions{width:100%;max-width:340px}
+  .node{
+    position:relative;
+    top:auto;
+    right:auto;
+    margin:10px 8px 0 auto;
+    width:108px;
+  }
+  .section{padding:24px 8px 18px}
+  .cards{grid-template-columns:1fr;gap:10px}
+  .card{
+    min-height:auto;
+    padding:24px 20px;
+  }
+  .how-grid{grid-template-columns:1fr}
+  .step{
+    min-height:auto;
+    padding:18px 6px 22px;
+    border-bottom:1px solid rgba(255,255,255,.18);
+  }
+  .step+.step{
+    border-left:0;
+    padding-left:6px;
+  }
+  footer{
+    flex-direction:column;
+    padding:18px;
+  }
+  .footer-right{text-align:left}
+  .city{width:58%;opacity:.72}
+  .water{left:0}
+}
+</style>
+</head>
+<body>
+
+<div class="scene" aria-hidden="true">
+  <div class="city left">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div>
+  </div>
+  <div class="city right">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div>
+  </div>
+  <div class="bridge"></div>
+  <div class="water"></div>
+  <div class="haze"></div>
+</div>
+
+<main class="page">
+  <header>
+    <div class="brand"><span class="dot">●</span>SYSTEM//FIELD</div>
+    <nav>
+      <a href="examples.html">EXAMPLES</a>
+      <a href="#how">HOW IT WORKS</a>
+      <a href="#about">ABOUT</a>
+      <a class="nav-cta" href="intake.html">GET STARTED</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="about">
+    <div class="hero-left">
+      <div class="crumb"><span class="dot">●</span> 01 / <span style="color:var(--pink)">HOME</span></div>
+      <h1>YOU BRING<br>THE MESS.<br><span>I ORGANIZE IT.</span></h1>
+      <div class="hero-rule"></div>
+      <p class="hero-copy">
+        Have something you're trying to organize, compare, research, plan, or just get under control?
+        I figure out the right solution and build it specifically around your situation, priorities, and the way you need to use it.
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="intake.html">TELL ME WHAT YOU NEED →</a>
+        <a class="btn" href="examples.html">SEE EXAMPLES</a>
+      </div>
+    </div>
+    <div class="node">NODE 001<br><span class="on">ONLINE</span><br><br><span class="dot">●</span></div>
+  </section>
+
+  <section class="section" id="examples">
+    <div class="section-title"><span class="dot">●</span>WHAT DO YOU NEED HELP WITH?</div>
+    <div class="cards">
+      <a class="card" href="intake.html?type=life">
+        <div class="card-icon">♙</div>
+        <h3>MY EVERYDAY LIFE</h3>
+        <p>Shopping, travel, moving, cars, collections, job search, big decisions, or anything that's just too messy right now.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a class="card" href="intake.html?type=work">
+        <div class="card-icon">▣</div>
+        <h3>MY WORK</h3>
+        <p>Projects, applications, research, content, information you need to compare or keep track of.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a class="card" href="intake.html?type=business">
+        <div class="card-icon">▥</div>
+        <h3>MY BUSINESS</h3>
+        <p>Clients, appointments, expenses, inventory, pricing, services, leads, or how you run your day-to-day.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a class="card" href="intake.html?type=other">
+        <div class="card-icon">✳</div>
+        <h3>SOMETHING ELSE</h3>
+        <p>Not sure how to explain it yet? Tell me what you're dealing with and we'll figure it out together.</p>
+        <div class="arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section-title"><span class="dot">●</span>HOW IT WORKS</div>
+    <div class="how-grid">
+      <div class="step">
+        <div class="step-num">01 <span>/</span></div>
+        <h3>SHOW ME THE PROBLEM</h3>
+        <p>You explain what you're dealing with. It doesn't have to be organized first.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02 <span>/</span></div>
+        <h3>I FIGURE OUT WHAT WOULD HELP</h3>
+        <p>I look at what you're trying to accomplish and decide the best way to organize it.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03 <span>/</span></div>
+        <h3>I BUILD IT AROUND YOU</h3>
+        <p>You get something built specifically around your situation, priorities, and the way you need to use it.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div><span class="dot">●</span> OBSIDIAN//SYSTEMS<br>&nbsp;&nbsp;&nbsp;BUILDING CLARITY OUT OF CHAOS.</div>
+    <div class="footer-right">CUSTOM TOOLS. MADE FOR YOU.<br><a class="footer-cta" href="intake.html">LET'S MAKE SENSE OF IT →</a></div>
+  </footer>
+</main>
+
+</body>
+</html>
