@@ -471,8 +471,35 @@ currentPaymentIntentId = data.paymentIntentId;
         paymentIntent:paymentIntent.id
       })
     );
-    window.location.href = 'confirmation.html';
-  }else{
+ 
+    const intake = JSON.parse(
+  localStorage.getItem('systemFieldIntake') || 'null'
+);
+
+const selectedTier = JSON.parse(
+  localStorage.getItem('systemFieldSelectedTier') || 'null'
+);
+
+if (intake?.submissionId) {
+  try {
+    await fetch('https://monos-beta.vercel.app/api/submit-intake', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'payment_update',
+        submissionId: intake.submissionId,
+        package: selectedTier?.code || '',
+        paymentStatus: 'Paid',
+        paymentIntentId: paymentIntent.id
+      })
+    });
+  } catch (err) {
+    console.error('Payment sheet update failed:', err);
+  }
+}
+    window.location.href = 'confirmation.html';}else{
     message.textContent = 'Payment is being processed.';
     btn.disabled = false;
     btn.textContent = 'COMPLETE PAYMENT →';
