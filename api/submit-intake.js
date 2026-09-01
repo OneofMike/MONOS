@@ -76,6 +76,9 @@ if (data.action === 'payment_update') {
 } else {
   payload = {
     submissionId: data.submissionId || '',
+    firstName: data.firstName || '',
+lastName: data.lastName || '',
+email: data.email || '',
     problem: data.problem || '',
     helpType: data.helpType || '',
     difficult: Array.isArray(data.difficult) ? data.difficult : [],
