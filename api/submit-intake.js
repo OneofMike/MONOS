@@ -30,22 +30,66 @@ export default async function handler(req, res) {
       });
     }
 
-    const data = req.body || {};
+   
+const data = req.body || {};
 
-    const payload = {
-      problem: data.problem || '',
-      helpType: data.helpType || '',
-      difficult: Array.isArray(data.difficult) ? data.difficult : [],
-      success: data.success || '',
-      materials: Array.isArray(data.materials) ? data.materials : [],
-      storage: data.storage || '',
-      actions: Array.isArray(data.actions) ? data.actions : [],
-      device: data.device || '',
-      users: data.users || '',
-      style: Array.isArray(data.style) ? data.style : [],
-      files: Array.isArray(data.files) ? data.files : []
-    };
+let payload;
 
+if (data.action === 'payment_update') {
+  let name = '';
+  let email = '';
+
+  if (data.paymentIntentId && process.env.STRIPE_SECRET_KEY) {
+    const stripeResponse = await fetch(
+      `https://api.stripe.com/v1/payment_intents/${data.paymentIntentId}?expand[]=payment_method`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`
+        }
+      }
+    );
+
+    if (stripeResponse.ok) {
+      const paymentIntent = await stripeResponse.json();
+
+      const billingDetails =
+        paymentIntent.payment_method?.billing_details || {};
+
+      name = billingDetails.name || '';
+      email =
+        billingDetails.email ||
+        paymentIntent.receipt_email ||
+        '';
+    }
+  }
+
+  payload = {
+    action: 'payment_update',
+    submissionId: data.submissionId || '',
+    name,
+    email,
+    package: data.package || '',
+    paymentStatus: data.paymentStatus || 'Paid',
+    paymentIntentId: data.paymentIntentId || ''
+  };
+
+} else {
+  payload = {
+    submissionId: data.submissionId || '',
+    problem: data.problem || '',
+    helpType: data.helpType || '',
+    difficult: Array.isArray(data.difficult) ? data.difficult : [],
+    success: data.success || '',
+    materials: Array.isArray(data.materials) ? data.materials : [],
+    storage: data.storage || '',
+    actions: Array.isArray(data.actions) ? data.actions : [],
+    device: data.device || '',
+    users: data.users || '',
+    style: Array.isArray(data.style) ? data.style : [],
+    files: Array.isArray(data.files) ? data.files : []
+  };
+}
+   
     const googleResponse = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
