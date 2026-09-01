@@ -348,7 +348,7 @@ tiers.forEach(card=>{
 let stripe;
 let elements;
 let paymentElement;
-
+let currentPaymentIntentId = null;
 async function startStripeCheckout(choice){
   try{
     const response = await fetch(
@@ -365,7 +365,7 @@ async function startStripeCheckout(choice){
     );
 
     const data = await response.json();
-
+currentPaymentIntentId = data.paymentIntentId;
     if(!response.ok || !data.clientSecret){
       throw new Error(data.error || 'Unable to start checkout');
     }
