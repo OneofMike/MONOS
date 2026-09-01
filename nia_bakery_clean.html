@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nia's Bakery — Order Operations</title>
+<style>
+:root{
+  --ink:#30251f;--muted:#7e7168;--paper:#fffaf1;--cream:#efe3d4;
+  --pink:#d58a9a;--pink2:#efbdc8;--sage:#a9b7a1;--gold:#d2a65c;
+  --line:rgba(70,50,40,.16);--dark:#382b26;--white:#fff;
+  --good:#7fa989;--warn:#c68d55;--bad:#bd6f74;--shadow:0 12px 28px rgba(78,51,39,.10)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(213,138,154,.12),transparent 28%),
+    linear-gradient(180deg,#eadfce,#e7dccb 100%);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.top{
+  position:sticky;top:0;z-index:50;min-height:58px;background:var(--dark);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:4px solid #e7b3bf;
+}
+.brand{font-weight:900;letter-spacing:.075em}
+.brand span{color:var(--pink2)}
+.top small{font:8px "Courier New";color:#d7c5ba;letter-spacing:.12em}
+.app{max-width:1420px;margin:auto;padding:14px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;margin-bottom:10px}
+.paper,.section,.nav,.mini-card{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}
+.paper{padding:18px}
+.eyebrow{font:8px "Courier New";letter-spacing:.11em;color:#9c6974;text-transform:uppercase}
+h1{font:700 38px/1 Georgia,serif;margin:6px 0 8px}
+h2{font:26px Georgia,serif;margin:0}
+h3{font:19px Georgia,serif;margin:0}
+p{line-height:1.55}
+.hero p{font:9px/1.6 "Courier New";color:var(--muted);max-width:680px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;height:100%}
+.kpi{background:#fff;border:1px dashed #cdb9a8;padding:12px;display:flex;flex-direction:column;justify-content:center}
+.kpi span{font:7px "Courier New";color:var(--muted)}
+.kpi b{font-size:22px;margin-top:4px}
+.workspace{display:grid;grid-template-columns:245px 1fr;gap:10px}
+.nav{padding:9px;height:fit-content;position:sticky;top:70px}
+.nav .nav-title{font:8px "Courier New";color:#9d8070;padding:10px 10px 7px}
+.nav button{
+  width:100%;border:0;background:transparent;text-align:left;padding:12px 10px;margin-bottom:4px;
+  font:9px "Courier New";color:var(--ink)
+}
+.nav button.active{background:var(--dark);color:#fff}
+.nav button b{float:right}
+.side-summary{margin-top:8px;padding:12px;border-top:1px solid var(--line)}
+.side-summary span{display:block;font:7px "Courier New";color:var(--muted)}
+.side-summary strong{display:block;margin:4px 0 10px;font-size:13px}
+.view{display:none}.view.active{display:block}
+.section{padding:14px;margin-bottom:10px}
+.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+.section-head span{font:8px "Courier New";color:var(--muted)}
+.filter-row{display:grid;grid-template-columns:1fr 150px 150px;gap:7px;margin-bottom:10px}
+input,select,textarea{
+  width:100%;border:1px solid #d2c3b7;background:#fff;padding:10px;color:var(--ink);outline:none
+}
+textarea{min-height:90px;resize:vertical}
+.orders{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.order{background:#fff;border:1px solid var(--line);padding:13px;cursor:pointer;transition:.15s}
+.order:hover{transform:translateY(-1px);border-color:#c99aaa}
+.order-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.order h3{margin:5px 0 3px}
+.order p{font:8px/1.5 "Courier New";color:var(--muted);margin:0}
+.pill{display:inline-block;padding:4px 7px;border-radius:999px;font:7px "Courier New";background:#f3e4e8;color:#8d5360}
+.pill.good{background:#e5efe7;color:#52745c}.pill.warn{background:#f5eadb;color:#946936}.pill.bad{background:#f4e0e1;color:#8f5056}
+.order-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.stat{border-top:1px solid #eee;padding-top:7px}
+.stat span{display:block;font:7px "Courier New";color:var(--muted)}
+.stat b{font-size:11px;display:block;margin-top:2px}
+.stage-tabs{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);margin-bottom:10px}
+.stage-tabs button{border:0;border-right:1px solid var(--line);padding:9px 5px;background:#f1e6da;font:8px "Courier New"}
+.stage-tabs button:last-child{border-right:0}.stage-tabs button.active{background:var(--dark);color:#fff}
+.stage-board{display:none}.stage-board.active{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.field{display:grid;gap:5px}.field.w2{grid-column:span 2}.field.full{grid-column:1/-1}
+label{font:8px "Courier New";color:#8c6a58;letter-spacing:.05em}
+.upload-zone{border:1px dashed #b89a87;background:#fffdf8;padding:13px;text-align:center;cursor:pointer}
+.upload-zone input{display:none}.upload-zone b{display:block;font-size:12px}.upload-zone span{font:8px "Courier New";color:var(--muted)}
+.preview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}
+.preview{aspect-ratio:1;background:linear-gradient(145deg,#ead4db,#f8eadc);display:grid;place-items:center;border:1px solid var(--line);overflow:hidden;font:7px "Courier New";color:#9d8070}
+.preview img{width:100%;height:100%;object-fit:cover}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}
+.calc{background:#352924;color:#fff;padding:11px}
+.calc span{display:block;font:7px "Courier New";color:#d7c4b9}.calc b{font-size:20px;display:block;margin-top:4px}.calc small{font:7px "Courier New";color:#d2a9b2}
+.btnrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.btn{border:0;background:var(--dark);color:white;padding:10px 13px;font:8px "Courier New"}
+.btn.alt{background:#ead9de;color:#744f58}.btn.light{background:white;color:var(--ink);border:1px solid var(--line)}
+.ops-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ops-card{background:#fff;border:1px solid var(--line);padding:12px}
+.ops-card h3{margin-bottom:8px}
+.check{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-top:1px solid #eee}
+.check input{width:auto;margin-top:2px}.check span{font:9px/1.4 "Courier New";color:#5d534d}
+.inventory{display:grid;gap:6px}
+.inv{display:grid;grid-template-columns:1fr 90px 110px;gap:6px;align-items:center;font:9px "Courier New";padding:9px;background:#fff;border:1px solid var(--line)}
+.low{color:#a14f55;font-weight:700}
+.drawer{position:fixed;inset:0;display:none;z-index:100}.drawer.open{display:block}
+.shade{position:absolute;inset:0;background:rgba(45,35,30,.62)}
+.panel{position:absolute;right:0;top:0;width:min(760px,97vw);height:100%;background:#fbf4e9;border-left:5px solid var(--pink);display:flex;flex-direction:column}
+.panel-head{display:flex;justify-content:space-between;gap:10px;padding:16px;border-bottom:1px solid var(--line)}
+.panel-head h2{font:30px Georgia,serif;margin:4px 0}.panel-head p{font:9px "Courier New";color:var(--muted);margin:0}
+.close{width:40px;height:40px;border:1px solid var(--line);background:#fff;font-size:22px}
+.panel-body{padding:12px;overflow:auto}
+.file-tabs{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);background:#f0e4d6;position:sticky;top:0;z-index:3}
+.file-tabs button{border:0;border-right:1px solid var(--line);background:transparent;padding:10px 5px;font:7px "Courier New"}
+.file-tabs button.active{background:var(--dark);color:white}
+.file-pane{display:none}.file-pane.active{display:block}
+.detail-grid,.pay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.detail,.paybox{background:#fff;border:1px solid var(--line);padding:11px}
+.detail span,.paybox span{display:block;font:7px "Courier New";color:#9a6873}
+.detail b,.paybox b{display:block;font-size:13px;margin-top:4px}
+.revision,.taskrow,.stockrow,.log{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:8px 0;border-top:1px solid #eee;font:8px "Courier New"}
+.taskrow{grid-template-columns:22px 110px 1fr}.taskrow input{width:auto}
+.stockrow{grid-template-columns:1fr 90px 90px}
+.note-log{display:grid;gap:0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#382b26;color:#fff;padding:10px 14px;font:8px "Courier New";transition:.2s;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){
+  .app{padding:8px}.hero{display:block}.hero .paper:first-child{margin-bottom:8px}.kpis{grid-template-columns:1fr 1fr}
+  .workspace{display:block}.nav{display:grid;grid-template-columns:repeat(4,1fr);position:sticky;top:58px;z-index:30;padding:0}
+  .nav .nav-title,.side-summary{display:none}.nav button{margin:0;padding:11px 3px;text-align:center;border-right:1px solid var(--line);font-size:7px}
+  .nav button b{float:none;display:block;margin-top:3px}.orders,.stage-board.active,.ops-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr 1fr}.field.w2{grid-column:span 2}.calc-grid{grid-template-columns:1fr 1fr}
+  .panel{top:auto;bottom:0;width:100%;height:92vh;border-left:0;border-top:5px solid var(--pink);border-radius:20px 20px 0 0}
+}
+@media(max-width:560px){
+  .top small{display:none}h1{font-size:30px}.filter-row{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.w2,.field.full{grid-column:auto}
+  .preview-grid{grid-template-columns:repeat(3,1fr)}.detail-grid,.pay-grid{grid-template-columns:1fr}.order-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">NIA'S <span>BAKERY</span> ♡</div>
+  <small>CUSTOM ORDER OPERATIONS</small>
+</header>
+
+<main class="app">
+  <section class="hero">
+    <div class="paper">
+      <div class="eyebrow">ORDER OPERATIONS</div>
+      <h1>DAILY ORDER<br>WORKSPACE.</h1>
+      <p>Use this dashboard to manage customer requests, quotes, deposits, revisions, ingredient needs, production timing, balances, pickup details, and follow-up in one place.</p>
+    </div>
+    <div class="paper">
+      <div class="kpis">
+        <div class="kpi"><span>DUE THIS WEEK</span><b>7</b></div>
+        <div class="kpi"><span>BALANCES DUE</span><b>$620</b></div>
+        <div class="kpi"><span>EST. REVENUE</span><b>$1,485</b></div>
+        <div class="kpi"><span>PRODUCTION</span><b>23.5h</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="workspace">
+    <nav class="nav">
+      <div class="nav-title">WORKSPACE</div>
+      <button class="active" data-view="orders">ORDERS <b>7</b></button>
+      <button data-view="new">NEW ORDER <b>+</b></button>
+      <button data-view="production">TODAY <b>5</b></button>
+      <button data-view="inventory">INVENTORY <b>3</b></button>
+      <div class="side-summary">
+        <span>NEXT PICKUP</span><strong>Sasha · 5:30 PM</strong>
+        <span>NEXT BALANCE</span><strong>$76.50 · before handoff</strong>
+        <span>LOW STOCK</span><strong>Butter · boards · boxes</strong>
+      </div>
+    </nav>
+
+    <div>
+      <section class="view active" id="orders">
+        <div class="section">
+          <div class="section-head"><h2>Order board</h2><span>CLICK AN ORDER TO VIEW OR UPDATE ITS DETAILS</span></div>
+          <div class="filter-row">
+            <input id="orderSearch" placeholder="Search customer, event, status...">
+            <select id="statusFilter">
+              <option value="">All statuses</option><option>Inquiry</option><option>Quote Sent</option><option>Deposit Paid</option><option>Baking</option><option>Ready for Pickup</option>
+            </select>
+            <select id="sortOrders">
+              <option value="due">Sort: Due date</option><option value="balance">Sort: Balance</option><option value="value">Sort: Order value</option>
+            </select>
+          </div>
+          <div class="stage-tabs">
+            <button class="active" data-stage="all">ALL</button>
+            <button data-stage="inquiry">INQUIRY</button>
+            <button data-stage="booked">BOOKED</button>
+            <button data-stage="productionStage">PRODUCTION</button>
+            <button data-stage="pickup">PICKUP</button>
+          </div>
+          <div class="stage-board active" id="all"></div>
+          <div class="stage-board" id="inquiry"></div>
+          <div class="stage-board" id="booked"></div>
+          <div class="stage-board" id="productionStage"></div>
+          <div class="stage-board" id="pickup"></div>
+        </div>
+      </section>
+
+      <section class="view" id="new">
+        <div class="section">
+          <div class="section-head"><h2>New custom order</h2><span>ENTER ORDER DETAILS TO BUILD THE QUOTE AND WORKBACK</span></div>
+          <div class="form-grid">
+            <div class="field"><label>CUSTOMER</label><input id="newCustomer" placeholder="Name"></div>
+            <div class="field"><label>EVENT</label><input id="newEvent" placeholder="Birthday, shower, corporate..."></div>
+            <div class="field"><label>CONTACT</label><input id="newContact" placeholder="@handle / phone / email"></div>
+            <div class="field"><label>DUE DATE + TIME</label><input id="newDue" type="datetime-local"></div>
+            <div class="field"><label>FULFILLMENT</label><select id="fulfillment"><option value="pickup">Customer Pickup</option><option value="delivery">Local Delivery</option></select></div>
+            <div class="field"><label>DELIVERY MILES</label><input id="miles" type="number" value="0" min="0"></div>
+            <div class="field"><label>CAKE SIZE</label><select><option>6 inch</option><option>8 inch</option><option>10 inch</option><option>Two-tier</option><option>48 cupcakes</option><option>Cake + cupcakes</option></select></div>
+            <div class="field"><label>FLAVOR</label><select><option>Vanilla Bean</option><option>Chocolate Strawberry</option><option>Red Velvet</option><option>Lemon</option><option>Vanilla + Oreo</option></select></div>
+            <div class="field"><label>FILLING</label><select><option>Vanilla Buttercream</option><option>Strawberry</option><option>Chocolate Ganache</option><option>Oreo Cream</option><option>Lemon Curd</option></select></div>
+            <div class="field full"><label>ORDER / DESIGN SUMMARY</label><textarea placeholder="Size, servings, colors, piping, topper, theme, allergy notes, pickup details..."></textarea></div>
+            <div class="field w2">
+              <label>REFERENCE PHOTOS</label>
+              <label class="upload-zone"><input id="photos" type="file" accept="image/*" multiple><b>DROP OR SELECT REFERENCE IMAGES</b><span>Add customer reference images for this order</span></label>
+              <div class="preview-grid" id="previews"></div>
+            </div>
+            <div class="field"><label>ALLERGY / FOOD NOTES</label><textarea placeholder="Allergies, dietary restrictions, cross-contact disclaimer..."></textarea></div>
+            <div class="field"><label>BASE PRICE</label><input id="basePrice" type="number" value="165"></div>
+            <div class="field"><label>DESIGN ADD-ONS</label><input id="addon" type="number" value="18"></div>
+            <div class="field"><label>SPECIAL MATERIALS</label><input id="materials" type="number" value="15"></div>
+            <div class="field"><label>INGREDIENT COST</label><input id="ingredients" type="number" value="30"></div>
+            <div class="field"><label>PACKAGING COST</label><input id="packaging" type="number" value="8"></div>
+            <div class="field"><label>EST. PRODUCTION HOURS</label><input id="hours" type="number" value="4.1" step=".1"></div>
+            <div class="field"><label>DEPOSIT RULE</label><select id="depositPct"><option value=".5">50%</option><option value=".4">40%</option><option value=".3">30%</option></select></div>
+          </div>
+          <div class="calc-grid">
+            <div class="calc"><span>ORDER TOTAL</span><b id="total">$198</b><small>base + add-ons + materials + delivery</small></div>
+            <div class="calc"><span>DEPOSIT REQUIRED</span><b id="deposit">$99</b><small>based on selected rule</small></div>
+            <div class="calc"><span>EST. GROSS PROFIT</span><b id="profit">$160</b><small>before valuing Nia's labor</small></div>
+            <div class="calc"><span>PROFIT / PRODUCTION HR</span><b id="perhour">$39.02</b><small>estimated</small></div>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="saveOrder">SAVE ORDER</button>
+            <button class="btn alt" id="sendDeposit">SAVE + MARK DEPOSIT REQUESTED</button>
+            <button class="btn light" id="createQuote">CREATE QUOTE SUMMARY</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="production">
+        <div class="section">
+          <div class="section-head"><h2>Today’s production plan</h2><span>CHECK OFF TASKS AS THEY ARE COMPLETED</span></div>
+          <div class="ops-grid">
+            <div class="ops-card"><h3>Morning prep</h3>
+              <label class="check"><input type="checkbox"><span>Pull butter + eggs for Aria’s two-tier cake</span></label>
+              <label class="check"><input type="checkbox"><span>Make Oreo filling — 1.5 batches</span></label>
+              <label class="check"><input type="checkbox"><span>Print Marcus logo topper sheet</span></label>
+              <label class="check"><input type="checkbox"><span>Check Sasha final balance payment</span></label>
+            </div>
+            <div class="ops-card"><h3>Bake queue</h3>
+              <label class="check"><input type="checkbox"><span><b>10:00 AM</b> — Aria vanilla tier 1 • 3 layers</span></label>
+              <label class="check"><input type="checkbox"><span><b>11:15 AM</b> — Aria Oreo tier 2 • 3 layers</span></label>
+              <label class="check"><input type="checkbox"><span><b>1:30 PM</b> — Marcus cupcakes • 48 count</span></label>
+            </div>
+            <div class="ops-card"><h3>Customer follow-ups</h3>
+              <label class="check"><input type="checkbox"><span>Kiara — approve added gold border / possible +$15 charge</span></label>
+              <label class="check"><input type="checkbox"><span>Jordan — deposit reminder; quote expires tomorrow</span></label>
+              <label class="check"><input type="checkbox"><span>Sasha — send 4:30 PM pickup reminder + $76.50 balance</span></label>
+            </div>
+            <div class="ops-card"><h3>Tomorrow setup</h3>
+              <label class="check"><input type="checkbox"><span>Restock 10" cake boards</span></label>
+              <label class="check"><input type="checkbox"><span>Buy unsalted butter — minimum 8 lb</span></label>
+              <label class="check"><input type="checkbox"><span>Move Devon layers from freezer to fridge</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="inventory">
+        <div class="section">
+          <div class="section-head"><h2>Inventory + shopping</h2><span>REVIEW LOW-STOCK ITEMS BEFORE PRODUCTION</span></div>
+          <div class="inventory">
+            <div class="inv"><b>Unsalted butter</b><span>3.5 lb</span><span class="low">NEED 8 lb</span></div>
+            <div class="inv"><b>Large eggs</b><span>32</span><span>NEED 28</span></div>
+            <div class="inv"><b>Powdered sugar</b><span>12 lb</span><span>NEED 9 lb</span></div>
+            <div class="inv"><b>10" cake boards</b><span>1</span><span class="low">NEED 3</span></div>
+            <div class="inv"><b>10" cake boxes</b><span>4</span><span>NEED 3</span></div>
+            <div class="inv"><b>Cupcake boxes / 12</b><span>2</span><span class="low">NEED 4</span></div>
+            <div class="inv"><b>Edible pearls</b><span>1 jar</span><span class="low">LOW</span></div>
+            <div class="inv"><b>Gold detail material</b><span>Enough</span><span>IN STOCK</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<div class="drawer" id="orderDrawer">
+  <div class="shade" data-close></div>
+  <aside class="panel">
+    <div class="panel-head">
+      <div><div class="eyebrow" id="drawerEyebrow">ORDER DETAILS</div><h2 id="drawerTitle">Order</h2><p id="drawerSub"></p></div>
+      <button class="close" data-close>×</button>
+    </div>
+    <div class="panel-body">
+      <div class="file-tabs">
+        <button class="active" data-filetab="overview">OVERVIEW</button>
+        <button data-filetab="design">DESIGN</button>
+        <button data-filetab="money">MONEY</button>
+        <button data-filetab="production">PRODUCTION</button>
+        <button data-filetab="followup">FOLLOW-UP</button>
+      </div>
+      <section class="file-pane active" id="pane-overview">
+        <div class="detail-grid">
+          <div class="detail"><span>CUSTOMER</span><b id="fCustomer"></b></div>
+          <div class="detail"><span>STATUS</span><b id="fStatus"></b></div>
+          <div class="detail"><span>EVENT</span><b id="fEvent"></b></div>
+          <div class="detail"><span>DUE</span><b id="fDue"></b></div>
+          <div class="detail"><span>CONTACT</span><b id="fContact"></b></div>
+          <div class="detail"><span>FULFILLMENT</span><b id="fFulfillment"></b></div>
+        </div>
+        <div class="detail" style="margin-top:8px"><span>ORDER SUMMARY</span><p id="fSummary"></p></div>
+      </section>
+      <section class="file-pane" id="pane-design">
+        <div class="detail-grid">
+          <div class="detail"><span>SIZE</span><b id="fSize"></b></div>
+          <div class="detail"><span>FLAVOR</span><b id="fFlavor"></b></div>
+          <div class="detail"><span>FILLING</span><b id="fFilling"></b></div>
+          <div class="detail"><span>SERVINGS</span><b id="fServings"></b></div>
+        </div>
+        <div class="detail" style="margin-top:8px"><span>APPROVED DESIGN</span><p id="fDesign"></p></div>
+        <div class="detail" style="margin-top:8px"><span>ALLERGY / FOOD NOTES</span><p id="fAllergy"></p></div>
+        <div class="detail" style="margin-top:8px"><span>REVISION HISTORY</span><div id="fRevisions"></div></div>
+      </section>
+      <section class="file-pane" id="pane-money">
+        <div class="pay-grid">
+          <div class="paybox"><span>ORDER TOTAL</span><b id="fTotal"></b></div>
+          <div class="paybox"><span>PAID</span><b id="fPaid"></b></div>
+          <div class="paybox"><span>BALANCE</span><b id="fBalance"></b></div>
+          <div class="paybox"><span>PROFIT / HR</span><b id="fProfitHr"></b></div>
+        </div>
+        <div class="detail-grid">
+          <div class="detail"><span>INGREDIENT COST</span><b id="fIngredientCost"></b></div>
+          <div class="detail"><span>PACKAGING</span><b id="fPackaging"></b></div>
+          <div class="detail"><span>SPECIAL MATERIALS</span><b id="fSpecial"></b></div>
+          <div class="detail"><span>EST. LABOR</span><b id="fLabor"></b></div>
+        </div>
+        <div class="detail" style="margin-top:8px"><span>PAYMENT NOTES</span><p id="fPaymentNotes"></p></div>
+      </section>
+      <section class="file-pane" id="pane-production">
+        <div class="detail"><span>WORKBACK SCHEDULE</span><div id="fTasks"></div></div>
+        <div class="detail" style="margin-top:8px"><span>INGREDIENT + PACKAGING PULL</span><div id="fStock"></div></div>
+      </section>
+      <section class="file-pane" id="pane-followup">
+        <div class="detail"><span>CUSTOMER FOLLOW-UP</span><div id="fFollowups"></div></div>
+        <div class="detail" style="margin-top:8px"><span>INTERNAL NOTE</span><textarea placeholder="Add a note about the customer, design, payment, pickup, or production..."></textarea><button class="btn" id="saveNote" style="margin-top:8px">SAVE NOTE</button></div>
+      </section>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast">SAVED ✓</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+const orderData={
+  maya:{stage:"inquiry",name:"Maya — 30th Birthday",status:"Inquiry",sub:"Quote pending • design approval needed",customer:"Maya Carter",event:"30th Birthday",fulfillment:"Customer Pickup",due:"Sep 6 • 1:00 PM",contact:"Instagram @mayacarter",summary:'6" heart cake • vintage piping • chocolate strawberry • silver “30” topper.',size:"6 inch",flavor:"Chocolate Strawberry",filling:"Strawberry",servings:"10–12",design:"Blush pink heart cake, white vintage shell piping, cherries on top, silver 30 topper.",allergy:"No allergies reported. Confirm before deposit.",revisions:[["AUG 30","Customer changed base color from white to blush pink."],["AUG 30","Asked whether cherries can be added without increasing quote."]],total:185,paid:0,profitHr:"$39.20",ingredientCost:"$31",packaging:"$8",special:"$12",labor:"3.4 h",paymentNotes:"50% deposit ($92.50) required before date is reserved.",tasks:[["TODAY","Confirm final color + cherry detail"],["AFTER APPROVAL","Send deposit request"],["SEP 4","Shop / prep"],["SEP 5","Bake + crumb coat"],["SEP 6","Decorate + pickup handoff"]],stock:[["Eggs","6","IN STOCK"],["Butter","1.5 lb","LOW"],["6-inch heart board","1","IN STOCK"],["Silver 30 topper","0","BUY"]],followups:[["Next message","Ask Maya to approve blush-pink reference and confirm cherries."],["Payment","Send $92.50 deposit request immediately after design approval."]]},
+  jordan:{stage:"inquiry",name:"Jordan — Baby Shower",status:"Quote Sent",sub:"Quote sent • deposit not received",customer:"Jordan Lee",event:"Baby Shower",fulfillment:"Local Delivery",due:"Sep 12 • 11:30 AM",contact:"Instagram @jordnlee",summary:"Two-tier neutral cake • 45 servings • beige/cream palette • delivery requested.",size:"Two-tier",flavor:"Vanilla Bean",filling:"Vanilla Buttercream",servings:"45",design:"Minimal cream two-tier with soft beige texture, dried floral accents and acrylic 'Baby Lee' topper.",allergy:"One guest has nut allergy; kitchen cross-contact disclaimer required.",revisions:[["AUG 29","Changed from sage accents to all-neutral palette."],["AUG 30","Added delivery request — 11 miles from pickup area."]],total:310,paid:0,profitHr:"$34.80",ingredientCost:"$58",packaging:"$18",special:"$28",labor:"5.9 h",paymentNotes:"Quoted $310 including delivery. 50% deposit ($155) needed to reserve.",tasks:[["SEP 1","Deposit deadline"],["SEP 9","Confirm topper + final serving count"],["SEP 10","Bake tiers"],["SEP 11","Stack / finish"],["SEP 12","Deliver 11:30 AM"]],stock:[["Eggs","14","IN STOCK"],["Butter","4 lb","LOW"],["Tier supports","1 set","BUY"],["12-inch box","1","IN STOCK"]],followups:[["Tomorrow","Deposit reminder if unpaid by noon."],["Sep 9","Confirm event address and receiving contact."]]},
+  kiara:{stage:"booked",name:"Kiara — Graduation",status:"Deposit Paid",sub:"$110 balance • design change requested",customer:"Kiara Johnson",event:"Graduation",fulfillment:"Customer Pickup",due:"Sep 5 • 3:00 PM",contact:"Instagram @kiaraj",summary:'8" vanilla bean • strawberry filling • UNLV red/black/gold • Class of 2026 topper.',size:"8 inch",flavor:"Vanilla Bean",filling:"Strawberry",servings:"24",design:"UNLV red + black + gold. Gold acrylic Class of 2026 topper, piped border and diploma detail.",allergy:"No known allergies. Customer confirmed Aug 27.",revisions:[["AUG 29","Added gold border after original design approval."],["AUG 27","Changed filling from vanilla buttercream to strawberry."]],total:220,paid:110,profitHr:"$36.10",ingredientCost:"$34",packaging:"$9",special:"$29",labor:"4.1 h",paymentNotes:"Deposit received Aug 27. Gold-border change may add $15 if approved.",tasks:[["SEP 3","Confirm gold-border charge + final design"],["SEP 4 AM","Bake layers + strawberry filling"],["SEP 4 PM","Stack / fill / crumb coat"],["SEP 5 AM","Final buttercream + gold details"],["SEP 5 2PM","Send balance + pickup reminder"]],stock:[["Eggs","12","IN STOCK"],["Butter","3.5 lb","LOW"],["10-inch board","1","LOW"],["Gold detail material","Enough","IN STOCK"]],followups:[["Today","Get approval on possible +$15 gold-border change."],["Sep 5 • 2 PM","Send $110 balance reminder and pickup instructions."]]},
+  devon:{stage:"booked",name:"Devon — Anniversary",status:"Deposit Paid",sub:"$82.50 balance • design locked",customer:"Devon Morris",event:"Anniversary",fulfillment:"Customer Pickup",due:"Sep 3 • 6:00 PM",contact:"Text • 702-555-0148",summary:'6" red velvet • minimalist white + black detail.',size:"6 inch",flavor:"Red Velvet",filling:"Vanilla Buttercream",servings:"10–12",design:"Smooth white finish, thin black piping, small handwritten anniversary date on top.",allergy:"No allergies reported.",revisions:[["AUG 28","Removed floral detail; customer wants cleaner design."]],total:165,paid:82.5,profitHr:"$40.60",ingredientCost:"$29",packaging:"$8",special:"$5",labor:"3.0 h",paymentNotes:"50% deposit paid. Final balance $82.50.",tasks:[["SEP 1","Verify black coloring"],["SEP 2 AM","Bake"],["SEP 2 PM","Crumb coat"],["SEP 3","Finish + photograph"],["SEP 3 5PM","Balance reminder"]],stock:[["Red coloring","Enough","IN STOCK"],["Cream cheese","0","BUY"],["6-inch board","4","IN STOCK"]],followups:[["Sep 3 • 5 PM","Send pickup reminder + balance."],["After pickup","Ask permission to post cake photo."]]},
+  aria:{stage:"productionStage",name:"Aria — Sweet 16",status:"Baking",sub:"$145 balance • bake today",customer:"Aria Thompson",event:"Sweet 16",fulfillment:"Customer Pickup",due:"Sep 1 • 2:00 PM",contact:"Instagram @ariath",summary:"Two-tier • vanilla + Oreo • pearl finish • lavender accents.",size:"Two-tier",flavor:"Vanilla + Oreo",filling:"Oreo Cream",servings:"38–42",design:"Pearl white finish, lavender ribbon detail, edible pearls, chrome 16 topper.",allergy:"No nut allergy. Dairy-heavy order; customer aware.",revisions:[["AUG 27","Added edible pearls."],["AUG 25","Changed bottom tier from chocolate to vanilla."]],total:290,paid:145,profitHr:"$32.75",ingredientCost:"$61",packaging:"$17",special:"$31",labor:"6.1 h",paymentNotes:"Deposit received. $145 remaining.",tasks:[["TODAY 10AM","Bake vanilla tier"],["TODAY 11:15","Bake Oreo tier"],["TODAY 4PM","Fill + crumb coat"],["AUG 31","Stack + pearl finish"],["SEP 1 1PM","Balance reminder"]],stock:[["Eggs","18","IN STOCK"],["Oreos","3 packs","IN STOCK"],["Edible pearls","1 jar","LOW"],["Tier box","1","IN STOCK"]],followups:[["Tonight","Send progress photo only if finish is clean enough."],["Sep 1 • 1 PM","Send $145 balance reminder."]]},
+  marcus:{stage:"productionStage",name:"Marcus — Office Party",status:"Baking",sub:"$96 balance • 48 cupcakes",customer:"Marcus Reed",event:"Office Party",fulfillment:"Local Delivery",due:"Sep 2 • 8:30 AM",contact:"Email • marcus@example.com",summary:"48 cupcakes • 24 vanilla / 24 chocolate • company logo toppers.",size:"48 cupcakes",flavor:"Mixed Cupcakes",filling:"None",servings:"48",design:"White buttercream swirl, alternating navy and silver sprinkles, printed logo toppers.",allergy:"Office requested ingredient list. No allergy guarantee.",revisions:[["AUG 30","Increased count from 36 to 48."],["AUG 29","Added printed logo toppers."]],total:192,paid:96,profitHr:"$49.00",ingredientCost:"$38",packaging:"$16",special:"$11",labor:"2.6 h",paymentNotes:"Deposit paid. Final invoice due night before delivery.",tasks:[["TODAY","Print / cut logo toppers"],["SEP 1 1PM","Bake 48 cupcakes"],["SEP 1 6PM","Decorate + box"],["SEP 1 6PM","Final invoice due"],["SEP 2 8:30AM","Deliver"]],stock:[["Cupcake liners","61","IN STOCK"],["Cupcake boxes","2","BUY 2"],["Logo cardstock","Enough","IN STOCK"]],followups:[["Sep 1 • 4 PM","Confirm office suite / delivery contact."],["Sep 1 • 6 PM","Send $96 final invoice."]]},
+  sasha:{stage:"pickup",name:"Sasha — Bridal Shower",status:"Ready for Pickup",sub:"$76.50 balance • pickup today",customer:"Sasha Green",event:"Bridal Shower",fulfillment:"Customer Pickup",due:"Today • 5:30 PM",contact:"Instagram @sashagreen",summary:'8" lemon cake • pressed florals • 24 mini cupcakes.',size:"Cake + cupcakes",flavor:"Lemon",filling:"Lemon Curd",servings:"Cake 24 + 24 minis",design:"Ivory textured cake with pressed florals. Mini cupcakes match floral palette.",allergy:"Customer confirmed no allergies.",revisions:[["AUG 28","Added 24 mini cupcakes."],["AUG 25","Changed from fresh florals to pressed edible florals."]],total:255,paid:178.5,profitHr:"$42.30",ingredientCost:"$47",packaging:"$14",special:"$9",labor:"4.0 h",paymentNotes:"$76.50 final balance remains. Do not hand off until paid.",tasks:[["DONE","Cake complete"],["DONE","Cupcakes boxed"],["4:30 PM","Send pickup reminder"],["5:15 PM","Check payment"],["5:30 PM","Handoff"]],stock:[["Cake box","1","USED"],["Mini cupcake box","2","USED"],["Pressed florals","Enough","USED"]],followups:[["4:30 PM","Pickup reminder + address + $76.50 balance."],["After handoff","Ask for review / permission to repost event photo."]]}
+};
+
+function money(v){return '$'+Number(v).toFixed(2).replace('.00','')}
+function statusClass(s){return s==="Ready for Pickup"?"good":s==="Baking"?"warn":s==="Inquiry"?"bad":""}
+function orderCard(id,d){
+  return `<article class="order" data-order="${id}" data-stage="${d.stage}" data-status="${d.status}">
+    <div class="order-top"><div><div class="eyebrow">${d.event}</div><h3>${d.name}</h3><p>${d.sub}</p></div><span class="pill ${statusClass(d.status)}">${d.status}</span></div>
+    <div class="order-grid">
+      <div class="stat"><span>DUE</span><b>${d.due}</b></div>
+      <div class="stat"><span>TOTAL</span><b>${money(d.total)}</b></div>
+      <div class="stat"><span>PAID</span><b>${money(d.paid)}</b></div>
+      <div class="stat"><span>BALANCE</span><b>${money(d.total-d.paid)}</b></div>
+    </div>
+  </article>`
+}
+function renderOrders(){
+  const query=$('#orderSearch').value.trim().toLowerCase();
+  const status=$('#statusFilter').value;
+  let entries=Object.entries(orderData).filter(([id,d])=>{
+    const hay=(d.name+' '+d.event+' '+d.status+' '+d.contact).toLowerCase();
+    return (!query||hay.includes(query)) && (!status||d.status===status);
+  });
+  const sort=$('#sortOrders').value;
+  if(sort==="balance") entries.sort((a,b)=>(b[1].total-b[1].paid)-(a[1].total-a[1].paid));
+  if(sort==="value") entries.sort((a,b)=>b[1].total-a[1].total);
+  const all=entries.map(([id,d])=>orderCard(id,d)).join('');
+  $('#all').innerHTML=all||'<p>No matching orders.</p>';
+  ['inquiry','booked','productionStage','pickup'].forEach(stage=>{
+    $('#'+stage).innerHTML=entries.filter(([id,d])=>d.stage===stage).map(([id,d])=>orderCard(id,d)).join('')||'<p>No orders in this stage.</p>';
+  });
+  $$('.order').forEach(o=>o.onclick=()=>openOrder(o.dataset.order));
+}
+renderOrders();
+['orderSearch','statusFilter','sortOrders'].forEach(id=>$('#'+id).addEventListener('input',renderOrders));
+
+$$('.nav button[data-view]').forEach(b=>b.onclick=()=>{
+  $$('.nav button[data-view]').forEach(x=>x.classList.remove('active'));
+  $$('.view').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); $('#'+b.dataset.view).classList.add('active');
+});
+$$('.stage-tabs button').forEach(b=>b.onclick=()=>{
+  $$('.stage-tabs button').forEach(x=>x.classList.remove('active'));
+  $$('.stage-board').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); $('#'+b.dataset.stage).classList.add('active');
+});
+
+$('#photos').addEventListener('change',e=>{
+  const box=$('#previews'); box.innerHTML='';
+  [...e.target.files].forEach(file=>{
+    const d=document.createElement('div'); d.className='preview';
+    const img=document.createElement('img'); img.src=URL.createObjectURL(file); d.appendChild(img); box.appendChild(d);
+  });
+});
+function num(id){return parseFloat($('#'+id).value)||0}
+function recalc(){
+  const base=num('basePrice'), addon=num('addon'), mat=num('materials');
+  const delivery=$('#fulfillment').value==='delivery' ? Math.max(12,num('miles')*1.25) : 0;
+  const total=base+addon+mat+delivery, dep=total*parseFloat($('#depositPct').value);
+  const cost=num('ingredients')+num('packaging')+mat+delivery*.35, profit=total-cost, hr=num('hours')||1;
+  $('#total').textContent=money(total); $('#deposit').textContent=money(dep); $('#profit').textContent=money(profit); $('#perhour').textContent=money(profit/hr);
+}
+['basePrice','addon','materials','fulfillment','miles','depositPct','ingredients','packaging','hours'].forEach(id=>$('#'+id).addEventListener('input',recalc));
+recalc();
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+$('#saveOrder').onclick=()=>toast('ORDER SAVED ✓');
+$('#sendDeposit').onclick=()=>toast('DEPOSIT REQUEST MARKED ✓');
+$('#createQuote').onclick=()=>toast('QUOTE SUMMARY CREATED ✓');
+$('#saveNote').onclick=()=>toast('NOTE SAVED ✓');
+
+function openOrder(id){
+  const d=orderData[id]; if(!d)return;
+  $('#drawerEyebrow').textContent='ORDER DETAILS / '+d.event.toUpperCase();
+  $('#drawerTitle').textContent=d.name; $('#drawerSub').textContent=d.sub;
+  $('#fCustomer').textContent=d.customer; $('#fStatus').textContent=d.status; $('#fEvent').textContent=d.event; $('#fDue').textContent=d.due;
+  $('#fContact').textContent=d.contact; $('#fFulfillment').textContent=d.fulfillment; $('#fSummary').textContent=d.summary;
+  $('#fSize').textContent=d.size; $('#fFlavor').textContent=d.flavor; $('#fFilling').textContent=d.filling; $('#fServings').textContent=d.servings;
+  $('#fDesign').textContent=d.design; $('#fAllergy').textContent=d.allergy;
+  $('#fRevisions').innerHTML=d.revisions.map(r=>`<div class="revision"><strong>${r[0]}</strong><span>${r[1]}</span></div>`).join('');
+  $('#fTotal').textContent=money(d.total); $('#fPaid').textContent=money(d.paid); $('#fBalance').textContent=money(d.total-d.paid); $('#fProfitHr').textContent=d.profitHr;
+  $('#fIngredientCost').textContent=d.ingredientCost; $('#fPackaging').textContent=d.packaging; $('#fSpecial').textContent=d.special; $('#fLabor').textContent=d.labor;
+  $('#fPaymentNotes').textContent=d.paymentNotes;
+  $('#fTasks').innerHTML=d.tasks.map(t=>`<label class="taskrow"><input type="checkbox" ${t[0]==='DONE'?'checked':''}><strong>${t[0]}</strong><span>${t[1]}</span></label>`).join('');
+  $('#fStock').innerHTML=d.stock.map(s=>`<div class="stockrow"><b>${s[0]}</b><span>${s[1]}</span><span class="${/BUY|LOW/.test(s[2])?'low':''}">${s[2]}</span></div>`).join('');
+  $('#fFollowups').innerHTML='<div class="note-log">'+d.followups.map(f=>`<div class="log"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('')+'</div>';
+  $$('.file-tabs button').forEach((b,i)=>b.classList.toggle('active',i===0)); $$('.file-pane').forEach((p,i)=>p.classList.toggle('active',i===0));
+  $('#orderDrawer').classList.add('open'); document.body.style.overflow='hidden';
+}
+$$('[data-close]').forEach(x=>x.onclick=()=>{$('#orderDrawer').classList.remove('open');document.body.style.overflow=''});
+$$('.file-tabs button').forEach(b=>b.onclick=()=>{
+  $$('.file-tabs button').forEach(x=>x.classList.remove('active')); $$('.file-pane').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); $('#pane-'+b.dataset.filetab).classList.add('active');
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#orderDrawer').classList.remove('open');document.body.style.overflow=''}});
+</script>
+</body>
+</html>
