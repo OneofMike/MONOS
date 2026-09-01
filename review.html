@@ -471,6 +471,7 @@ currentPaymentIntentId = data.paymentIntentId;
         paymentIntent:paymentIntent.id
       })
     );
+    window.location.href = 'confirmation.html';
   }else{
     message.textContent = 'Payment is being processed.';
     btn.disabled = false;
