@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>you — Side Business Feasibility BUSINESS ANALYSIS</title>
+<style>
+:root{
+ --bg:#0a0f14;--bg2:#0f151d;--panel:#121a23;--panel2:#17212c;--panel3:#0f161e;
+ --line:#273442;--text:#edf2f7;--muted:#92a0ae;--green:#64d39a;--amber:#efb968;
+ --red:#e77b7b;--blue:#77a9ff;--cyan:#66cbd5;--purple:#ad91ff;--white:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+ radial-gradient(circle at 15% 0%,rgba(70,121,108,.09),transparent 26%),
+ linear-gradient(180deg,#080c11 0,#0e141b 42%,#0a0f14 100%);
+ color:var(--text);font-family:Inter,Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:80;background:rgba(8,12,17,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:950;letter-spacing:.035em}.brand span{color:var(--green)}
+.badge{font:800 10px monospace;color:#9fe6bf;border:1px solid #315d46;border-radius:999px;padding:7px 10px;background:#102018}
+.shell{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:55px;height:calc(100vh - 55px);overflow:auto;border-right:1px solid var(--line);background:#0c1219;padding:12px}
+.navgroup{font:800 8px monospace;color:#5f7080;margin:12px 8px 7px;letter-spacing:.12em}
+.navbtn{width:100%;text-align:left;border:0;background:transparent;color:var(--muted);padding:9px 10px;border-radius:9px;margin-bottom:3px;font-weight:750;font-size:11px}
+.navbtn:hover,.navbtn.active{background:#18222d;color:white}
+.main{padding:16px;max-width:1600px;width:100%;margin:0 auto}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:10px;margin-bottom:10px}
+.card{background:linear-gradient(180deg,var(--panel),#101820);border:1px solid var(--line);border-radius:15px;padding:14px}
+.card.tight{padding:11px}
+.eyebrow{font:800 9px monospace;letter-spacing:.12em;color:var(--green)}
+h1{font-size:34px;line-height:1.02;margin:7px 0 9px;max-width:900px}
+h2{font-size:17px;margin:0 0 9px}h3{font-size:13px;margin:0 0 7px}
+p{color:var(--muted);line-height:1.5;margin:5px 0;font-size:12px}
+.small{font-size:10px;color:var(--muted)}
+.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.blue{color:var(--blue)}.cyan{color:var(--cyan)}.purple{color:var(--purple)}
+.metricgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.metric{background:#0e151d;border:1px solid #22303d;border-radius:11px;padding:9px}
+.metric span{display:block;font:800 8px monospace;color:#758493;text-transform:uppercase}
+.metric b{display:block;font-size:20px;margin-top:3px}
+.clickable{cursor:pointer;transition:.16s ease}
+.clickable:hover{outline:1px solid #45627a;transform:translateY(-1px)}
+.ranking{display:grid;gap:6px}
+.rankrow{display:grid;grid-template-columns:1fr 44px;gap:8px;align-items:center;padding:9px;background:#0f171e;border:1px solid #263543;border-radius:10px}
+.rankrow b{font-size:11px}.rankrow strong{font:900 17px monospace;text-align:right}
+.controls{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin:10px 0}
+.control{background:#0e151d;border:1px solid var(--line);border-radius:11px;padding:8px}
+.control label{display:block;font:800 8px monospace;color:#758493;margin-bottom:5px}
+.control input,.control select{width:100%;border:1px solid #314154;background:#0a1118;color:white;border-radius:8px;padding:8px}
+.section{display:none}.section.active{display:block}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.biz{position:relative;overflow:hidden}
+.biz:before{content:"";position:absolute;top:0;bottom:0;left:0;width:3px;background:var(--green)}
+.biz:nth-child(2):before{background:var(--blue)}.biz:nth-child(3):before{background:var(--amber)}.biz:nth-child(4):before{background:var(--red)}
+.bizhead{display:flex;justify-content:space-between;gap:10px}
+.rankchip{font:900 9px monospace;padding:5px 8px;border:1px solid #314151;border-radius:999px;background:#0d151c}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+.stat{background:#0e151c;border:1px solid #222e3b;border-radius:9px;padding:7px}
+.stat span{display:block;font:800 7px monospace;color:#748291}
+.stat b{display:block;font-size:15px;margin-top:2px}
+.openbtn{width:100%;margin-top:8px;padding:8px;border:1px solid #324457;background:#18232e;color:#fff;border-radius:9px;font-weight:850;font-size:10px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:1100px;background:#10171f}
+th,td{padding:9px;border-bottom:1px solid #202d39;font-size:10px;text-align:right}
+th{font:800 8px monospace;color:#8d9baa;background:#0e151c}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:#10171f}
+td strong{color:white}
+.formula{font:800 10px/1.65 monospace;color:#b9c5d1;background:#091017;border:1px dashed #2c3b49;border-radius:10px;padding:10px}
+.note{border-left:3px solid var(--cyan);background:#0d171d;padding:9px 10px;border-radius:8px;color:#aebbc7;font-size:11px}
+.weightrow{display:grid;grid-template-columns:180px 1fr 60px 60px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #202c38;font-size:10px}
+.weightrow input[type=range]{width:100%}
+.scorebar{height:6px;background:#24313d;border-radius:99px;overflow:hidden}.scorebar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--cyan))}
+.breakstack{display:grid;gap:6px}.lineitem{display:grid;grid-template-columns:1fr 90px 90px 40px;gap:6px;padding:8px;background:#0e151c;border:1px solid #25313e;border-radius:9px;font-size:10px;align-items:center}
+.tag{font:800 8px monospace;border:1px solid #334456;border-radius:999px;padding:4px 6px;color:#aebac6;display:inline-block}
+.scenario{background:#0f171e;border:1px solid var(--line);border-radius:11px;padding:10px}.scenario span{font:800 8px monospace;color:#7e8b99}.scenario b{display:block;font-size:19px;margin-top:3px}
+.timeline{display:grid;gap:6px}.step{display:grid;grid-template-columns:88px 1fr;gap:8px;background:#0e151c;border:1px solid #263340;border-radius:9px;padding:8px}.step b{font:900 9px monospace;color:var(--green)}.step span{font-size:10px;color:#c8d1db}
+.drawer{display:none;position:fixed;inset:0;z-index:100}.drawer.open{display:block}.shade{position:absolute;inset:0;background:rgba(0,0,0,.72)}.drawer-panel{position:absolute;right:0;top:0;height:100%;width:min(860px,94vw);overflow:auto;background:#0d141b;border-left:1px solid var(--line);padding:16px}
+.drawer-head{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:10px}.close{border:0;background:#202b36;color:white;width:34px;height:34px;border-radius:50%}
+.deep-tabs{display:flex;gap:5px;overflow:auto;margin-bottom:9px;position:sticky;top:-16px;padding:8px 0;background:#0d141b;z-index:3}
+.deep-tabs button{white-space:nowrap;border:1px solid #2f3d4c;background:#111820;color:#9ba9b8;border-radius:999px;padding:6px 9px;font:800 8px monospace}.deep-tabs button.active{background:#1d3d2f;color:#9ff0c4;border-color:#386b51}
+.deep-pane{display:none}.deep-pane.active{display:block}
+.sourcebox{font:700 9px/1.5 monospace;color:#8fa0ae;background:#0a1117;border:1px dashed #2d3b49;border-radius:9px;padding:8px}
+.inputmini{width:80px;background:#0b1219;color:white;border:1px solid #334353;border-radius:7px;padding:6px;text-align:right}
+.pillrow{display:flex;gap:5px;flex-wrap:wrap}
+.pill{font:800 8px monospace;border:1px solid #344555;background:#101820;color:#b7c3ce;border-radius:999px;padding:5px 7px}
+@media(max-width:1100px){.shell{grid-template-columns:1fr}.sidebar{position:sticky;top:55px;height:auto;z-index:70;border-right:0;border-bottom:1px solid var(--line);display:flex;overflow:auto;padding:7px}.navgroup{display:none}.navbtn{width:auto;white-space:nowrap;margin:0}.hero{grid-template-columns:1fr}.controls{grid-template-columns:repeat(4,1fr)}.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.main{padding:9px}.controls{grid-template-columns:repeat(2,1fr)}.grid4,.grid3,.grid2{grid-template-columns:1fr}.metricgrid{grid-template-columns:1fr 1fr}.weightrow{grid-template-columns:120px 1fr 46px 46px}.drawer-panel{width:100vw}.badge{display:none}h1{font-size:28px}.topbar{padding:9px 11px}}
+
+/* --- DEEP TRACE EXPANSION --- */
+.traceable{
+ cursor:pointer;
+ text-decoration:underline;
+ text-decoration-style:dotted;
+ text-decoration-color:#466079;
+ text-underline-offset:3px;
+}
+.traceable:hover{color:#fff}
+.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.evidence-card{background:#0e151c;border:1px solid #263442;border-radius:10px;padding:10px}
+.evidence-card span{display:block;font:800 8px monospace;color:#738393;margin-bottom:4px}
+.evidence-card b{font-size:13px}
+.trace-list{display:grid;gap:6px}
+.trace-line{display:grid;grid-template-columns:1fr 110px;gap:8px;background:#0e151c;border:1px solid #263442;border-radius:9px;padding:8px}
+.trace-line span{font-size:10px;color:#bcc7d1}
+.trace-line b{text-align:right;font:800 10px monospace}
+@media(max-width:700px){.evidence-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+ <div class="brand">TREVOR <span>// SIDE BUSINESS ANALYSIS</span></div>
+ <div class="badge">$4,000 • WEEKENDS ONLY • DECISION MODEL</div>
+</div>
+<div class="shell">
+ <aside class="sidebar">
+ <div class="navgroup">DECISION</div>
+ <button class="navbtn active" data-section="decision">01 Decision Overview</button>
+ <button class="navbtn" data-section="scoring">02 Scoring</button>
+ <button class="navbtn" data-section="matrix">03 Business Comparison</button>
+ <div class="navgroup">MONEY</div>
+ <button class="navbtn" data-section="economics">04 Unit Economics</button>
+ <button class="navbtn" data-section="startup">05 Startup Build</button>
+ <button class="navbtn" data-section="breakeven">06 Break-Even</button>
+ <div class="navgroup">OPERATIONS</div>
+ <button class="navbtn" data-section="market">07 Market + Acquisition</button>
+ <button class="navbtn" data-section="capacity">08 Capacity</button>
+ <button class="navbtn" data-section="scenario">09 Scenario Lab</button>
+ <button class="navbtn" data-section="risk">10 Risk / Sensitivity</button>
+ <button class="navbtn" data-section="plan">11 90-Day Plan</button>
+ </aside>
+
+ <main class="main">
+ <div class="hero">
+ <div class="card">
+ <div class="eyebrow">TREVOR // CURRENT MODEL CONCLUSION</div>
+ <h1>Mobile Detailing Is Your Strongest Starting Point.</h1>
+ <p>This recommendation is based on your current budget, weekend-only availability, ticket economics, repeat-customer potential, vehicle burden, and cash reserve. Open any major score or dollar figure to see exactly what is driving it.</p>
+ <div class="metricgrid">
+ <div class="metric clickable" data-metric="score-detailing"><span>WEIGHTED SCORE</span><b class="good" id="heroScore">86.0</b></div>
+ <div class="metric clickable" data-metric="startup-detailing"><span>STARTUP DEPLOYED</span><b id="heroStartup">$2,480</b></div>
+ <div class="metric clickable" data-metric="be-detailing"><span>BREAK-EVEN</span><b id="heroBreak">13 jobs</b></div>
+ <div class="metric clickable" data-metric="reserve-detailing"><span>CASH RESERVE</span><b class="cyan" id="heroReserve">$1,520</b></div>
+ </div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">CURRENT RANKING</div>
+ <div class="ranking">
+ <div class="rankrow clickable" data-detail="detailing"><b>1. Mobile Detailing</b><strong class="good" id="rank-detailing">86</strong></div>
+ <div class="rankrow clickable" data-detail="pressure"><b>2. Pressure Washing</b><strong class="blue" id="rank-pressure">82</strong></div>
+ <div class="rankrow clickable" data-detail="carpet"><b>3. Carpet Cleaning</b><strong class="warn" id="rank-carpet">74</strong></div>
+ <div class="rankrow clickable" data-detail="junk"><b>4. Junk Removal</b><strong class="bad" id="rank-junk">63</strong></div>
+ </div>
+ <p class="small">↑ Open any business to inspect the score, costs, economics, operations, market, risk, and scale logic.</p>
+ </div>
+ </div>
+
+ <div class="note" style="margin:10px 0 0">↓ Change any assumption below. Your break-even, capacity, lead requirements, and scenario outputs update automatically.</div><div class="controls">
+ <div class="control"><label>BUDGET</label><input id="budget" type="number" value="4000"></div>
+ <div class="control"><label>WEEKEND HOURS / WK</label><input id="hours" type="number" value="16"></div>
+ <div class="control"><label>EXPECTED JOBS / MO</label><input id="jobs" type="number" value="8"></div>
+ <div class="control"><label>DETAIL AVG TICKET</label><input id="ticket" type="number" value="240"></div>
+ <div class="control"><label>DETAIL VARIABLE COST</label><input id="varCost" type="number" value="49"></div>
+ <div class="control"><label>DETAIL HOURS / JOB</label><input id="jobHours" type="number" step=".1" value="3.1"></div>
+ <div class="control"><label>LEAD CLOSE RATE %</label><input id="closeRate" type="number" value="30"></div>
+ <div class="control"><label>MONTHLY GOAL</label><input id="goal" type="number" value="1500"></div>
+ </div>
+
+ <section class="section active" id="decision">
+ <div class="grid4" id="businessCards"></div>
+ <div class="grid3" style="margin-top:8px">
+ <div class="card"><div class="eyebrow">WHY #1</div><h2>Budget Efficiency</h2><p>Detailing leaves a modeled reserve instead of converting nearly the entire $4,000 into equipment. That matters because you still needs room for fuel, replacement supplies, unexpected repairs, and a slow first month.</p></div>
+ <div class="card"><div class="eyebrow">WHY #1</div><h2>Repeat-Customer Structure</h2><p>A first deep clean can become a maintenance detail every 4–8 weeks. That gives you a path to recurring demand rather than constantly replacing every completed customer with a new lead.</p></div>
+ <div class="card"><div class="eyebrow">WHAT COULD FLIP IT</div><h2>Pressure Washing Can Overtake</h2><p>If you proves higher local tickets, dense neighborhood routing, and enough recurring commercial work, pressure washing’s faster job cycle can outrank detailing.</p></div>
+ </div>
+ </section>
+
+ <section class="section" id="scoring">
+ <div class="grid2">
+ <div class="card">
+ <div class="eyebrow">WEIGHTED DECISION ENGINE</div>
+ <h2>Your Score Weights</h2>
+ <p>← Change the weights to reflect what matters most to you. Scores recalculate instantly.</p>
+ <div id="weightRows"></div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">SCORE BREAKDOWN</div>
+ <h2>How the Recommendation Is Built</h2>
+ <div id="scoreBreakdown"></div>
+ <div class="note" style="margin-top:8px">A high score means stronger fit against your current constraints and assumptions. Open the score to see what is pushing it up or down.</div>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="matrix">
+ <div class="card">
+ <div class="eyebrow">FULL COMPARISON</div><h2>Business Comparison</h2>
+ <div class="tablewrap" id="matrixTable"></div>
+ </div>
+ </section>
+
+ <section class="section" id="economics">
+ <div class="grid2">
+ <div class="card">
+ <div class="eyebrow">DETAILING // PER-JOB ECONOMICS</div>
+ <h2>Contribution Model</h2>
+ <div class="formula" id="detailFormula"></div>
+ <div class="metricgrid">
+ <div class="metric clickable" data-metric="ticket"><span>AVG TICKET</span><b id="ecoTicket"></b></div>
+ <div class="metric clickable" data-metric="variable-cost"><span>VARIABLE COST</span><b id="ecoVar"></b></div>
+ <div class="metric clickable" data-metric="contribution"><span>CONTRIBUTION</span><b id="ecoContrib"></b></div>
+ <div class="metric clickable" data-metric="profit-hour"><span>CONTRIBUTION / HR</span><b id="ecoPH"></b></div>
+ </div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">TICKET MIX</div><h2>How a $240 Average Could Be Produced</h2>
+ <div class="tablewrap"><table style="min-width:650px">
+ <thead><tr><th>Service</th><th>Mix</th><th>Ticket</th><th>Variable Cost</th><th>Contribution</th><th>Hours</th></tr></thead>
+ <tbody>
+ <tr><td>Maintenance Detail</td><td>25%</td><td>$145</td><td>$28</td><td>$117</td><td>1.8</td></tr>
+ <tr><td>Interior + Exterior Reset</td><td>45%</td><td>$225</td><td>$44</td><td>$181</td><td>2.8</td></tr>
+ <tr><td>Deep Interior</td><td>20%</td><td>$290</td><td>$62</td><td>$228</td><td>3.6</td></tr>
+ <tr><td>Correction / Premium</td><td>10%</td><td>$425</td><td>$99</td><td>$326</td><td>5.5</td></tr>
+ </tbody></table></div>
+ <p class="small">This is a modeled service mix for your current model; the structure is meant to show how actual customer data could replace assumptions later.</p>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="startup">
+ <div class="grid2">
+ <div class="card">
+ <div class="eyebrow">DETAILING // STARTUP BUILD SHEET</div><h2>Every Dollar in the $2,480 Model</h2>
+ <div class="breakstack" id="startupStack"></div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">BUY NOW VS LATER</div><h2>Capital Deployment Logic</h2>
+ <div class="timeline">
+ <div class="step"><b>JOB #1</b><span>Vacuum, pressure washer, basic extractor, towels, brushes, chemicals, buckets, storage, payment method.</span></div>
+ <div class="step"><b>AFTER 5</b><span>Replace the bottleneck item you actually notices in real work, not the item that simply looks professional.</span></div>
+ <div class="step"><b>AFTER 15</b><span>Consider steamer, upgraded extractor, or premium polishing setup if those services are actually selling.</span></div>
+ <div class="step"><b>LATER</b><span>Tank, generator, van or trailer only after customer density proves that mobile independence is worth the capital and transport burden.</span></div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="breakeven">
+ <div class="grid3">
+ <div class="card"><div class="eyebrow">BREAK-EVEN</div><h2>Startup Recovery</h2><div class="formula" id="beFormula"></div></div>
+ <div class="card"><div class="eyebrow">INCOME GOAL</div><h2>Jobs Needed for Your Goal</h2><div class="formula" id="goalFormula"></div></div>
+ <div class="card"><div class="eyebrow">RESERVE TEST</div><h2>Cash Remaining After Launch</h2><div class="formula" id="reserveFormula"></div></div>
+ </div>
+ <div class="card" style="margin-top:8px">
+ <div class="eyebrow">CUMULATIVE RECOVERY</div><h2>What Break-Even Looks Like Job by Job</h2>
+ <div class="tablewrap" id="beTable"></div>
+ </div>
+ </section>
+
+ <section class="section" id="market">
+ <div class="grid3">
+ <div class="card">
+ <div class="eyebrow">CUSTOMER ACQUISITION</div><h2>Lead Funnel</h2>
+ <div class="formula" id="funnelFormula"></div>
+ <div class="metricgrid" style="grid-template-columns:1fr 1fr">
+ <div class="metric"><span>LEADS NEEDED / 8 JOBS</span><b id="leadsNeeded"></b></div>
+ <div class="metric"><span>LEADS / WEEK</span><b id="leadsWeek"></b></div>
+ </div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">CHANNEL MODEL</div><h2>Where You Could Get Leads</h2>
+ <div class="timeline">
+ <div class="step"><b>LOCAL</b><span>Neighborhood groups, local car groups, apartment communities, referrals.</span></div>
+ <div class="step"><b>VISUAL</b><span>Before/after content creates proof and makes pricing easier to understand.</span></div>
+ <div class="step"><b>PARTNER</b><span>Turo hosts, independent dealers, office fleets, apartment managers.</span></div>
+ <div class="step"><b>REPEAT</b><span>Maintenance reminders reduce the number of net-new leads you must replace every month.</span></div>
+ </div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">CUSTOMER VALUE</div><h2>12-Month Repeat Example</h2>
+ <div class="formula">FIRST RESET: $225<br>+ 5 MAINTENANCE VISITS × $145<br>= $950 GROSS CUSTOMER VALUE<br><br>ONE ACQUIRED CUSTOMER CAN BECOME MULTIPLE WEEKEND BOOKINGS.</div>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="capacity">
+ <div class="grid2">
+ <div class="card">
+ <div class="eyebrow">WEEKEND CAPACITY</div><h2>Your Time Constraint</h2>
+ <div class="formula" id="capacityFormula"></div>
+ <p>Capacity is deliberately reduced below the pure arithmetic maximum to leave room for travel, quoting, customer handoff, cleanup, late arrivals, and rework.</p>
+ </div>
+ <div class="card">
+ <div class="eyebrow">TIME STACK / JOB</div><h2>Where the Hours Actually Go</h2>
+ <div class="breakstack">
+ <div class="lineitem"><span>Travel + arrival</span><b class="traceable" data-trace="hours" data-biz="detailing">0.35 h</b><span>11%</span><i class="tag">NON-BILLABLE</i></div>
+ <div class="lineitem"><span>Walkaround / intake</span><b class="traceable" data-trace="hours" data-biz="detailing">0.15 h</b><span>5%</span><i class="tag">SALES</i></div>
+ <div class="lineitem"><span>Production</span><b class="traceable" data-trace="hours" data-biz="detailing">2.20 h</b><span>71%</span><i class="tag">CORE</i></div>
+ <div class="lineitem"><span>QC / photos / payment</span><b class="traceable" data-trace="hours" data-biz="detailing">0.20 h</b><span>6%</span><i class="tag">CLOSE</i></div>
+ <div class="lineitem"><span>Reset / towels / load</span><b class="traceable" data-trace="hours" data-biz="detailing">0.20 h</b><span>6%</span><i class="tag">RESET</i></div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="scenario">
+ <div class="card">
+ <div class="eyebrow">LIVE SCENARIO LAB</div><h2>Conservative → Expected → Strong → Practical Ceiling</h2>
+ <div class="grid4">
+ <div class="scenario"><span>CONSERVATIVE • 3 JOBS</span><b id="sCon"></b><p>Slow launch / low lead flow.</p></div>
+ <div class="scenario"><span>EXPECTED • USER INPUT</span><b id="sExp"></b><p>Current expected jobs/month.</p></div>
+ <div class="scenario"><span>STRONG • 16 JOBS</span><b id="sStrong"></b><p>Four jobs each weekend.</p></div>
+ <div class="scenario"><span>PRACTICAL CEILING</span><b id="sCeil"></b><p>Derived from available hours.</p></div>
+ </div>
+ </div>
+ <div class="grid2" style="margin-top:8px">
+ <div class="card">
+ <div class="eyebrow">SENSITIVITY // TICKET</div><h2>What If your Average Ticket Changes?</h2>
+ <div id="ticketSensitivity"></div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">SENSITIVITY // JOB VOLUME</div><h2>What If Lead Flow Changes?</h2>
+ <div id="volumeSensitivity"></div>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="risk">
+ <div class="grid2">
+ <div class="card">
+ <div class="eyebrow">RISK REGISTER</div><h2>Detailing — Modeled Operating Risks</h2>
+ <div class="tablewrap"><table style="min-width:700px">
+ <thead><tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr></thead>
+ <tbody>
+ <tr><td>Customer expects impossible stain removal</td><td><span class="traceable" data-trace="risk" data-biz="detailing">Mid</span></td><td><span class="traceable" data-trace="risk" data-biz="detailing">Mid</span></td><td>Pre-inspection + exclusions + before photos</td></tr>
+ <tr><td>Paint/interior damage</td><td><span class="traceable" data-trace="risk" data-biz="detailing">Low–Mid</span></td><td><span class="traceable" data-trace="risk" data-biz="detailing">High</span></td><td>Process discipline + insurance + avoid advanced work early</td></tr>
+ <tr><td>Weather cancellation</td><td><span class="traceable" data-trace="risk" data-biz="detailing">Mid</span></td><td><span class="traceable" data-trace="risk" data-biz="detailing">Mid</span></td><td>Canopy + flexible reschedule policy</td></tr>
+ <tr><td>Equipment failure</td><td><span class="traceable" data-trace="risk" data-biz="detailing">Low–Mid</span></td><td><span class="traceable" data-trace="risk" data-biz="detailing">Mid</span></td><td>Reserve cash + backup basic tools</td></tr>
+ <tr><td>Low lead flow</td><td>Mid</td><td><span class="traceable" data-trace="risk" data-biz="detailing">High</span></td><td>Track inquiry volume weekly and diversify channels</td></tr>
+ <tr><td>Jobs take too long</td><td>Mid</td><td><span class="traceable" data-trace="risk" data-biz="detailing">High</span></td><td>Track actual hours and reprice packages</td></tr>
+ </tbody></table></div>
+ </div>
+ <div class="card">
+ <div class="eyebrow">DECISION FLIP CONDITIONS</div><h2>When Mobile Detailing Stops Being #1</h2>
+ <div class="timeline">
+ <div class="step"><b>TICKET ↓</b><span>If realized detailing tickets settle far below the modeled level while pressure-washing tickets remain strong.</span></div>
+ <div class="step"><b>TIME ↑</b><span>If average details regularly take 4.5–5+ effective hours, your weekend capacity deteriorates sharply.</span></div>
+ <div class="step"><b>LEADS ↓</b><span>If detailing requires materially more lead generation than the alternatives in your market.</span></div>
+ <div class="step"><b>ROUTE DENSITY ↑</b><span>If pressure washing can stack several nearby jobs, its time efficiency becomes much more attractive.</span></div>
+ <div class="step"><b>VEHICLE ACCESS ↑</b><span>If you gains a capable truck/trailer arrangement at low cost, junk removal becomes less constrained.</span></div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <section class="section" id="plan">
+ <div class="card">
+ <div class="eyebrow">90-DAY EXECUTION</div><h2>Replace Assumptions With Your Real Results</h2>
+ <div class="timeline">
+ <div class="step"><b>DAYS 1–7</b><span>Buy minimum viable setup. Define your 3 packages. Perform 3 controlled jobs. Record actual chemical use and total elapsed time.</span></div>
+ <div class="step"><b>DAYS 8–30</b><span>Target your first 8 paid jobs. Track leads, source, quote, booked price, service mix, travel, production time, variable cost, customer feedback, repeat interest.</span></div>
+ <div class="step"><b>DAYS 31–45</b><span>Replace modeled average ticket and hours/job with your real values. Re-run ranking against pressure washing and the other alternatives.</span></div>
+ <div class="step"><b>DAYS 46–60</b><span>Cut low-margin package combinations. Create a maintenance offer for customers who rated the service highly. Test one partner channel.</span></div>
+ <div class="step"><b>DAYS 61–75</b><span>Measure repeat bookings, customer acquisition effort, and whether weekend capacity is becoming the limiting factor.</span></div>
+ <div class="step"><b>DAYS 76–90</b><span>Decide whether you should stay lean, upgrade equipment, add premium services, or switch capital toward the business model that actual data now favors.</span></div>
+ </div>
+ </div>
+ </section>
+ </main>
+</div>
+
+<div class="drawer" id="drawer">
+ <div class="shade" data-close></div>
+ <aside class="drawer-panel">
+ <div class="drawer-head"><div><div class="eyebrow" id="dEye">RESEARCH FILE</div><h2 id="dTitle"></h2><p id="dSub"></p></div><button class="close" data-close>×</button></div>
+ <div class="deep-tabs" id="deepTabs">
+ <button class="active" data-pane="summary">SUMMARY</button>
+ <button data-pane="score">SCORE MATH</button>
+ <button data-pane="costs">COST STACK</button>
+ <button data-pane="economics">ECONOMICS</button>
+ <button data-pane="ops">OPERATIONS</button>
+ <button data-pane="market">MARKET</button>
+ <button data-pane="risk">RISK</button>
+ <button data-pane="scale">SCALE</button>
+ </div>
+ <div id="deepContent"></div>
+ </aside>
+</div>
+
+<div class="drawer" id="metricDrawer">
+ <div class="shade" data-mclose></div>
+ <aside class="drawer-panel">
+ <div class="drawer-head"><div><div class="eyebrow">NUMBER TRACE</div><h2 id="mTitle"></h2><p id="mSub"></p></div><button class="close" data-mclose>×</button></div>
+ <div id="metricContent"></div>
+ </aside>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const money=n=>'$'+Math.round(n).toLocaleString();
+const business={
+ detailing:{name:"Mobile Detailing",scoreBase:86,startup:2480,ticket:240,varCost:49,hours:3.1,repeat:92,budgetFit:92,weekendFit:90,vehicle:82,demand:78,margin:88,scale:82,risk:78,
+ summary:["High repeat potential","Strong reserve after launch","Works with current vehicle","Deep upsell ladder","Weekend compatible"],
+ costs:[["Pressure washer",390,"NOW"],["Wet/dry vacuum",160,"NOW"],["Extractor",430,"NOW"],["DA polisher",190,"NOW"],["Chemicals",285,"NOW"],["Microfiber + pads",150,"NOW"],["Canopy + lighting",235,"NOW"],["Buckets / brushes / bins",180,"NOW"],["Launch / insurance reserve",460,"RESERVE"]],
+ ops:["Lead arrives → photos / condition → package fit → quote → booking → before photos → production → QC → payment → maintenance reminder.","Main operational bottleneck is labor time. If you takes too long on each vehicle, the business can look profitable per job but still underperform per weekend.","Real time-tracking should replace modeled hours after the first 8–10 paid jobs."],
+ market:["Primary: busy consumers who value convenience.","Secondary: enthusiasts who spend more on correction / protection.","Partner path: Turo hosts, small dealers, office fleets.","Retention path: 4–8 week maintenance cadence."],
+ risk:["Damage / rework","Weather","Expectation mismatch","Slow lead flow","Jobs taking too long"],
+ scale:["Maintenance plans","Premium correction","Fleet partnerships","Helper after saturation","Van/tank only after proven demand"]},
+ pressure:{name:"Pressure Washing",scoreBase:82,startup:2180,ticket:225,varCost:43,hours:2.7,repeat:58,budgetFit:95,weekendFit:91,vehicle:72,demand:82,margin:92,scale:84,risk:65,
+ summary:["Excellent contribution/hour","Lowest startup model","Simple core service","Higher weather exposure","Lower repeat frequency"],
+ costs:[["Washer",850,"NOW"],["Surface cleaner",260,"NOW"],["Hoses / reels",220,"NOW"],["Chemicals",180,"NOW"],["PPE / accessories",120,"NOW"],["Storage",100,"NOW"],["Marketing / reserve",450,"RESERVE"]],
+ ops:["Quote from photos / measurements → verify access → pretreat → wash → rinse → post-treat → cleanup → after photos.","Route density can materially improve the model because setup and travel become a smaller share of the working day.","House washing expands ticket size but increases chemistry and damage risk."],
+ market:["Primary: homeowners with driveways / patios.","Partner: property managers / HOAs.","Upsell: house wash, walls, pool deck.","Repeat: usually weaker than detailing unless commercial."],
+ risk:["Surface damage","Runoff","Weather","Water access","Elevation"],
+ scale:["Commercial recurring pads","House wash upsell","HOA work","Second machine","Trailer after density"]},
+ carpet:{name:"Carpet Cleaning",scoreBase:74,startup:3260,ticket:205,varCost:39,hours:2.8,repeat:70,budgetFit:55,weekendFit:80,vehicle:70,demand:76,margin:82,scale:76,risk:72,
+ summary:["Indoor demand","Good property-manager channel","Moderate repeat","Higher startup commitment","Smaller cash reserve"],
+ costs:[["Portable extractor",1650,"NOW"],["Vacuum / agitation",420,"NOW"],["Hoses / tools",280,"NOW"],["Chemicals",260,"NOW"],["Fans / drying",210,"NOW"],["Accessories",140,"NOW"],["Launch reserve",300,"RESERVE"]],
+ ops:["Inspect → vacuum → pretreat → agitate → extract → spot treat → dry setup → final walkthrough.","Apartment turns and realtor referrals could create better consistency than consumer-only demand.","Stain expectations and drying performance need strong communication."],
+ market:["Primary: residential refresh / move-outs.","Partner: property managers / realtors.","Upsell: upholstery / pet treatment.","Repeat: moderate, often event-driven."],
+ risk:["Over-wetting","Stain expectations","Equipment transport","Chemical sensitivity","Callbacks"],
+ scale:["Upholstery","Property managers","Pet-treatment add-ons","Commercial recurring","Second extractor"]},
+ junk:{name:"Junk Removal",scoreBase:63,startup:3850,ticket:310,varCost:97,hours:3.6,repeat:40,budgetFit:20,weekendFit:62,vehicle:22,demand:82,margin:76,scale:88,risk:48,
+ summary:["Highest ticket","Strong move-out demand","Almost no cash reserve","Vehicle burden","Disposal uncertainty"],
+ costs:[["Trailer / hauling setup",2250,"NOW"],["Dollies / straps / tools",350,"NOW"],["PPE",150,"NOW"],["Dump-fee float",350,"RESERVE"],["Insurance/admin reserve",400,"RESERVE"],["Marketing / misc",350,"NOW"]],
+ ops:["Photo estimate → access / item check → load → sweep → dump / donation → disposal documentation → payment.","Unknown load composition can destroy quote accuracy. Dump distance and disposal fee are core unit-economic variables.","Some jobs become two-person work, reducing your solo flexibility."],
+ market:["Primary: move-outs / cleanouts.","Partner: realtors / property managers.","Upsell: labor-only moves / light .","Repeat: low unless partner accounts."],
+ risk:["Vehicle strain","Injury","Dump fees","Hazardous material","Helper dependency"],
+ scale:["Larger trailer","Helper crew","Estate cleanouts","Commercial routes","Property manager accounts"]}
+};
+const weights={budgetFit:22,weekendFit:18,margin:18,repeat:14,vehicle:10,demand:8,scale:5,risk:5};
+const labels={budgetFit:"Budget fit",weekendFit:"Weekend fit",margin:"Unit economics",repeat:"Repeat potential",vehicle:"Vehicle / storage burden",demand:"Demand access",scale:"Scalability",risk:"Risk-adjusted fit"};
+
+function weightedScore(d){
+ let total=0,wt=0;
+ Object.keys(weights).forEach(k=>{total+=d[k]*weights[k];wt+=weights[k]});
+ return total/wt;
+}
+function contribution(d){return d.ticket-d.varCost}
+function breakEven(d){return Math.ceil(d.startup/contribution(d))}
+function businessCards(){
+ $('#businessCards').innerHTML=Object.entries(business).map(([id,d],i)=>`
+ <div class="card biz clickable" data-detail="${id}">
+ <div class="bizhead"><div><div class="eyebrow">RANK #${i+1}</div><h2>${d.name}</h2></div><span class="rankchip">${weightedScore(d).toFixed(1)}</span></div>
+ <div class="statgrid">
+ <div class="stat"><span>STARTUP</span><b class="traceable" data-trace="startup" data-biz="${id}">${money(d.startup)}</b></div>
+ <div class="stat"><span>AVG TICKET</span><b class="traceable" data-trace="ticket" data-biz="${id}">${money(d.ticket)}</b></div>
+ <div class="stat"><span>CONTRIB / JOB</span><b class="traceable" data-trace="contrib" data-biz="${id}">${money(contribution(d))}</b></div>
+ <div class="stat"><span>HOURS / JOB</span><b class="traceable" data-trace="hours" data-biz="${id}">${d.hours}</b></div>
+ <div class="stat"><span>BREAK-EVEN</span><b class="traceable" data-trace="be" data-biz="${id}">${breakEven(d)} jobs</b></div>
+ <div class="stat"><span>REPEAT SCORE</span><b class="traceable" data-trace="repeat" data-biz="${id}">${d.repeat}/100</b></div>
+ </div><button class="openbtn">OPEN FULL RESEARCH FILE →</button>
+ </div>`).join("");
+ bindBusiness();
+}
+function bindBusiness(){$$('[data-detail]').forEach(x=>x.onclick=()=>openDetail(x.dataset.detail))}
+function buildWeights(){
+ $('#weightRows').innerHTML=Object.keys(weights).map(k=>`
+ <div class="weightrow"><b>${labels[k]}</b><input type="range" min="0" max="35" value="${weights[k]}" data-weight="${k}"><span id="w-${k}">${weights[k]}%</span><span id="sd-${k}" class="traceable" data-trace="${k}" data-biz="detailing">${business.detailing[k]}</span></div>`).join("");
+ $$('[data-weight]').forEach(r=>r.oninput=()=>{weights[r.dataset.weight]=+r.value;$('#w-'+r.dataset.weight).textContent=r.value+'%';refreshScores()});
+}
+function refreshScores(){
+ const scored=Object.entries(business).map(([id,d])=>[id,weightedScore(d)]).sort((a,b)=>b[1]-a[1]);
+ scored.forEach(([id,s])=>{const el=$('#rank-'+id);if(el)el.textContent=s.toFixed(1)});
+ $('#heroScore').textContent=weightedScore(business.detailing).toFixed(1);
+ $('#scoreBreakdown').innerHTML=Object.keys(weights).map(k=>{
+ const contribution=business.detailing[k]*weights[k]/100;
+ return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:10px"><b>${labels[k]}</b><span>${business.detailing[k]}/100 × ${weights[k]}%</span></div><div class="scorebar"><i style="width:${business.detailing[k]}%"></i></div></div>`
+ }).join("")+`<div class="formula">WEIGHTED RESULT = ${weightedScore(business.detailing).toFixed(1)} / 100</div>`;
+ businessCards();
+}
+function matrix(){
+ const rows=[
+ ["Weighted score","score",d=>weightedScore(d).toFixed(1)],
+ ["Startup spend","startup",d=>money(d.startup)],
+ ["Budget remaining","reserve",d=>money((+$('#budget').value||4000)-d.startup)],
+ ["Average ticket","ticket",d=>money(d.ticket)],
+ ["Variable cost / job","varcost",d=>money(d.varCost)],
+ ["Contribution / job","contrib",d=>money(contribution(d))],
+ ["Effective hours / job","hours",d=>d.hours],
+ ["Contribution / hour","ph",d=>money(contribution(d)/d.hours)],
+ ["Break-even jobs","be",d=>breakEven(d)],
+ ["Budget-fit score","budgetFit",d=>d.budgetFit+"/100"],
+ ["Weekend-fit score","weekendFit",d=>d.weekendFit+"/100"],
+ ["Repeat score","repeat",d=>d.repeat+"/100"],
+ ["Vehicle/storage fit","vehicle",d=>d.vehicle+"/100"],
+ ["Demand access","demand",d=>d.demand+"/100"],
+ ["Scalability","scale",d=>d.scale+"/100"],
+ ["Risk-adjusted fit","risk",d=>d.risk+"/100"]
+ ];
+ $('#matrixTable').innerHTML=`<table><thead><tr><th>Metric</th>${Object.values(business).map(d=>`<th>${d.name}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${r[0]}</strong></td>${Object.entries(business).map(([id,d])=>`<td><span class="traceable" data-trace="${r[1]}" data-biz="${id}">${r[2](d)}</span></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+ bindTraceables();
+}
+function startup(){
+ $('#startupStack').innerHTML=business.detailing.costs.map(([name,cost,stage])=>`<div class="lineitem clickable" data-metric="startup-item" data-name="${name}" data-cost="${cost}" data-stage="${stage}"><span>${name}</span><b>${money(cost)}</b><span>${stage}</span><i class="tag">OPEN</i></div>`).join("");
+ $$('#startupStack .clickable').forEach(x=>x.onclick=()=>openMetric('startup-item',x.dataset));
+}
+function recalc(){
+ let budget=+$('#budget').value||0,jobs=+$('#jobs').value||0,ticket=+$('#ticket').value||0,vc=+$('#varCost').value||0,h=+$('#jobHours').value||1,hrs=+$('#hours').value||0,close=+$('#closeRate').value||1,goal=+$('#goal').value||0;
+ business.detailing.ticket=ticket;business.detailing.varCost=vc;business.detailing.hours=h;
+ let c=ticket-vc,be=Math.max(0,Math.ceil(business.detailing.startup/Math.max(c,1))),reserve=budget-business.detailing.startup,ph=c/h;
+ $('#heroStartup').textContent=money(business.detailing.startup);$('#heroBreak').textContent=be+' jobs';$('#heroReserve').textContent=money(reserve);
+ $('#ecoTicket').textContent=money(ticket);$('#ecoVar').textContent=money(vc);$('#ecoContrib').textContent=money(c);$('#ecoPH').textContent=money(ph);
+ $('#detailFormula').innerHTML=`${money(ticket)} AVERAGE TICKET<br>− ${money(vc)} VARIABLE COST<br>= ${money(c)} CONTRIBUTION / JOB<br>${money(c)} ÷ ${h.toFixed(1)} HOURS = ${money(ph)} / EFFECTIVE HOUR`;
+ $('#beFormula').innerHTML=`${money(business.detailing.startup)} STARTUP<br>÷ ${money(c)} CONTRIBUTION / JOB<br>= ${be} JOBS TO RECOVER STARTUP`;
+ const goalJobs=Math.ceil(goal/Math.max(c,1));$('#goalFormula').innerHTML=`${money(goal)} MONTHLY CONTRIBUTION GOAL<br>÷ ${money(c)} / JOB<br>= ${goalJobs} JOBS / MONTH`;
+ $('#reserveFormula').innerHTML=`${money(budget)} AVAILABLE<br>− ${money(business.detailing.startup)} STARTUP<br>= ${money(reserve)} REMAINING LIQUID`;
+ let beRows='';for(let i=1;i<=Math.min(be+4,24);i++){let recovered=i*c;beRows+=`<tr><td>Job ${i}</td><td>${money(c)}</td><td>${money(recovered)}</td><td>${money(Math.max(0,business.detailing.startup-recovered))}</td><td>${recovered>=business.detailing.startup?'<span class="good">RECOVERED</span>':'—'}</td></tr>`}
+ $('#beTable').innerHTML=`<table style="min-width:720px"><thead><tr><th>Job</th><th>Contribution</th><th>Cumulative</th><th>Startup Left</th><th>Status</th></tr></thead><tbody>${beRows}</tbody></table>`;
+ let leads=Math.ceil(jobs/(close/100)), lw=(leads/4.33).toFixed(1);$('#leadsNeeded').textContent=leads;$('#leadsWeek').textContent=lw;
+ $('#funnelFormula').innerHTML=`${leads} QUALIFIED LEADS<br>× ${close}% CLOSE RATE<br>≈ ${jobs} BOOKINGS<br>× ${money(ticket)} AVG TICKET<br>= ${money(jobs*ticket)} GROSS REVENUE`;
+ let practical=Math.floor((hrs/h)*.8),monthly=Math.floor(practical*4.33);
+ $('#capacityFormula').innerHTML=`${hrs} AVAILABLE HOURS / WEEK<br>÷ ${h.toFixed(1)} EFFECTIVE HOURS / JOB<br>= ${(hrs/h).toFixed(1)} RAW JOBS<br>× 80% OPERATING BUFFER<br>= ${practical} PRACTICAL JOBS / WEEK<br>≈ ${monthly} / MONTH`;
+ $('#sCon').textContent=money(3*c);$('#sExp').textContent=money(jobs*c);$('#sStrong').textContent=money(16*c);$('#sCeil').textContent=money(monthly*c);
+ const tickets=[160,200,240,280,320,400];
+ $('#ticketSensitivity').innerHTML=tickets.map(t=>{let cc=t-vc;return `<div class="weightrow"><b>${money(t)} avg ticket</b><div class="scorebar"><i style="width:${Math.min(100,cc/300*100)}%"></i></div><span>${money(cc)}/job</span><span>${Math.ceil(business.detailing.startup/Math.max(cc,1))} BE</span></div>`}).join("");
+ const vols=[3,6,8,12,16,monthly];
+ $('#volumeSensitivity').innerHTML=vols.map(v=>`<div class="weightrow"><b>${v} jobs/mo</b><div class="scorebar"><i style="width:${Math.min(100,v/18*100)}%"></i></div><span>${money(v*c)}</span><span>${(v*h).toFixed(1)}h</span></div>`).join("");
+ matrix();refreshScores();bindMetrics();
+}
+function deepHTML(id,pane){
+ const d=business[id],c=contribution(d),be=breakEven(d),ph=c/d.hours;
+ if(pane==='summary')return `<div class="grid3">${d.summary.map(x=>`<div class="metric"><span>FIT FACTOR</span><b style="font-size:13px">${x}</b></div>`).join("")}</div><div class="formula" style="margin-top:8px">WEIGHTED SCORE: ${weightedScore(d).toFixed(1)} / 100<br>STARTUP: ${money(d.startup)}<br>AVG TICKET: ${money(d.ticket)}<br>CONTRIBUTION: ${money(c)} / JOB<br>BREAK-EVEN: ${be} JOBS</div>`;
+ if(pane==='score')return Object.keys(weights).map(k=>`<div class="weightrow"><b>${labels[k]}</b><div class="scorebar"><i style="width:${d[k]}%"></i></div><span class="traceable" data-trace="${k}" data-biz="${id}">${d[k]}</span><span>${weights[k]}%</span></div>`).join("")+`<div class="formula">NORMALIZED WEIGHTED SCORE = ${weightedScore(d).toFixed(1)}</div>`;
+ if(pane==='costs')return `<div class="breakstack">${d.costs.map(x=>`<div class="lineitem"><span>${x[0]}</span><b class="traceable" data-trace="startup" data-biz="${id}">${money(x[1])}</b><span>${x[2]}</span><i class="tag">${x[2]}</i></div>`).join("")}</div><div class="sourcebox" style="margin-top:8px">This your current build uses modeled planning costs. In a live client project, these rows could be replaced by researched vendor quotes, URLs, shipping, tax, warranty, used-vs-new options, and local availability.</div>`;
+ if(pane==='economics')return `<div class="grid3"><div class="metric"><span>AVG TICKET</span><b class="traceable" data-trace="ticket" data-biz="${id}">${money(d.ticket)}</b></div><div class="metric"><span>VARIABLE COST</span><b class="traceable" data-trace="varcost" data-biz="${id}">${money(d.varCost)}</b></div><div class="metric"><span>CONTRIBUTION</span><b class="traceable" data-trace="contrib" data-biz="${id}">${money(c)}</b></div><div class="metric"><span>HOURS</span><b class="traceable" data-trace="hours" data-biz="${id}">${d.hours}</b></div><div class="metric"><span>CONTRIB / HR</span><b class="traceable" data-trace="ph" data-biz="${id}">${money(ph)}</b></div><div class="metric"><span>BREAK-EVEN</span><b class="traceable" data-trace="be" data-biz="${id}">${be}</b></div></div><div class="formula" style="margin-top:8px">${money(d.ticket)} − ${money(d.varCost)} = ${money(c)} / JOB<br>${money(c)} ÷ ${d.hours}h = ${money(ph)} / EFFECTIVE HOUR</div>`;
+ if(pane==='ops')return d.ops.map((x,i)=>`<div class="card tight" style="margin-bottom:6px"><div class="eyebrow">OPERATIONS 0${i+1}</div><p>${x}</p></div>`).join("");
+ if(pane==='market')return d.market.map((x,i)=>`<div class="step"><b>SEG ${i+1}</b><span>${x}</span></div>`).join("");
+ if(pane==='risk')return d.risk.map(x=>`<div class="step"><b>WATCH</b><span>${x}</span></div>`).join("");
+ if(pane==='scale')return d.scale.map((x,i)=>`<div class="step"><b>STAGE ${i+1}</b><span>${x}</span></div>`).join("");
+}
+let current='detailing';
+function openDetail(id){current=id;let d=business[id];$('#dTitle').textContent=d.name;$('#dSub').textContent='Your full research file • open any section to inspect the logic underneath';$$('#deepTabs button').forEach((b,i)=>b.classList.toggle('active',i===0));$('#deepContent').innerHTML=`<div class="deep-pane active">${deepHTML(id,'summary')}</div>`;bindTraceables();$('#drawer').classList.add('open');document.body.style.overflow='hidden'}
+$$('#deepTabs button').forEach(b=>b.onclick=()=>{$$('#deepTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#deepContent').innerHTML=`<div class="deep-pane active">${deepHTML(current,b.dataset.pane)}</div>`;bindTraceables()});
+$$('[data-close]').forEach(x=>x.onclick=()=>{$('#drawer').classList.remove('open');document.body.style.overflow=''});
+function metricData(key,ds={}){
+ const d=business.detailing,c=contribution(d),budget=+$('#budget').value||4000;
+ const map={
+ 'score-detailing':["86-ish Weighted Score","This is not a magic confidence number. It is a weighted fit score built from your priorities.",`BUDGET FIT ${d.budgetFit}/100 × ${weights.budgetFit}%<br>WEEKEND FIT ${d.weekendFit}/100 × ${weights.weekendFit}%<br>UNIT ECONOMICS ${d.margin}/100 × ${weights.margin}%<br>REPEAT ${d.repeat}/100 × ${weights.repeat}%<br>VEHICLE/STORAGE ${d.vehicle}/100 × ${weights.vehicle}%<br>DEMAND ${d.demand}/100 × ${weights.demand}%<br>SCALE ${d.scale}/100 × ${weights.scale}%<br>RISK FIT ${d.risk}/100 × ${weights.risk}%<br><br>= ${weightedScore(d).toFixed(1)} / 100`],
+ 'startup-detailing':["$2,480 Startup","This is the modeled minimum-viable launch stack, not an instruction to spend the full amount immediately.",d.costs.map(x=>`${x[0].toUpperCase()}: ${money(x[1])} [${x[2]}]`).join("<br>")],
+ 'be-detailing':["Break-Even Jobs","How many contribution-producing jobs recover the modeled startup spend.",`${money(d.startup)} STARTUP ÷ ${money(c)} CONTRIBUTION / JOB = ${(d.startup/c).toFixed(2)} → ${breakEven(d)} JOBS`],
+ 'reserve-detailing':["Cash Reserve","What you have left after startup deployment.",`${money(budget)} AVAILABLE − ${money(d.startup)} STARTUP = ${money(budget-d.startup)} LIQUID RESERVE`],
+ 'ticket':["Average Ticket","The model currently uses your editable average ticket input. After you launch, replace this with your actual booked-job data.",`CURRENT INPUT: ${money(d.ticket)}<br>WHAT CHANGES IT: package mix, vehicle size, condition, upsells, discounts, geography, customer segment.`],
+ 'variable-cost':["Variable Cost / Job","Costs that tend to rise as you completes more jobs.",`CURRENT INPUT: ${money(d.varCost)} / JOB<br>EXAMPLE STACK: chemicals + towels/wear + travel fuel + payment/misc.`],
+ 'contribution':["Contribution / Job","Money left after modeled variable costs, before taxes and broader fixed-cost treatment.",`${money(d.ticket)} TICKET − ${money(d.varCost)} VARIABLE COST = ${money(c)} CONTRIBUTION`],
+ 'profit-hour':["Contribution / Effective Hour","Shows whether a good-looking ticket is actually worth your limited weekend time.",`${money(c)} CONTRIBUTION ÷ ${d.hours.toFixed(1)} HOURS = ${money(c/d.hours)} / EFFECTIVE HOUR`]
+ };
+ if(key==='startup-item')return [ds.name,`${ds.stage} startup item`,`${ds.name.toUpperCase()}<br>MODELED COST: ${money(+ds.cost)}<br>STAGE: ${ds.stage}<br><br>Before buying, expand this record with the exact brand/model, retailer, used alternative, warranty, shipping, tax, local stock, replacement cost, and why you need it.`];
+ return map[key]||["Model Detail","Supporting logic","This value is part of your modeled feasibility system."];
+}
+
+function traceNarrative(id,key){
+ const d=business[id], c=contribution(d), ph=c/d.hours, budget=+$('#budget').value||4000;
+ const names={
+ detailing:"Mobile Detailing",pressure:"Pressure Washing",carpet:"Carpet Cleaning",junk:"Junk Removal"
+ };
+ const fit={
+ budgetFit:{
+ title:"Budget Fit",
+ why:"Measures how comfortably the business fits inside your $4,000 without eliminating your operating reserve.",
+ calc:`STARTUP ${money(d.startup)}<br>BUDGET ${money(budget)}<br>RESERVE ${money(budget-d.startup)}<br><br>MODELED FIT SCORE: ${d.budgetFit}/100`,
+ evidence:[["Primary driver","Startup spend vs available budget"],["Penalty","Low remaining cash after launch"],["Why you cares","He cannot replace a large capital mistake easily from weekend income"]]
+ },
+ weekendFit:{
+ title:"Weekend Fit",
+ why:"Measures whether you can realistically perform enough jobs inside limited Saturday/Sunday hours.",
+ calc:`${d.hours} EFFECTIVE HOURS / JOB<br>${$('#hours').value||16} HOURS AVAILABLE / WEEK<br>RAW CAPACITY ≈ ${(+( $('#hours').value||16)/d.hours).toFixed(1)} JOBS / WEEK<br><br>MODELED FIT SCORE: ${d.weekendFit}/100`,
+ evidence:[["Primary driver","Time per job"],["Penalty","Travel, loading, dump runs, setup"],["Why you cares","His full-time job makes time the hard constraint"]]
+ },
+ margin:{
+ title:"Unit Economics Score",
+ why:"Combines contribution dollars and contribution per effective hour.",
+ calc:`${money(d.ticket)} TICKET − ${money(d.varCost)} VARIABLE COST = ${money(c)} CONTRIBUTION<br>${money(c)} ÷ ${d.hours} HOURS = ${money(ph)} / EFFECTIVE HOUR<br><br>MODELED SCORE: ${d.margin}/100`,
+ evidence:[["Primary driver","Contribution / job"],["Secondary driver","Contribution / hour"],["Penalty","High consumables or disposal cost"]]
+ },
+ repeat:{
+ title:"Repeat Potential",
+ why:"Estimates how naturally one completed customer can produce another booking without reacquisition.",
+ calc:`MODELED REPEAT SCORE: ${d.repeat}/100`,
+ evidence:id==="detailing"
+ ?[["Cadence","Maintenance details can recur every 4–8 weeks"],["Retention mechanic","Before/after proof + reminder"],["Economic effect","Lower dependence on net-new leads"]]
+ :id==="pressure"
+ ?[["Cadence","Residential repeat is infrequent"],["Better path","Commercial pads / HOAs"],["Economic effect","More new-customer replacement needed"]]
+ :id==="carpet"
+ ?[["Cadence","Event / move-out / periodic"],["Better path","Property managers"],["Economic effect","Moderate recurrence"]]
+ :[["Cadence","Usually one-time"],["Better path","Realtor / property-manager accounts"],["Economic effect","Low consumer repeat"]]
+ },
+ vehicle:{
+ title:"Vehicle / Storage Fit",
+ why:"Measures how much your current transportation and storage constraints are stressed.",
+ calc:`MODELED FIT SCORE: ${d.vehicle}/100`,
+ evidence:id==="junk"
+ ?[["Vehicle need","Highest"],["Storage","Trailer / hauling equipment"],["Penalty","Towing, dump trips, physical load"]]
+ :id==="pressure"
+ ?[["Vehicle need","Moderate"],["Storage","Washer, hose reels, surface cleaner"],["Penalty","Can grow into tank/trailer dependence"]]
+ :[["Vehicle need","Low–moderate"],["Storage","Portable equipment"],["Advantage","Can launch without dedicated commercial vehicle"]]
+ },
+ demand:{
+ title:"Demand Access",
+ why:"Rates how many plausible customer channels you can reach without a heavy sales infrastructure.",
+ calc:`MODELED DEMAND ACCESS: ${d.demand}/100`,
+ evidence:[["Consumer demand","Local residential"],["Partner demand","Property / fleet / referral channels"],["Constraint","Replace this with your local lead data once you begin tracking inquiries"]]
+ },
+ scale:{
+ title:"Scalability",
+ why:"Rates how many expansion paths exist after you proves the base service.",
+ calc:`MODELED SCALE SCORE: ${d.scale}/100`,
+ evidence:d.scale>85?[["Path","Add crews / route density"],["Path","Commercial accounts"],["Path","Higher-capacity equipment"]]
+ :[["Path","Higher-ticket services"],["Path","Recurring accounts"],["Path","Helper / equipment upgrade"]]
+ },
+ risk:{
+ title:"Risk-Adjusted Fit",
+ why:"Rewards businesses with fewer ways for one bad job to create a major loss or operational problem.",
+ calc:`MODELED RISK FIT: ${d.risk}/100`,
+ evidence:[["Financial risk","Capital at risk"],["Operational risk","Damage / injury / callback"],["Schedule risk","Weather / logistics / helper dependence"]]
+ }
+ };
+ if(fit[key]) return {title:`${names[id]} — ${fit[key].title}`,sub:fit[key].why,body:`<div class="formula">${fit[key].calc}</div><div class="evidence-grid" style="margin-top:8px">${fit[key].evidence.map(x=>`<div class="evidence-card"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}</div>`};
+
+ const basic={
+ score:{title:`${names[id]} — Weighted Score`,sub:"The current your current fit score.",body:`<div class="formula">${Object.keys(weights).map(k=>`${labels[k].toUpperCase()}: ${d[k]}/100 × ${weights[k]}%`).join("<br>")}<br><br>= ${weightedScore(d).toFixed(1)} / 100</div>`},
+ startup:{title:`${names[id]} — Startup Spend`,sub:"Complete modeled launch stack.",body:`<div class="trace-list">${d.costs.map(x=>`<div class="trace-line"><span>${x[0]} <i class="tag">${x[2]}</i></span><b>${money(x[1])}</b></div>`).join("")}</div><div class="formula" style="margin-top:8px">TOTAL = ${money(d.startup)}</div>`},
+ reserve:{title:`${names[id]} — Cash Remaining`,sub:"Budget left after modeled startup.",body:`<div class="formula">${money(budget)} BUDGET − ${money(d.startup)} STARTUP = ${money(budget-d.startup)} REMAINING</div>`},
+ ticket:{title:`${names[id]} — Average Ticket`,sub:"The modeled average revenue from one completed job.",body:`<div class="formula">CURRENT MODEL: ${money(d.ticket)} / JOB</div><div class="evidence-grid" style="margin-top:8px"><div class="evidence-card"><span>WHAT MOVES IT</span><b>Service mix / scope</b></div><div class="evidence-card"><span>WHAT MOVES IT</span><b>Upsells / customer type</b></div><div class="evidence-card"><span>LIVE REPLACEMENT</span><b>Actual booked-job average</b></div><div class="evidence-card"><span>MODEL RISK</span><b>Overestimating premium jobs</b></div></div>`},
+ varcost:{title:`${names[id]} — Variable Cost / Job`,sub:"Costs that rise as more jobs are completed.",body:`<div class="formula">MODELED VARIABLE COST = ${money(d.varCost)} / JOB</div><div class="evidence-grid" style="margin-top:8px"><div class="evidence-card"><span>INCLUDES</span><b>Consumables / fuel / wear</b></div><div class="evidence-card"><span>BUSINESS-SPECIFIC</span><b>${id==="junk"?"Dump fees":id==="pressure"?"Chemicals + fuel":id==="carpet"?"Chemicals + wear":"Chemicals + towels + travel"}</b></div></div>`},
+ contrib:{title:`${names[id]} — Contribution / Job`,sub:"Revenue left after modeled job-variable cost.",body:`<div class="formula">${money(d.ticket)} TICKET − ${money(d.varCost)} VARIABLE COST = ${money(c)} CONTRIBUTION</div>`},
+ hours:{title:`${names[id]} — Effective Hours / Job`,sub:"Total time the job consumes, not just hands-on service time.",body:`<div class="formula">MODELED EFFECTIVE TIME: ${d.hours} HOURS / JOB</div><div class="evidence-grid" style="margin-top:8px"><div class="evidence-card"><span>INCLUDES</span><b>Travel / setup</b></div><div class="evidence-card"><span>INCLUDES</span><b>Core production</b></div><div class="evidence-card"><span>INCLUDES</span><b>QC / payment</b></div><div class="evidence-card"><span>INCLUDES</span><b>Reset / unload</b></div></div>`},
+ ph:{title:`${names[id]} — Contribution / Hour`,sub:"How efficiently the business uses your limited weekend time.",body:`<div class="formula">${money(c)} CONTRIBUTION ÷ ${d.hours} HOURS = ${money(ph)} / EFFECTIVE HOUR</div>`},
+ be:{title:`${names[id]} — Break-Even`,sub:"Jobs required to recover modeled startup capital.",body:`<div class="formula">${money(d.startup)} STARTUP ÷ ${money(c)} CONTRIBUTION / JOB = ${(d.startup/c).toFixed(2)} → ${breakEven(d)} JOBS</div>`}
+ };
+ return basic[key]||{title:"Trace",sub:"Underlying model detail.",body:"<div class='formula'>No deeper trace configured for this item yet.</div>"};
+}
+function openTrace(id,key){
+ const t=traceNarrative(id,key);
+ $('#mTitle').textContent=t.title;
+ $('#mSub').textContent=t.sub;
+ $('#metricContent').innerHTML=t.body;
+ $('#metricDrawer').classList.add('open');
+ document.body.style.overflow='hidden';
+}
+function bindTraceables(){
+ $$('.traceable[data-trace]').forEach(x=>{
+ x.onclick=(e)=>{e.stopPropagation();openTrace(x.dataset.biz||'detailing',x.dataset.trace)};
+ });
+}
+
+function openMetric(key,ds={}){let m=metricData(key,ds);$('#mTitle').textContent=m[0];$('#mSub').textContent=m[1];$('#metricContent').innerHTML=`<div class="formula">${m[2]}</div>`;$('#metricDrawer').classList.add('open');document.body.style.overflow='hidden'}
+function bindMetrics(){$$('[data-metric]').forEach(x=>x.onclick=()=>openMetric(x.dataset.metric,x.dataset))}
+$$('[data-mclose]').forEach(x=>x.onclick=()=>{$('#metricDrawer').classList.remove('open');document.body.style.overflow=''});
+$$('.navbtn').forEach(b=>b.onclick=()=>{$$('.navbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.section').forEach(s=>s.classList.remove('active'));$('#'+b.dataset.section).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})});
+$$('.control input').forEach(i=>i.addEventListener('input',recalc));
+
+buildWeights();startup();recalc();bindMetrics();bindTraceables();
+</script>
+</body>
+</html>

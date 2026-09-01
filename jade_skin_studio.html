@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jade / Skin Studio</title>
+
+
+<style>
+:root{
+  --bg:#fff4f6;
+  --bg2:#fbe6eb;
+  --panel:#fffafb;
+  --panel2:#fff1f4;
+  --panel3:#fce8ee;
+  --pink:#f5a8bc;
+  --pink2:#ef7ea2;
+  --pink3:#d96d93;
+  --rose:#b86b84;
+  --nude:#dbc6bd;
+  --nude2:#c8afa5;
+  --grey:#9d8f8b;
+  --grey2:#746763;
+  --white:#ffffff;
+  --cream:#fff9f5;
+  --line:#e9b9c6;
+  --line2:#dca5b4;
+  --text:#6e3e4b;
+  --muted:#987780;
+  --shadow:0 10px 0 rgba(226,164,180,.16),0 18px 42px rgba(154,100,115,.10);
+  --pixel:2px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:"Courier New","Lucida Console",Monaco,monospace;
+  background:
+    radial-gradient(circle at 7% 11%,rgba(255,255,255,.95) 0 2px,transparent 3px),
+    radial-gradient(circle at 88% 15%,rgba(255,255,255,.95) 0 2px,transparent 3px),
+    radial-gradient(circle at 18% 84%,rgba(245,168,188,.22) 0 120px,transparent 121px),
+    radial-gradient(circle at 82% 76%,rgba(219,198,189,.26) 0 150px,transparent 151px),
+    linear-gradient(180deg,#fff7f9 0%,#fbecef 50%,#fff5f6 100%);
+  background-size:auto,auto,auto,auto,auto;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    linear-gradient(90deg,rgba(228,178,192,.12) 1px,transparent 1px),
+    linear-gradient(rgba(228,178,192,.12) 1px,transparent 1px);
+  background-size:18px 18px;
+  image-rendering:pixelated;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 8% 18%,#fff 0 2px,transparent 3px),
+    radial-gradient(circle at 91% 22%,#fff 0 2px,transparent 3px),
+    radial-gradient(circle at 15% 74%,#f6b6c7 0 2px,transparent 3px),
+    radial-gradient(circle at 82% 86%,#fff 0 2px,transparent 3px);
+  background-size:150px 150px,190px 190px,170px 170px,210px 210px;
+  opacity:.7;
+}
+
+button,input,select,textarea{font:inherit}
+button{color:inherit}
+
+.app{
+  width:min(1600px,calc(100% - 28px));
+  margin:0 auto;
+  padding:16px 0 40px;
+  position:relative;
+  z-index:2;
+}
+
+/* candy frame around full dashboard */
+.app::before,
+.app::after{
+  content:"";
+  position:fixed;
+  pointer-events:none;
+  z-index:-1;
+}
+.app::before{
+  inset:10px;
+  border:2px solid rgba(234,167,184,.45);
+  box-shadow:
+    inset 0 0 0 4px rgba(255,255,255,.7),
+    inset 0 0 0 7px rgba(240,190,202,.24);
+}
+.app::after{
+  left:12px;
+  right:12px;
+  bottom:12px;
+  height:8px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f3a9bb 0 8px,
+      #fff 8px 16px,
+      #e1c8bf 16px 24px,
+      #fff 24px 32px
+    );
+  opacity:.7;
+}
+
+/* TOP BAR */
+.topbar{
+  position:sticky;
+  top:10px;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  padding:14px 18px 13px;
+  border:2px solid var(--line2);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.97),rgba(255,240,244,.96));
+  box-shadow:var(--shadow);
+  image-rendering:pixelated;
+}
+
+.topbar::before{
+  content:"";
+  position:absolute;
+  left:-2px;right:-2px;top:-10px;
+  height:10px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f19cb4 0 18px,
+      #fff 18px 36px
+    );
+  border:2px solid var(--line2);
+  border-bottom:0;
+}
+
+.topbar::after{
+  content:"";
+  position:absolute;
+  left:12px;right:12px;bottom:-8px;
+  height:8px;
+  background:
+    linear-gradient(135deg,#fff 25%,transparent 25%) 0 0/12px 12px,
+    linear-gradient(225deg,#fff 25%,transparent 25%) 0 0/12px 12px;
+  opacity:.9;
+}
+
+.brandlock{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:max-content;
+}
+
+.brandmark{
+  width:34px;
+  height:34px;
+  position:relative;
+  border:2px solid var(--rose);
+  background:#fff;
+  box-shadow:
+    0 0 0 3px #f8c8d4,
+    4px 4px 0 rgba(216,109,147,.15);
+}
+
+.brandmark::before{
+  content:"";
+  position:absolute;
+  width:8px;height:8px;
+  left:5px;top:9px;
+  background:#f39ab3;
+  box-shadow:
+    8px -5px 0 #f7c5d1,
+    8px 5px 0 #f7c5d1,
+    16px 0 0 #f39ab3;
+}
+
+.brandmark::after{
+  content:"";
+  position:absolute;
+  width:6px;height:6px;
+  right:5px;bottom:5px;
+  background:#d8b9ae;
+  box-shadow:
+    -6px 0 0 #fff,
+    0 -6px 0 #fff;
+}
+
+.brandmeta strong{
+  display:block;
+  font-size:13px;
+  letter-spacing:.15em;
+  color:var(--pink3);
+  text-shadow:2px 2px 0 #fce0e7;
+}
+
+.brandmeta small{
+  display:block;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  margin:0;
+  flex-wrap:wrap;
+}
+
+.tab{
+  padding:9px 16px;
+  border:2px solid var(--line);
+  background:#fff9fb;
+  color:var(--rose);
+  cursor:pointer;
+  font-weight:700;
+  font-size:10px;
+  letter-spacing:.10em;
+  position:relative;
+  box-shadow:3px 3px 0 rgba(227,176,190,.18);
+}
+
+.tab::before{
+  content:"♡";
+  margin-right:7px;
+  color:var(--pink2);
+}
+
+.tab::after{
+  content:"";
+  position:absolute;
+  left:4px;right:4px;bottom:3px;
+  height:2px;
+  background:transparent;
+}
+
+.tab.active{
+  color:#fff;
+  background:linear-gradient(180deg,#f3a6b9,#e983a1);
+  border-color:#d87694;
+  text-shadow:1px 1px 0 #b96b84;
+}
+
+.tab.active::after{background:#fff}
+
+/* HERO - SAME LAYOUT, MORE CANDY */
+.hero{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:14px;
+  margin:20px 0 12px;
+  min-height:0;
+}
+
+.hero-copy{
+  min-height:220px;
+  border:2px solid var(--line);
+  padding:28px 30px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,242,246,.9)),
+    repeating-linear-gradient(90deg,rgba(244,183,199,.08) 0 12px,transparent 12px 24px);
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-copy::before{
+  content:"";
+  position:absolute;
+  right:18px;
+  top:18px;
+  width:64px;
+  height:46px;
+  background:
+    radial-gradient(circle at 18px 23px,#f09bb3 0 12px,transparent 13px),
+    radial-gradient(circle at 46px 23px,#f09bb3 0 12px,transparent 13px),
+    linear-gradient(#fff,#fff) center/12px 12px no-repeat;
+  image-rendering:pixelated;
+  opacity:.78;
+}
+
+.hero-copy::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:7px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f2adc0 0 10px,
+      #fff 10px 20px,
+      #dcc5bc 20px 30px,
+      #fff 30px 40px
+    );
+}
+
+.kicker{
+  color:var(--pink3);
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.kicker::before{content:"✦  "}
+.kicker::after{content:"  ♡"}
+
+.hero h1{
+  margin:0;
+  font-size:clamp(34px,4.5vw,68px);
+  line-height:.94;
+  letter-spacing:-.05em;
+  max-width:860px;
+  color:#804858;
+  text-shadow:
+    2px 2px 0 #fff,
+    4px 4px 0 #f6d6de;
+}
+
+.hero p{
+  white-space:pre-line;
+  color:var(--muted);
+  line-height:1.65;
+  max-width:760px;
+  font-size:11px;
+  margin:16px 0 0;
+}
+
+.telemetry{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  border:2px solid var(--line);
+  padding:10px;
+  background:
+    linear-gradient(180deg,#fff8fa,#fcecf1);
+  box-shadow:var(--shadow);
+  position:relative;
+}
+
+.telemetry::before,
+.telemetry::after{
+  content:"♡";
+  position:absolute;
+  color:#ef8ba7;
+  font-size:13px;
+}
+.telemetry::before{left:6px;top:5px}
+.telemetry::after{right:6px;bottom:5px}
+
+.telemetry .readout{
+  background:#fff;
+  border:1px solid #efc5d0;
+  padding:15px 12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:0;
+  text-align:center;
+  box-shadow:3px 3px 0 rgba(235,186,198,.15);
+  position:relative;
+}
+
+.telemetry .readout::before{
+  content:"";
+  width:28px;height:28px;
+  margin:0 auto 8px;
+  background:
+    radial-gradient(circle,#f2a4b9 0 35%,#fff 36% 50%,#e4c3bb 51% 65%,transparent 66%);
+}
+
+.readout small{
+  color:var(--muted);
+  letter-spacing:.11em;
+  font-size:8px;
+}
+
+.readout strong{
+  font-size:22px;
+  margin-top:6px;
+  color:#7b4352;
+}
+
+.readout span{
+  margin-top:6px;
+  color:var(--pink3);
+  font-size:8px;
+  letter-spacing:.1em;
+}
+
+/* SECTION FRAME */
+.view{display:none}
+.view.active{display:block}
+
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:26px;
+  padding:20px 0 10px;
+  position:relative;
+}
+
+.section-head::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:6px;
+  height:6px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f3a7bb 0 10px,
+      #fff 10px 20px,
+      #e2ccc3 20px 30px,
+      #fff 30px 40px
+    );
+  opacity:.72;
+}
+
+.section-id{
+  color:var(--pink3);
+  font-size:9px;
+  letter-spacing:.16em;
+}
+.section-id::before{content:"♡ "}
+
+.section-head h2{
+  margin:6px 0 0;
+  font-size:clamp(24px,3vw,42px);
+  line-height:1;
+  letter-spacing:-.04em;
+  color:#78434f;
+  text-shadow:2px 2px 0 #fff;
+}
+
+.section-head p{
+  margin:0;
+  max-width:640px;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:10px;
+}
+
+/* PANELS */
+.grid2{
+  display:grid;
+  grid-template-columns:320px minmax(0,1fr);
+  gap:14px;
+}
+
+.panel{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,244,247,.93));
+  border:2px solid var(--line);
+  padding:14px;
+  box-shadow:var(--shadow);
+  position:relative;
+}
+
+.panel::before{
+  content:"";
+  position:absolute;
+  width:12px;height:12px;
+  left:6px;top:6px;
+  background:#f09bb3;
+  box-shadow:
+    12px 0 0 #fff,
+    0 12px 0 #fff,
+    12px 12px 0 #e5c5bc;
+  opacity:.55;
+}
+
+.panel::after{
+  content:"✦";
+  position:absolute;
+  right:9px;
+  top:7px;
+  color:#ef93ac;
+  font-size:10px;
+}
+
+.panel.white{
+  background:
+    linear-gradient(180deg,#fff,#fff7f9);
+}
+
+.panel h3{
+  margin:0 0 10px;
+  font-size:9px;
+  color:var(--pink3);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  padding-left:14px;
+}
+.panel h3::before{
+  content:"♡";
+  margin-right:6px;
+  color:#f095ad;
+}
+
+.kpis{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+}
+
+.kpi{
+  background:
+    linear-gradient(180deg,#fff,#fff1f5);
+  border:1px solid #efc1cd;
+  padding:12px 13px;
+  text-align:left;
+  color:var(--text);
+  position:relative;
+  box-shadow:3px 3px 0 rgba(232,179,193,.13);
+}
+
+.kpi::after{
+  content:"♡";
+  position:absolute;
+  right:10px;
+  top:9px;
+  color:#ef92aa;
+}
+
+.kpi small{
+  display:block;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.kpi b{
+  display:block;
+  font-size:19px;
+  margin-top:5px;
+  color:#78424f;
+}
+
+.chart{
+  margin-top:8px;
+  background:#fff;
+  border:1px solid #efc3ce;
+  padding:10px;
+  box-shadow:inset 0 0 0 3px #fff5f7;
+}
+
+.chart canvas{
+  width:100%;
+  height:auto;
+  display:block;
+  max-height:230px;
+}
+
+/* TABLES */
+.table{
+  overflow:auto;
+  border:2px solid #efc0cd;
+  background:#fff;
+  box-shadow:inset 0 0 0 3px #fff5f7;
+}
+
+.table table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:900px;
+}
+
+th,td{
+  padding:8px 8px;
+  border-bottom:1px solid #f0d2da;
+  border-right:1px solid #f6dde3;
+  font-size:10px;
+}
+
+th{
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f9dce4 0 16px,
+      #fff1f4 16px 32px
+    );
+  color:#a45b70;
+  text-transform:uppercase;
+  font-size:8px;
+  letter-spacing:.08em;
+}
+
+tr:hover td{background:#fff7f9}
+
+input,select,textarea{
+  width:100%;
+  padding:7px 8px;
+  border:1px solid #efc8d2;
+  border-radius:0;
+  background:#fffafb;
+  color:var(--text);
+  outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:#e482a0;
+  box-shadow:0 0 0 2px rgba(236,139,166,.11);
+}
+
+textarea{resize:vertical}
+
+.btn{
+  padding:8px 11px;
+  border:1px solid #df9fb1;
+  background:
+    linear-gradient(180deg,#fff,#fbe0e7);
+  border-radius:0;
+  cursor:pointer;
+  font-weight:700;
+  font-size:9px;
+  letter-spacing:.06em;
+  box-shadow:3px 3px 0 rgba(226,166,183,.16);
+  position:relative;
+}
+.btn::before{
+  content:"♡";
+  margin-right:5px;
+  color:#e87f9d;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  background:linear-gradient(180deg,#fff,#f6ccd7);
+}
+
+.actions{
+  display:flex;
+  gap:7px;
+  margin-top:9px;
+  flex-wrap:wrap;
+}
+
+/* CALENDAR */
+.calwrap{
+  display:grid;
+  grid-template-columns:290px minmax(0,1fr);
+  gap:14px;
+}
+
+.calendar-side p,
+.expenseTop p{
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin:10px 0 5px;
+}
+
+.calgrid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:1px;
+  background:#efc7d1;
+  border:3px solid #efc0cd;
+  box-shadow:0 8px 0 rgba(226,171,186,.12);
+}
+
+.dow{
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f3b4c3 0 14px,
+      #fce6eb 14px 28px
+    );
+  color:#904e61;
+  text-align:center;
+  padding:8px;
+  font-size:8px;
+  letter-spacing:.08em;
+}
+
+.day{
+  min-height:88px;
+  background:#fffafb;
+  padding:6px;
+  border:0;
+  position:relative;
+}
+
+.day:nth-child(3n){background:#fff5f7}
+.day:nth-child(4n){background:#fbefec}
+
+.day b{
+  font-size:9px;
+  color:#7b4654;
+}
+
+.day textarea{
+  background:transparent;
+  border:0;
+  min-height:56px;
+  padding:6px 0 0;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.day::after{
+  content:"♡";
+  position:absolute;
+  right:5px;
+  top:4px;
+  font-size:8px;
+  color:rgba(236,132,161,.0);
+}
+
+.day:focus-within::after{
+  color:#e97e9b;
+}
+
+/* EXPENSES */
+.expenseTop{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:14px;
+}
+
+.expenseWrap{
+  display:grid;
+  grid-template-columns:1.55fr .7fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.month-title{
+  font-size:clamp(30px,4vw,50px);
+  margin:0 0 12px;
+  letter-spacing:-.05em;
+  color:#7d4855;
+  text-shadow:2px 2px 0 #fff;
+}
+
+.summary{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.summary td,.summary th{
+  padding:8px;
+  border-bottom:1px solid #f0d2da;
+}
+
+.check{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  margin:6px 0;
+}
+
+.check input[type=checkbox]{
+  width:auto;
+  accent-color:#e87f9d;
+}
+
+/* PIXEL CANDY DECORATIONS */
+.pixel-corner,
+.pixel-bow,
+.pixel-heart,
+.pixel-candy{
+  position:fixed;
+  pointer-events:none;
+  z-index:1;
+  image-rendering:pixelated;
+}
+
+.pixel-corner{
+  width:54px;height:54px;
+}
+.pixel-corner::before{
+  content:"";
+  position:absolute;
+  width:6px;height:6px;
+  background:#f1a0b5;
+  box-shadow:
+    6px 0 0 #f1a0b5,
+    12px 0 0 #fff,
+    0 6px 0 #f1a0b5,
+    0 12px 0 #fff,
+    18px 6px 0 #efc1cc,
+    24px 12px 0 #fff,
+    30px 18px 0 #f1a0b5,
+    36px 24px 0 #fff;
+}
+.pixel-corner.tl{left:18px;top:88px}
+.pixel-corner.br{right:18px;bottom:18px;transform:rotate(180deg)}
+
+.pixel-bow{
+  width:48px;height:34px;
+}
+.pixel-bow::before,
+.pixel-bow::after{
+  content:"";
+  position:absolute;
+  top:5px;
+  width:18px;height:18px;
+  background:#ef8faa;
+  box-shadow:
+    4px 4px 0 #f6c6d2,
+    8px 8px 0 #d97896;
+}
+.pixel-bow::before{left:1px;transform:skewY(14deg)}
+.pixel-bow::after{right:1px;transform:skewY(-14deg)}
+.pixel-bow i{
+  position:absolute;
+  left:19px;top:10px;
+  width:10px;height:10px;
+  background:#fff;
+  box-shadow:0 0 0 2px #d97896;
+}
+.pixel-bow.tr{right:24px;top:95px}
+.pixel-bow.bl{left:24px;bottom:34px}
+
+.pixel-heart{
+  width:34px;height:30px;
+}
+.pixel-heart::before{
+  content:"";
+  position:absolute;
+  left:11px;top:8px;
+  width:6px;height:6px;
+  background:#ee92ab;
+  box-shadow:
+    -6px -6px 0 #ee92ab,
+    6px -6px 0 #ee92ab,
+    -12px 0 0 #ee92ab,
+    12px 0 0 #ee92ab,
+    -6px 6px 0 #ee92ab,
+    6px 6px 0 #ee92ab,
+    0 12px 0 #ee92ab;
+}
+.pixel-heart.ml{left:10px;top:45%}
+.pixel-heart.mr{right:10px;top:58%}
+
+.pixel-candy{
+  width:38px;height:20px;
+  right:18px;
+  top:43%;
+}
+.pixel-candy::before{
+  content:"";
+  position:absolute;
+  left:10px;top:4px;
+  width:18px;height:12px;
+  background:
+    repeating-linear-gradient(90deg,#fff 0 4px,#f1a0b5 4px 8px);
+  border:2px solid #d98ca2;
+}
+.pixel-candy::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(45deg,transparent 42%,#e9afbd 43% 57%,transparent 58%) left/10px 20px no-repeat,
+    linear-gradient(-45deg,transparent 42%,#e9afbd 43% 57%,transparent 58%) right/10px 20px no-repeat;
+}
+
+@media(max-width:1050px){
+  .hero{grid-template-columns:1fr}
+  .grid2,.calwrap,.expenseTop,.expenseWrap{grid-template-columns:1fr}
+  .telemetry{min-height:120px}
+}
+
+@media(max-width:760px){
+  .app{width:min(100% - 16px,1600px)}
+  .topbar{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:10px;
+  }
+  .tabs{gap:6px}
+  .hero-copy{padding:22px}
+  .telemetry{grid-template-columns:1fr}
+  .section-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .calgrid{grid-template-columns:repeat(2,1fr)}
+  .dow{display:none}
+  .pixel-corner,.pixel-bow,.pixel-heart,.pixel-candy{display:none}
+}
+</style>
+
+
+</head>
+<body>
+
+<div class="pixel-corner tl" aria-hidden="true"></div>
+<div class="pixel-corner br" aria-hidden="true"></div>
+<div class="pixel-bow tr" aria-hidden="true"><i></i></div>
+<div class="pixel-bow bl" aria-hidden="true"><i></i></div>
+<div class="pixel-heart ml" aria-hidden="true"></div>
+<div class="pixel-heart mr" aria-hidden="true"></div>
+<div class="pixel-candy" aria-hidden="true"></div>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="brandlock">
+      <div class="brandmark"></div>
+      <div class="brandmeta">
+        <strong>JADE / SKIN STUDIO</strong>
+        <small>JADE SKIN STUDIO // JULY 2026</small>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="services">001 SERVICES</button>
+      <button class="tab" data-tab="calendar">002 CALENDAR</button>
+      <button class="tab" data-tab="expenses">003 EXPENSES</button>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="kicker">JULY PRIORITY</div>
+      <h1>Fill the open slots.<br>Push rebooking.</h1>
+      <p>
+        • TARGET
+  18+ full-price facial appointments
+  6 clients rebooked before checkout
+  5 LED add-ons
+  July expenses below $1,800
+
+• PRIORITY
+  Open Tuesday + Thursday gaps
+  Protect higher-margin services
+  Watch product restocks before they affect availability
+      </p>
+    </div>
+
+    <div class="telemetry">
+      <div class="readout">
+        <small>Active Services</small>
+        <strong id="totalServicesHero">—</strong>
+        <span>JADE’S CURRENT MENU</span>
+      </div>
+      <div class="readout">
+        <small>Avg. Service Price</small>
+        <strong id="avgPriceHero">—</strong>
+        <span>ACROSS HER ACTIVE MENU</span>
+      </div>
+      <div class="readout">
+        <small>Avg. Gross Profit</small>
+        <strong id="avgProfitHero">—</strong>
+        <span>BEFORE RENT + OVERHEAD</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="view active">
+    <div class="section-head">
+      <div>
+        <div class="section-id">001 / JADE’S SERVICE MENU</div>
+        <h2>See what each treatment is really earning.</h2>
+      </div>
+      <p>Facials, acne treatments, peels, dermaplaning, waxing, and add-ons.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>Jade’s Service Snapshot</h3>
+        <div class="kpis">
+          <div class="kpi"><small>Total Services</small><b id="totalServices">0</b></div>
+          <div class="kpi"><small>Average Price</small><b id="avgPrice">$0.00</b></div>
+          <div class="kpi"><small>Average Profit</small><b id="avgProfit">$0.00</b></div>
+        </div>
+        <div class="chart"><canvas id="pie" width="520" height="420"></canvas></div>
+      </div>
+
+      <div class="panel white">
+        <h3>Jade’s Current Menu</h3>
+        <div class="table">
+          <table id="svc">
+            <thead>
+              <tr>
+                <th>Service</th><th>Category</th><th>Duration</th><th>Price</th>
+                <th>Product Cost</th><th>Supply Cost</th><th>Total Cost</th>
+                <th>Est. Profit</th><th>Monthly Notes</th><th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button class="btn" id="addService">+ ADD SERVICE</button>
+          <button class="btn" id="loadServices">RESTORE JADE DATA</button>
+          <button class="btn" id="clearServices">CLEAR MENU</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calendar" class="view">
+    <div class="section-head">
+      <div>
+        <div class="section-id">002 / JULY BOOKING PLAN</div>
+        <h2>Protect the days that actually make money.</h2>
+      </div>
+      <p>Client days: Tuesday, Thursday, Friday, and Saturday.</p>
+    </div>
+
+    <div class="calwrap">
+      <div class="panel calendar-side">
+        <h3>Jade’s Monthly Setup</h3>
+        <div class="kpi"><small>Today's Date</small><b id="today"></b></div>
+        <p>Month</p><select id="month"></select>
+        <p>Year</p><input id="year" type="number" value="2026">
+        <p>Calendar Start</p>
+        <select id="start"><option value="1">Monday</option><option value="0">Sunday</option></select>
+        <p>Recurring Payments</p><textarea>Studio suite rent — $1,050 on 7/1
+GlossGenius — $49 on 7/3
+Liability insurance — $42 on 7/8
+Phone / business line — $65 on 7/18</textarea>
+        <p>Deadlines</p><textarea>Restock acne cleanser + enzyme — by 7/10
+Submit July sales tax records — 7/20
+Fall peel promo photos — 7/25</textarea>
+      </div>
+
+      <div class="panel white">
+        <h3 id="calTitle">Jade’s Booking Calendar</h3>
+        <div id="cal" class="calgrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="expenses" class="view">
+    <div class="section-head">
+      <div>
+        <div class="section-id">003 / MONTHLY MONEY</div>
+        <h2>Know where the studio money is going.</h2>
+      </div>
+      <p>July operating costs across products, supplies, rent, software, marketing, education, and studio expenses.</p>
+    </div>
+
+    <div class="expenseTop">
+      <div class="panel">
+        <h3>Jade’s July Budget</h3>
+        <div class="month-title">July, 2026</div>
+        <p>Business Name</p><input id="biz" value="Jade Skin Studio">
+        <p>Monthly Expense Goal</p><input id="goal" type="number" value="1800">
+      </div>
+
+      <div class="panel white">
+        <h3>Where July Money Is Going</h3>
+        <table class="summary">
+          <thead><tr><th>Category</th><th>Amount</th></tr></thead>
+          <tbody id="summary"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="expenseWrap">
+      <div class="panel white">
+        <h3>Jade’s Expense Log</h3>
+        <div class="table">
+          <table id="exp">
+            <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button class="btn" id="addExp">+ ADD EXPENSE</button>
+          <button class="btn" id="loadExp">RESTORE JADE DATA</button>
+          <button class="btn" id="clearExp">CLEAR LOG</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="kpi"><small>Total Expenses</small><b id="totalExp">$0.00</b></div>
+        <h3 style="margin-top:18px">July Money Goals</h3>
+        <div id="goals"></div>
+        <h3 style="margin-top:18px">July Studio Tasks</h3>
+        <div id="todos"></div>
+        <h3 style="margin-top:18px">Jade’s Notes</h3>
+        <textarea style="min-height:170px"></textarea>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],money=n=>'$'+(+n||0).toFixed(2);
+
+$$('.tab').forEach(b=>b.onclick=()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active'));
+  $$('.view').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  $('#'+b.dataset.tab).classList.add('active');
+});
+
+const names=['Signature Custom Facial','Acne Reset Facial','Hydration Facial','Brightening Chemical Peel','Dermaplaning Facial','Brow Wax','Lip Wax','Skin Consultation','LED Add-on'];
+const cats=['Skin','Wax','Consultation','Add-on'];
+const svcBody=$('#svc tbody');
+
+function addSvc(s={name:'Signature Custom Facial',category:'Skin',duration:60,price:0,product:0,supply:0,notes:''}){
+  let tr=document.createElement('tr');
+  tr.innerHTML=`<td><select class=n>${names.map(x=>`<option ${x==s.name?'selected':''}>${x}</option>`)}</select></td><td><select class=c>${cats.map(x=>`<option ${x==s.category?'selected':''}>${x}</option>`)}</select></td><td><input class=d type=number value="${s.duration}"></td><td><input class=p type=number step=.01 value="${s.price}"></td><td><input class=pc type=number step=.01 value="${s.product}"></td><td><input class=sc type=number step=.01 value="${s.supply}"></td><td class=tc></td><td class=pr></td><td><input class=no value="${s.notes}"></td><td><button class=btn>×</button></td>`;
+  tr.querySelectorAll('input,select').forEach(e=>e.oninput=updateSvc);
+  tr.querySelector('button').onclick=()=>{tr.remove();updateSvc()};
+  svcBody.appendChild(tr)
+}
+
+function updateSvc(){
+  let rows=$$('#svc tbody tr'),
+  arr=rows.map(r=>({
+    name:r.querySelector('.n').value,
+    price:+r.querySelector('.p').value,
+    product:+r.querySelector('.pc').value,
+    supply:+r.querySelector('.sc').value
+  }));
+
+  rows.forEach((r,i)=>{
+    let t=arr[i].product+arr[i].supply;
+    r.querySelector('.tc').textContent=money(t);
+    r.querySelector('.pr').textContent=money(arr[i].price-t)
+  });
+
+  const avgP=arr.length?arr.reduce((a,b)=>a+b.price,0)/arr.length:0;
+  const avgProfit=arr.length?arr.reduce((a,b)=>a+b.price-b.product-b.supply,0)/arr.length:0;
+
+  $('#totalServices').textContent=arr.length;
+  $('#avgPrice').textContent=money(avgP);
+  $('#avgProfit').textContent=money(avgProfit);
+
+  $('#totalServicesHero').textContent=arr.length;
+  $('#avgPriceHero').textContent=money(avgP);
+  $('#avgProfitHero').textContent=money(avgProfit);
+
+  drawPie(arr)
+}
+
+function drawPie(arr){
+  let c=$('#pie'),x=c.getContext('2d');
+  x.clearRect(0,0,c.width,c.height);
+  let counts={};
+  arr.forEach(s=>counts[s.name]=(counts[s.name]||0)+1);
+  let ent=Object.entries(counts),tot=ent.reduce((a,[,v])=>a+v,0);
+
+  x.fillStyle='#9d948c';
+  x.font='13px Courier New';
+
+  if(!tot){
+    x.fillText('Add services to see breakdown',140,200);
+    return
+  }
+
+  let colors=['#f3a7bb','#e8c6ce','#d9c5ba','#c9b5ad','#f7dfe5','#b7b0ad','#fff4f6'];
+  let st=-Math.PI/2;
+
+  ent.forEach(([n,v],i)=>{
+    let a=v/tot*Math.PI*2;
+    x.beginPath();
+    x.moveTo(210,200);
+    x.arc(210,200,140,st,st+a);
+    x.closePath();
+    x.fillStyle=colors[i%colors.length];
+    x.fill();
+    st+=a
+  });
+
+  x.font='13px Courier New';
+  ent.forEach(([n,v],i)=>{
+    x.fillStyle=colors[i%colors.length];
+    x.fillRect(375,55+i*26,12,12);
+    x.fillStyle='#b7afa8';
+    x.fillText(n,395,66+i*26)
+  })
+}
+
+$('#addService').onclick=()=>{addSvc();updateSvc()};
+$('#clearServices').onclick=()=>{svcBody.innerHTML='';updateSvc()};
+$('#loadServices').onclick=()=>{
+  svcBody.innerHTML='';
+  addSvc({name:'Signature Custom Facial',category:'Skin',duration:60,price:115,product:18,supply:6,notes:'Core service / strongest rebook'});
+  addSvc({name:'Acne Reset Facial',category:'Skin',duration:75,price:135,product:26,supply:8,notes:'Track 4–6 week rebooks'});
+  addSvc({name:'Hydration Facial',category:'Skin',duration:60,price:125,product:22,supply:7,notes:'Good dry-skin seasonal offer'});
+  addSvc({name:'Brightening Chemical Peel',category:'Skin',duration:45,price:150,product:34,supply:9,notes:'Higher product cost'});
+  addSvc({name:'Dermaplaning Facial',category:'Skin',duration:50,price:105,product:13,supply:6,notes:'Strong add-on potential'});
+  addSvc({name:'Brow Wax',category:'Wax',duration:20,price:28,product:3,supply:2,notes:'Best paired with facial'});
+  addSvc({name:'LED Add-on',category:'Add-on',duration:15,price:35,product:1,supply:1,notes:'High-margin add-on'});
+  updateSvc()
+};
+$('#loadServices').click();
+
+const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+months.forEach((m,i)=>$('#month').innerHTML+=`<option value=${i}>${m}</option>`);
+$('#month').value=6;
+$('#today').textContent=new Date().toLocaleDateString();
+
+function renderCal(){
+  let m=+$('#month').value,y=+$('#year').value,st=+$('#start').value,g=$('#cal');
+  $('#calTitle').textContent=months[m]+' '+y;
+  g.innerHTML='';
+  let ds=st?['Mon','Tue','Wed','Thu','Fri','Sat','Sun']:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  ds.forEach(d=>g.innerHTML+=`<div class=dow>${d}</div>`);
+  let off=(new Date(y,m,1).getDay()-st+7)%7;
+  for(let i=0;i<off;i++)g.innerHTML+='<div class=day></div>';
+  let n=new Date(y,m+1,0).getDate();
+  const jadeJuly={2:'10:00 Maya — Acne Reset\n1:00 OPEN',4:'9:30 Keisha — Custom Facial\n12:00 Lena — LED add-on',7:'11:00 Tori — Hydration\n2:30 OPEN',9:'10:30 Bri — Dermaplaning\n1:30 Nia — Brow Wax',11:'9:00 Sam — Custom Facial\n11:30 Ava — Peel\n2:00 OPEN',14:'10:00 OPEN\n1:00 Maya — Acne follow-up',16:'11:30 Kayla — Custom Facial\n3:00 content / before-after',18:'9:30 Lena — Hydration\n12:00 Zoe — Brow + LED',21:'RESTOCK + admin\n2:00 OPEN',23:'10:00 Bri — Custom Facial\n1:00 Tori — Dermaplaning',25:'9:00 Ava — Peel follow-up\n12:30 OPEN',28:'10:30 Keisha — Custom Facial\n1:30 OPEN',30:'11:00 Maya — Acne Reset\n2:00 monthly numbers'};
+  for(let d=1;d<=n;d++){const val=(m===6&&y===2026&&jadeJuly[d])?jadeJuly[d]:'';g.innerHTML+=`<div class=day><b>${d}</b><textarea placeholder="Appointment / note">${val}</textarea></div>`}
+}
+['month','year','start'].forEach(id=>$('#'+id).oninput=renderCal);
+renderCal();
+
+const expBody=$('#exp tbody'),expCats=['Products','Supplies','Marketing','Rent','Software','Education','Travel','Other'];
+
+function addExp(e={date:'2026-07-01',description:'',category:'Products',amount:0}){
+  let tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class=ed type=date value="${e.date}"></td><td><input class=es value="${e.description}"></td><td><select class=ec>${expCats.map(x=>`<option ${x==e.category?'selected':''}>${x}</option>`)}</select></td><td><input class=ea type=number step=.01 value="${e.amount}"></td><td><button class=btn>×</button></td>`;
+  tr.querySelectorAll('input,select').forEach(x=>x.oninput=updateExp);
+  tr.querySelector('button').onclick=()=>{tr.remove();updateExp()};
+  expBody.appendChild(tr)
+}
+
+function updateExp(){
+  let arr=$$('#exp tbody tr').map(r=>({
+    category:r.querySelector('.ec').value,
+    amount:+r.querySelector('.ea').value
+  })),s={};
+
+  arr.forEach(e=>s[e.category]=(s[e.category]||0)+e.amount);
+
+  $('#summary').innerHTML=
+    Object.entries(s).map(([k,v])=>`<tr><td>${k}</td><td>${money(v)}</td></tr>`).join('')+
+    `<tr><td><b>Total Expenses</b></td><td><b>${money(arr.reduce((a,b)=>a+b.amount,0))}</b></td></tr>`;
+
+  $('#totalExp').textContent=money(arr.reduce((a,b)=>a+b.amount,0))
+}
+
+$('#addExp').onclick=()=>{addExp();updateExp()};
+$('#clearExp').onclick=()=>{expBody.innerHTML='';updateExp()};
+$('#loadExp').onclick=()=>{
+  expBody.innerHTML='';
+  addExp({date:'2026-07-01',description:'Private studio suite rent',category:'Rent',amount:1050});
+  addExp({date:'2026-07-03',description:'GlossGenius booking software',category:'Software',amount:49});
+  addExp({date:'2026-07-05',description:'Image Skincare enzyme + cleanser restock',category:'Products',amount:186});
+  addExp({date:'2026-07-08',description:'Gloves, gauze, headbands + disposables',category:'Supplies',amount:74});
+  addExp({date:'2026-07-12',description:'Instagram promo + local boosted post',category:'Marketing',amount:85});
+  addExp({date:'2026-07-15',description:'LED mask replacement straps',category:'Supplies',amount:32});
+  addExp({date:'2026-07-18',description:'Business phone line',category:'Software',amount:65});
+  updateExp()
+};
+$('#loadExp').click();
+
+const jadeGoals=['Keep July expenses under $1,800','Book 18+ full-price facial appointments','Get 6 clients rebooked before leaving','Keep at least $500 in product/restock reserve','Sell 5 LED add-ons','Finish month with no unpaid balances'];
+const jadeTasks=['Photograph 3 acne progress clients','Review Custom Facial price after July','Restock enzyme + acne cleanser','Create August rebooking text','Ask 5 repeat clients for reviews','Block one half-day for admin + content'];
+jadeGoals.forEach(t=>$('#goals').innerHTML+=`<label class=check><input type=checkbox><input value="${t}"></label>`);
+jadeTasks.forEach(t=>$('#todos').innerHTML+=`<label class=check><input type=checkbox><input value="${t}"></label>`);
+</script>
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ethan Relocation Review</title>
+<style>
+:root{--ink:#142019;--muted:#647069;--cream:#eeeade;--paper:#f8f6ee;--line:rgba(26,38,30,.16);--green:#315c45}
+*{box-sizing:border-box}body{margin:0;background:#dedfd7;color:var(--ink);font-family:Arial,Helvetica,sans-serif}button{font:inherit;color:inherit}
+.top{padding:17px 24px;background:#17251d;color:white;display:flex;justify-content:space-between;position:sticky;top:0;z-index:30}.brand{font-weight:900;letter-spacing:.08em}.brand span{color:#b9d2bf}.top small{font:9px "Courier New";letter-spacing:.1em;color:#b9d2bf}
+.wrap{max-width:1240px;margin:auto;padding:32px 20px 80px}.eyebrow{font:9px "Courier New";letter-spacing:.12em;text-transform:uppercase}h1{font-size:clamp(38px,6vw,72px);margin:7px 0 12px;line-height:.94;letter-spacing:-.04em}.lede{max-width:760px;font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:24px}
+input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.relocation-board{display:grid;grid-template-columns:1.4fr .8fr .8fr;grid-template-rows:180px 180px;gap:10px;margin-bottom:18px}
+.city-pick{border:1px solid rgba(255,255,255,.18);cursor:pointer;position:relative;overflow:hidden;color:white;min-width:0;box-shadow:0 10px 24px rgba(0,0,0,.08)}.hero-pick{grid-row:1/3}.city-pick:nth-of-type(4){grid-column:2}.city-pick:nth-of-type(5){grid-column:3}
+.pick-art{position:absolute;inset:0;padding:16px;display:flex;justify-content:space-between;align-items:flex-start}.pick-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.72));z-index:0}.pick-icon{font-size:42px;z-index:1}.hero-pick .pick-icon{font-size:76px}.pick-scene{font:8px "Courier New";letter-spacing:.08em;z-index:1;max-width:120px;text-align:right}
+.pick-info{position:absolute;left:16px;right:16px;bottom:30px;display:flex;align-items:flex-end;justify-content:space-between;z-index:2}.pick-info h3{font-size:22px;margin:4px 0 0}.hero-pick .pick-info h3{font-size:39px}.rank{font:9px "Courier New";opacity:.7}.pick-score{font-size:31px;font-weight:900}.hero-pick .pick-score{font-size:54px}.city-pick>p{position:absolute;bottom:10px;left:16px;margin:0;z-index:2;font:8px "Courier New";letter-spacing:.08em}
+.tampa-pick{background:radial-gradient(circle at 80% 20%,#ffe68a 0 24px,transparent 25px),linear-gradient(150deg,#55a5a3,#276c72 55%,#193f43)}.phoenix-pick{background:radial-gradient(circle at 78% 18%,#ffd456 0 18px,transparent 19px),linear-gradient(145deg,#ecb56e,#c55f42 58%,#783d31)}.vegas-pick{background:radial-gradient(circle at 20% 20%,rgba(255,39,165,.7),transparent 20%),radial-gradient(circle at 80% 40%,rgba(76,198,255,.7),transparent 18%),linear-gradient(145deg,#17152a,#371732)}.sa-pick{background:radial-gradient(circle at 78% 18%,#ffd276 0 17px,transparent 18px),linear-gradient(145deg,#c99a69,#9d6047 60%,#633a31)}.orlando-pick{background:radial-gradient(circle at 78% 18%,#ffe77b 0 18px,transparent 19px),linear-gradient(145deg,#72b9df,#616bb4 60%,#514379)}
+#tampa:checked ~ .relocation-board label[for=tampa],
+#phoenix:checked ~ .relocation-board label[for=phoenix],
+#vegas:checked ~ .relocation-board label[for=vegas],
+#sa:checked ~ .relocation-board label[for=sa],
+#orlando:checked ~ .relocation-board label[for=orlando]{outline:3px solid white;outline-offset:-6px}
+.city-canvas{display:none;border:1px solid var(--line);background:var(--paper)}#tampa:checked ~ .city-canvases #tampa-canvas{display:block}
+#phoenix:checked ~ .city-canvases #phoenix-canvas{display:block}
+#vegas:checked ~ .city-canvases #vegas-canvas{display:block}
+#sa:checked ~ .city-canvases #sa-canvas{display:block}
+#orlando:checked ~ .city-canvases #orlando-canvas{display:block}
+.feature-banner{padding:22px;display:grid;grid-template-columns:70px 1fr auto;gap:18px;align-items:center}.scene-mark{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:34px;background:rgba(255,255,255,.38)}.feature-banner h2{font-size:36px;margin:4px 0}.feature-banner p{margin:0;max-width:750px;font-size:12px;line-height:1.6}.bigscore{text-align:right}.bigscore b{display:block;font-size:48px}.bigscore span{font:8px "Courier New"}
+.tampa-canvas .feature-banner{background:linear-gradient(110deg,#cce5d8,#9fcdd0)}.phoenix-canvas .feature-banner{background:linear-gradient(110deg,#f2d5a2,#df9667)}.vegas-canvas .feature-banner{background:linear-gradient(110deg,#211d39,#602550);color:white}.sa-canvas .feature-banner{background:linear-gradient(110deg,#ecd2b2,#c9946e)}.orlando-canvas .feature-banner{background:linear-gradient(110deg,#cfe9f5,#b8b4e8)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stat{padding:13px;border-right:1px solid var(--line)}.stat:last-child{border-right:0}.stat span{display:block;font:8px "Courier New";color:var(--muted)}.stat b{display:block;font-size:13px;margin-top:4px}
+.bento-grid{display:grid;grid-template-columns:1.2fr .8fr 1fr;grid-template-rows:180px 180px;gap:10px;padding:14px}.bento{border:1px solid var(--line);background:#fff;text-align:left;padding:16px;cursor:pointer;position:relative;overflow:hidden}.bento:hover{border-color:var(--green)}.bento.b1{grid-row:1/3}.bento.b4{grid-column:2/4}.tile-no{font:9px "Courier New";color:var(--muted)}.tile-icon{position:absolute;right:14px;top:12px;font-size:24px;opacity:.45}.tile-type{font:8px "Courier New";letter-spacing:.09em;color:var(--green);margin-top:18px}.bento h4{font-size:19px;margin:6px 0}.bento.b1 h4{font-size:27px}.bento p{font:10px/1.55 "Courier New";color:var(--muted);margin:0;max-width:420px}.open-link{position:absolute;bottom:13px;left:16px;font:8px "Courier New";color:#aa633a}
+.drawer{position:fixed;inset:0;display:none;z-index:100}.drawer.open{display:block}.shade{position:absolute;inset:0;background:rgba(15,22,18,.62)}.drawer-card{position:absolute;right:0;top:0;width:min(670px,95vw);height:100%;background:#f6f3ea;border-left:5px solid var(--green);display:flex;flex-direction:column}.drawer-head{padding:22px;border-bottom:1px solid var(--line);display:flex;gap:16px;justify-content:space-between}.drawer-head h3{font-size:30px;margin:6px 0}.drawer-head p{font:10px/1.6 "Courier New";color:var(--muted);margin:0}.close{width:42px;height:42px;background:white;border:1px solid var(--line);font-size:24px;cursor:pointer}.drawer-body{padding:18px;overflow-y:auto;display:grid;gap:10px}.research{background:white;border:1px solid var(--line);padding:15px}.research span{font:8px "Courier New";color:var(--green);letter-spacing:.08em}.research p{font:11px/1.7 "Courier New";color:#4d5851;margin:7px 0 0}body.lock{overflow:hidden}
+.phoenix-drawer{border-color:#c86843}.vegas-drawer{border-color:#ab3f87}.sa-drawer{border-color:#a96f4d}.orlando-drawer{border-color:#6b72b7}
+@media(max-width:800px){.relocation-board{grid-template-columns:1fr 1fr;grid-template-rows:240px 150px 150px}.hero-pick{grid-column:1/3;grid-row:auto}.city-pick:nth-of-type(4),.city-pick:nth-of-type(5){grid-column:auto}.hero-pick .pick-info h3{font-size:30px}.hero-pick .pick-score{font-size:42px}.feature-banner{grid-template-columns:50px 1fr}.bigscore{grid-column:2;text-align:left}.stats{grid-template-columns:repeat(2,1fr)}.bento-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}.bento,.bento.b1,.bento.b4{grid-column:auto;grid-row:auto;min-height:180px}}
+@media(max-width:520px){.top{padding:14px}.top small{display:none}.wrap{padding:26px 12px 60px}.relocation-board{grid-template-columns:1fr 1fr;gap:7px}.feature-banner{grid-template-columns:1fr}.scene-mark{width:52px;height:52px}.bigscore{grid-column:auto}.bento-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.drawer-card{width:100%}}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">ETHAN <span>// RELOCATION REVIEW</span></div><small>LOCATION DECISION BOARD</small></header>
+<main class="wrap">
+<div class="eyebrow">ETHAN // QUICK SUMMARY</div>
+<h1>YOU WANT WARMTH,<br>TRAINING + FREEDOM.</h1>
+<p class="lede">You work remotely, so the city itself has to earn its place. The goal is simple: stay near your $1,500 rent target, keep a serious boxing or Muay Thai gym within reach, stay close to a major airport, and live somewhere warm enough to actually enjoy year-round. These five cities are the strongest overall fits based on that mix.</p>
+<input type="radio" name="city" id="tampa" checked>
+<input type="radio" name="city" id="phoenix" >
+<input type="radio" name="city" id="vegas" >
+<input type="radio" name="city" id="sa" >
+<input type="radio" name="city" id="orlando" >
+<div class="relocation-board">
+<label for="tampa" class="city-pick tampa-pick hero-pick">
+ <div class="pick-art">
+ <span class="pick-icon">☀︎</span>
+ <span class="pick-scene">PALMS / BAY / WARM NIGHTS</span>
+ </div>
+ <div class="pick-info">
+ <div><span class="rank">01</span><h3>TAMPA</h3></div>
+ <div class="pick-score">91</div>
+ </div>
+ <p>BEST OVERALL</p>
+</label>
+<label for="phoenix" class="city-pick phoenix-pick ">
+ <div class="pick-art">
+ <span class="pick-icon">🌵</span>
+ <span class="pick-scene">DESERT / SUN / MOUNTAINS</span>
+ </div>
+ <div class="pick-info">
+ <div><span class="rank">02</span><h3>PHOENIX</h3></div>
+ <div class="pick-score">89</div>
+ </div>
+ <p>BEST DRY-HEAT</p>
+</label>
+<label for="vegas" class="city-pick vegas-pick ">
+ <div class="pick-art">
+ <span class="pick-icon">✦</span>
+ <span class="pick-scene">NEON / DESERT / FIGHT CITY</span>
+ </div>
+ <div class="pick-info">
+ <div><span class="rank">03</span><h3>LAS VEGAS</h3></div>
+ <div class="pick-score">88</div>
+ </div>
+ <p>BEST TAX + AIRPORT</p>
+</label>
+<label for="sa" class="city-pick sa-pick ">
+ <div class="pick-art">
+ <span class="pick-icon">★</span>
+ <span class="pick-scene">TEXAS / RIVER / WARM CITY</span>
+ </div>
+ <div class="pick-info">
+ <div><span class="rank">04</span><h3>SAN ANTONIO</h3></div>
+ <div class="pick-score">86</div>
+ </div>
+ <p>BEST VALUE</p>
+</label>
+<label for="orlando" class="city-pick orlando-pick ">
+ <div class="pick-art">
+ <span class="pick-icon">☀︎</span>
+ <span class="pick-scene">PALMS / LIGHTS / AIR TRAVEL</span>
+ </div>
+ <div class="pick-info">
+ <div><span class="rank">05</span><h3>ORLANDO</h3></div>
+ <div class="pick-score">84</div>
+ </div>
+ <p>BEST FL ALTERNATIVE</p>
+</label></div>
+<div class="city-canvases">
+<section class="city-canvas tampa-canvas" id="tampa-canvas">
+ <div class="feature-banner">
+ <div class="scene-mark">☀︎</div>
+ <div>
+ <div class="eyebrow">BEST OVERALL</div>
+ <h2>Tampa, Florida</h2>
+ <p>The strongest balance of warm weather, airport access, training options and neighborhoods that can still land near Ethan&#x27;s target.</p>
+ </div>
+ <div class="bigscore"><b>91</b><span>ETHAN FIT</span></div>
+ </div>
+ <div class="stats"><div class="stat"><span>1BR TARGET</span><b>$1,525 median*</b></div><div class="stat"><span>AIRPORT</span><b>TPA / central</b></div><div class="stat"><span>WINTER</span><b>Mild</b></div><div class="stat"><span>TRAINING</span><b>Strong</b></div><div class="stat"><span>STATE TAX</span><b>None</b></div></div>
+ <div class="bento-grid">
+<button type="button" class="bento b1" data-open="tampa-housing">
+ <div class="tile-no">01</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">HOUSING</div>
+ <h4>Seminole Heights + West Tampa</h4>
+ <p>Character, value and better airport access than the luxury core.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b2" data-open="tampa-training">
+ <div class="tile-no">02</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">TRAINING</div>
+ <h4>Boxing + Muay Thai</h4>
+ <p>Multiple serious options across the metro; apartment choice should be paired with gym route.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b3" data-open="tampa-airport">
+ <div class="tile-no">03</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">AIRPORT</div>
+ <h4>TPA access</h4>
+ <p>Central airport location is one of Tampa&#x27;s biggest advantages.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b4" data-open="tampa-weather">
+ <div class="tile-no">04</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">WEATHER</div>
+ <h4>Warm, humid, storm-prone</h4>
+ <p>Winter is excellent; summer humidity and hurricane planning are the price.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b5" data-open="tampa-cost">
+ <div class="tile-no">05</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">COST</div>
+ <h4>Tax advantage vs insurance</h4>
+ <p>No state income tax helps, but insurance and A/C costs matter.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b6" data-open="tampa-neighborhood">
+ <div class="tile-no">06</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">NEIGHBORHOODS</div>
+ <h4>4 finalist areas</h4>
+ <p>Seminole Heights, West Tampa, Temple Terrace and Water Street serve very different priorities.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button></div>
+</section>
+<section class="city-canvas phoenix-canvas" id="phoenix-canvas">
+ <div class="feature-banner">
+ <div class="scene-mark">🌵</div>
+ <div>
+ <div class="eyebrow">BEST DRY-HEAT</div>
+ <h2>Phoenix, Arizona</h2>
+ <p>Excellent airport access, housing below Ethan's ceiling at the citywide one-bedroom benchmark, and a deep combat-sports ecosystem; extreme summer heat is the defining tradeoff.</p>
+ </div>
+ <div class="bigscore"><b>89</b><span>ETHAN FIT</span></div>
+ </div>
+ <div class="stats"><div class="stat"><span>1BR TARGET</span><b>$1,077 1BR*</b></div><div class="stat"><span>AIRPORT</span><b>PHX / central</b></div><div class="stat"><span>WINTER</span><b>Excellent</b></div><div class="stat"><span>TRAINING</span><b>Excellent</b></div><div class="stat"><span>AZ INDIV. TAX</span><b>2.5% flat</b></div></div>
+ <div class="bento-grid">
+<button type="button" class="bento b1" data-open="phoenix-housing">
+ <div class="tile-no">01</div>
+ <div class="tile-icon">🌵</div>
+ <div class="tile-type">HOUSING</div>
+ <h4>Midtown + North Phoenix</h4>
+ <p>More realistic value than Scottsdale while staying central.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b2" data-open="phoenix-training">
+ <div class="tile-no">02</div>
+ <div class="tile-icon">🌵</div>
+ <div class="tile-type">TRAINING</div>
+ <h4>Deep fight scene</h4>
+ <p>High-level MMA, boxing and Muay Thai options across the metro.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b3" data-open="phoenix-airport">
+ <div class="tile-no">03</div>
+ <div class="tile-icon">🌵</div>
+ <div class="tile-type">AIRPORT</div>
+ <h4>Sky Harbor</h4>
+ <p>Major hub close to the urban core.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b4" data-open="phoenix-weather">
+ <div class="tile-no">04</div>
+ <div class="tile-icon">🌵</div>
+ <div class="tile-type">WEATHER</div>
+ <h4>Dry + extreme</h4>
+ <p>Fantastic winter, brutally hot summer.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b5" data-open="phoenix-cost">
+ <div class="tile-no">05</div>
+ <div class="tile-icon">🌵</div>
+ <div class="tile-type">COST</div>
+ <h4>A/C + car costs</h4>
+ <p>Affordable pockets remain, but summer electricity and driving add up.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b6" data-open="phoenix-neighborhood">
+ <div class="tile-no">06</div>
+ <div class="tile-icon">🌵</div>
+ <div class="tile-type">NEIGHBORHOODS</div>
+ <h4>Midtown / Tempe / North</h4>
+ <p>Each changes social life, commute and rent pressure.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button></div>
+</section>
+<section class="city-canvas vegas-canvas" id="vegas-canvas">
+ <div class="feature-banner">
+ <div class="scene-mark">✦</div>
+ <div>
+ <div class="eyebrow">BEST TAX + AIRPORT</div>
+ <h2>Las Vegas, Nevada</h2>
+ <p>No Nevada individual income tax, unusually convenient airport geography and a dense combat-sports culture make Las Vegas a strong practical fit.</p>
+ </div>
+ <div class="bigscore"><b>88</b><span>ETHAN FIT</span></div>
+ </div>
+ <div class="stats"><div class="stat"><span>1BR TARGET</span><b>$1,200 1BR*</b></div><div class="stat"><span>AIRPORT</span><b>LAS / central</b></div><div class="stat"><span>WINTER</span><b>Mild</b></div><div class="stat"><span>TRAINING</span><b>Elite density</b></div><div class="stat"><span>STATE TAX</span><b>None</b></div></div>
+ <div class="bento-grid">
+<button type="button" class="bento b1" data-open="vegas-housing">
+ <div class="tile-no">01</div>
+ <div class="tile-icon">✦</div>
+ <div class="tile-type">HOUSING</div>
+ <h4>Spring Valley + Henderson</h4>
+ <p>Good value if Ethan stays out of premium Summerlin pockets.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b2" data-open="vegas-training">
+ <div class="tile-no">02</div>
+ <div class="tile-icon">✦</div>
+ <div class="tile-type">TRAINING</div>
+ <h4>Fight capital</h4>
+ <p>Boxing, MMA and Muay Thai access is a major advantage.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b3" data-open="vegas-airport">
+ <div class="tile-no">03</div>
+ <div class="tile-icon">✦</div>
+ <div class="tile-type">AIRPORT</div>
+ <h4>LAS proximity</h4>
+ <p>The airport sits unusually close to the center of the metro.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b4" data-open="vegas-weather">
+ <div class="tile-no">04</div>
+ <div class="tile-icon">✦</div>
+ <div class="tile-type">WEATHER</div>
+ <h4>Dry desert climate</h4>
+ <p>Mild winters and extreme but dry summers.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b5" data-open="vegas-cost">
+ <div class="tile-no">05</div>
+ <div class="tile-icon">✦</div>
+ <div class="tile-type">COST</div>
+ <h4>No income tax</h4>
+ <p>Rent remains workable, utilities spike in summer.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b6" data-open="vegas-neighborhood">
+ <div class="tile-no">06</div>
+ <div class="tile-icon">✦</div>
+ <div class="tile-type">NEIGHBORHOODS</div>
+ <h4>Spring Valley / Arts / Henderson</h4>
+ <p>Strongly different lifestyle profiles within a compact metro.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button></div>
+</section>
+<section class="city-canvas sa-canvas" id="sa-canvas">
+ <div class="feature-banner">
+ <div class="scene-mark">★</div>
+ <div>
+ <div class="eyebrow">BEST VALUE</div>
+ <h2>San Antonio, Texas</h2>
+ <p>The affordability leader: more apartment options under Ethan&#x27;s ceiling and no state income tax, but more sprawl and weaker flight connectivity.</p>
+ </div>
+ <div class="bigscore"><b>86</b><span>ETHAN FIT</span></div>
+ </div>
+ <div class="stats"><div class="stat"><span>1BR TARGET</span><b>$1,122 median*</b></div><div class="stat"><span>AIRPORT</span><b>SAT / central</b></div><div class="stat"><span>WINTER</span><b>Mild</b></div><div class="stat"><span>TRAINING</span><b>Good</b></div><div class="stat"><span>STATE TAX</span><b>None</b></div></div>
+ <div class="bento-grid">
+<button type="button" class="bento b1" data-open="sa-housing">
+ <div class="tile-no">01</div>
+ <div class="tile-icon">★</div>
+ <div class="tile-type">HOUSING</div>
+ <h4>Best rent headroom</h4>
+ <p>Ethan gets the most room under budget here.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b2" data-open="sa-training">
+ <div class="tile-no">02</div>
+ <div class="tile-icon">★</div>
+ <div class="tile-type">TRAINING</div>
+ <h4>Solid gym scene</h4>
+ <p>Enough quality options, though less dense than Vegas or Phoenix.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b3" data-open="sa-airport">
+ <div class="tile-no">03</div>
+ <div class="tile-icon">★</div>
+ <div class="tile-type">AIRPORT</div>
+ <h4>SAT</h4>
+ <p>Convenient but not as connected as PHX or TPA.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b4" data-open="sa-weather">
+ <div class="tile-no">04</div>
+ <div class="tile-icon">★</div>
+ <div class="tile-type">WEATHER</div>
+ <h4>Hot + sometimes humid</h4>
+ <p>Warm overall with occasional severe-weather events.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b5" data-open="sa-cost">
+ <div class="tile-no">05</div>
+ <div class="tile-icon">★</div>
+ <div class="tile-type">COST</div>
+ <h4>Best overall value</h4>
+ <p>Rent advantage is real, but sprawl increases driving.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b6" data-open="sa-neighborhood">
+ <div class="tile-no">06</div>
+ <div class="tile-icon">★</div>
+ <div class="tile-type">NEIGHBORHOODS</div>
+ <h4>Southtown / Medical / Northwest</h4>
+ <p>The best neighborhood depends on whether Ethan prioritizes energy or savings.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button></div>
+</section>
+<section class="city-canvas orlando-canvas" id="orlando-canvas">
+ <div class="feature-banner">
+ <div class="scene-mark">☀︎</div>
+ <div>
+ <div class="eyebrow">BEST FL ALTERNATIVE</div>
+ <h2>Orlando, Florida</h2>
+ <p>Warm, well connected and amenity-rich, but citywide rent is around Ethan's ceiling and traffic can make neighborhood choice unusually important.</p>
+ </div>
+ <div class="bigscore"><b>84</b><span>ETHAN FIT</span></div>
+ </div>
+ <div class="stats"><div class="stat"><span>1BR TARGET</span><b>$1,525 median*</b></div><div class="stat"><span>AIRPORT</span><b>MCO / major hub</b></div><div class="stat"><span>WINTER</span><b>Mild</b></div><div class="stat"><span>TRAINING</span><b>Good</b></div><div class="stat"><span>STATE TAX</span><b>None</b></div></div>
+ <div class="bento-grid">
+<button type="button" class="bento b1" data-open="orlando-housing">
+ <div class="tile-no">01</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">HOUSING</div>
+ <h4>Mills 50 + College Park</h4>
+ <p>Central areas fit Ethan better than tourist-heavy corridors.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b2" data-open="orlando-training">
+ <div class="tile-no">02</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">TRAINING</div>
+ <h4>Good selection</h4>
+ <p>Enough serious options, but traffic makes exact location important.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b3" data-open="orlando-airport">
+ <div class="tile-no">03</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">AIRPORT</div>
+ <h4>MCO network</h4>
+ <p>Excellent connectivity with inconsistent drive times.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b4" data-open="orlando-weather">
+ <div class="tile-no">04</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">WEATHER</div>
+ <h4>Warm + stormy</h4>
+ <p>Mild winter and humid summer.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b5" data-open="orlando-cost">
+ <div class="tile-no">05</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">COST</div>
+ <h4>Rent pressure</h4>
+ <p>Similar tax benefit to Tampa with weaker housing value.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button>
+<button type="button" class="bento b6" data-open="orlando-neighborhood">
+ <div class="tile-no">06</div>
+ <div class="tile-icon">☀︎</div>
+ <div class="tile-type">NEIGHBORHOODS</div>
+ <h4>Mills 50 / College Park / Lake Nona</h4>
+ <p>Each produces a different balance of airport, lifestyle and cost.</p>
+ <span class="open-link">OPEN DEEP RESEARCH FILE →</span>
+</button></div>
+</section></div>
+</main>
+
+<div class="drawer" id="tampa-housing">
+ <div class="shade" data-close="tampa-housing"></div>
+ <aside class="drawer-card tampa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">TAMPA // HOUSING</div><h3>Seminole Heights + West Tampa</h3><p>Character, value and better airport access than the luxury core.</p></div>
+ <button class="close" type="button" data-close="tampa-housing">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT ETHAN IS REALLY DECIDING</span><p>Whether the housing stock gives him enough quality and location without forcing the rest of his life—training, airport, errands—to become inconvenient.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Real current listings, total monthly fees, parking, utilities, neighborhood noise, exact commute to the chosen gym and airport drive time during Ethan&#x27;s normal hours.</p></section><section class="research"><span>HOW TO COMPARE</span><p>Use all-in monthly cost, not advertised rent. A $1,430 apartment with $180 in mandatory fees is not cheaper than a $1,550 apartment with fewer add-ons.</p></section><section class="research"><span>DECISION RULE</span><p>Favor the neighborhood that keeps total cost near target while protecting Ethan&#x27;s two repeat trips: training and airport.</p></section>
+ <section class="research"><span>RENT TARGET MODEL</span><p>Treat $1,500 as Ethan's preferred ceiling, then separate base rent from mandatory fees, parking, internet, utilities and deposits. A listing only qualifies if the realistic recurring total still makes sense.</p></section><section class="research"><span>UNIT FILTERS</span><p>Track square footage, in-unit laundry, parking type, pet policy if relevant, lease term, construction age, floor level, A/C type, noise exposure, gym/pool amenities and whether advertised rent depends on concessions.</p></section><section class="research"><span>LEASE-UP / CONCESSION RISK</span><p>A '6 weeks free' special can make year-one effective rent look attractive while renewal rent jumps sharply. Store both effective rent and undiscounted monthly rent.</p></section><section class="research"><span>NEIGHBORHOOD MICRO-CHECK</span><p>Check the exact block rather than relying on neighborhood averages: grocery access, late-night noise, major-road exposure, nearby construction, parking security and the first/last five minutes of Ethan's gym commute.</p></section><section class="research"><span>MOVE-IN CASH</span><p>Estimate application fee, admin fee, security deposit, first month, parking, utility deposits, moving costs and basic setup purchases so Ethan knows the cash required before signing.</p></section><section class="research"><span>RENEWAL RISK</span><p>Record the normal asking rent for comparable units in the same property and nearby buildings. This gives Ethan a rough idea of whether the first-year deal is artificially cheap.</p></section><section class="research"><span>APARTMENT VERIFICATION LIST</span><p>Before applying: verify available-unit number, actual view/floor, all recurring fees, lease-break terms, guest parking, package handling, internet providers, utility billing method and whether the shown model unit matches the available unit.</p></section><section class="research"><span>HOUSING SCORE COMPONENTS</span><p>Budget fit 30%, gym commute 20%, airport access 15%, neighborhood fit 15%, unit quality 10%, recurring fees 5%, move-in cost 5%. The weighting can be changed if Ethan's priorities change.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="tampa-training">
+ <div class="shade" data-close="tampa-training"></div>
+ <aside class="drawer-card tampa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">TAMPA // TRAINING</div><h3>Boxing + Muay Thai</h3><p>Multiple serious options across the metro; apartment choice should be paired with gym route.</p></div>
+ <button class="close" type="button" data-close="tampa-training">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT COUNTS AS A REAL FIT</span><p>A gym only counts if Ethan would actually train there. A generic fitness studio offering a &#x27;Muay Thai&#x27; class is not equal to a serious striking gym.</p></section><section class="research"><span>WHAT TO RESEARCH</span><p>Coach background, sparring culture, competition activity, class schedule, monthly price, commute, parking and whether advanced classes fit Ethan&#x27;s schedule.</p></section><section class="research"><span>COMMUTE TEST</span><p>Run the route from finalist apartments during the exact weekday hours Ethan would train.</p></section><section class="research"><span>DECISION RULE</span><p>A slightly more expensive apartment can be the better move if it turns a 35-minute training trip into 10–15 minutes.</p></section>
+ <section class="research"><span>GYM QUALITY FILE</span><p>For each serious candidate, store disciplines offered, head coach, coach competitive background, active fighters, beginner/advanced separation, sparring frequency, ring/bag space, strength equipment and overall training culture.</p></section><section class="research"><span>SCHEDULE COMPATIBILITY</span><p>Do not just count classes. Map the exact weekly classes Ethan would attend against his work routine. A great gym with incompatible advanced-class times is a poor practical fit.</p></section><section class="research"><span>REAL MONTHLY COST</span><p>Membership + enrollment fee + required gear + parking + private lessons if relevant. Also record contract length, cancellation terms, trial policy and whether open-gym access is included.</p></section><section class="research"><span>TRAINING DEPTH</span><p>Separate fitness-oriented striking from technical Muay Thai/boxing. Look for pad work, partner drilling, controlled sparring, clinch work for Muay Thai, competition team activity and coaching attention.</p></section><section class="research"><span>COMMUTE BURDEN</span><p>Calculate round-trip minutes × expected training days per week. A 25-minute one-way commute at 4 sessions/week creates more than 3 hours of weekly driving.</p></section><section class="research"><span>FIRST-VISIT CHECKLIST</span><p>Observe class size, coach-to-student ratio, cleanliness, ventilation, mat/ring condition, skill level of regulars, how new people are treated and whether hard sparring is controlled.</p></section><section class="research"><span>LONG-TERM FIT</span><p>Ask whether Ethan could still grow there after 6–12 months. A gym that is convenient now but lacks advanced training may force another commute or membership later.</p></section><section class="research"><span>GYM SCORE COMPONENTS</span><p>Coaching/training quality 35%, commute 20%, schedule 15%, culture 10%, price 10%, facilities 5%, competition opportunities 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="tampa-airport">
+ <div class="shade" data-close="tampa-airport"></div>
+ <aside class="drawer-card tampa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">TAMPA // AIRPORT</div><h3>TPA access</h3><p>Central airport location is one of Tampa&#x27;s biggest advantages.</p></div>
+ <button class="close" type="button" data-close="tampa-airport">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY THIS MATTERS</span><p>Remote work gives Ethan location freedom, but airport friction determines how easy it is to actually use that freedom.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Drive time from the exact apartment at early morning, weekday rush hour and weekend travel windows; nonstop route coverage also matters.</p></section><section class="research"><span>HIDDEN COST</span><p>Long airport trips create parking, rideshare and time costs that don&#x27;t appear in rent comparisons.</p></section><section class="research"><span>DECISION RULE</span><p>Under ~30 minutes under normal conditions is a strong fit; consistently approaching Ethan&#x27;s 45-minute ceiling is a downgrade.</p></section>
+ <section class="research"><span>ROUTE QUALITY</span><p>Store nonstop destinations Ethan is most likely to use, typical frequency, airline competition and whether the airport is a true hub or simply has many flights.</p></section><section class="research"><span>DOOR-TO-GATE MODEL</span><p>Apartment → terminal drive, parking/rideshare buffer, security time and terminal walking. Airport proximity should be measured as total travel friction, not highway mileage.</p></section><section class="research"><span>TIME-OF-DAY TEST</span><p>Compare 5–7 AM, weekday afternoon, rush hour and late-night travel. A 17-minute midday airport can become a 35-minute rush-hour trip.</p></section><section class="research"><span>RIDESHARE / PARKING COST</span><p>Estimate typical rideshare cost from each finalist neighborhood and economy/garage parking rates for common 3-, 5- and 7-day trips.</p></section><section class="research"><span>DISRUPTION RISK</span><p>Weather, tourism peaks, major events and highway bottlenecks can affect reliability. Record the routes with the fewest single points of failure.</p></section><section class="research"><span>REMOTE-WORK VALUE</span><p>A better-connected airport increases the number of places Ethan can reach without burning a full day on connections—an important benefit of location-independent work.</p></section><section class="research"><span>AIRPORT SCORE COMPONENTS</span><p>Drive reliability 30%, nonstop network 25%, flight frequency 15%, fares/airline competition 10%, parking/rideshare cost 10%, terminal usability 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="tampa-weather">
+ <div class="shade" data-close="tampa-weather"></div>
+ <aside class="drawer-card tampa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">TAMPA // WEATHER</div><h3>Warm, humid, storm-prone</h3><p>Winter is excellent; summer humidity and hurricane planning are the price.</p></div>
+ <button class="close" type="button" data-close="tampa-weather">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>LIFESTYLE EFFECT</span><p>Weather changes how much of the year Ethan can comfortably be outside, train, drive and explore.</p></section><section class="research"><span>WHAT TO SEPARATE</span><p>Absolute heat, humidity, rainfall, storm exposure and winter conditions should be evaluated separately.</p></section><section class="research"><span>HOUSING EFFECT</span><p>Climate also changes electricity use, insurance exposure, vehicle wear and apartment features Ethan should prioritize.</p></section><section class="research"><span>DECISION RULE</span><p>The best climate is the one Ethan actually tolerates—not the city with the nicest annual-average temperature.</p></section>
+ <section class="research"><span>MONTH-BY-MONTH VIEW</span><p>Track typical highs/lows, humidity, rainfall and severe-weather patterns by month rather than relying on annual averages.</p></section><section class="research"><span>HEAT TYPE</span><p>Separate dry heat from humid heat. Phoenix/Las Vegas can post higher temperatures while Tampa/Orlando can feel more oppressive because of humidity and warm nights.</p></section><section class="research"><span>OUTDOOR HOURS</span><p>Estimate how many months allow comfortable morning/evening outdoor activity. Ethan's 'warm city' preference should reward usable warmth, not simply high temperatures.</p></section><section class="research"><span>TRAINING EFFECT</span><p>Climate changes hydration, outdoor conditioning, driving comfort and how willing Ethan is to leave home for evening training.</p></section><section class="research"><span>VEHICLE EFFECT</span><p>Extreme heat accelerates battery wear and can punish tires/interiors; heavy rain and storm exposure create different vehicle risks.</p></section><section class="research"><span>HOUSING EFFECT</span><p>A/C efficiency, covered parking, building insulation, flood exposure, backup power and shaded orientation become more important in harsher climates.</p></section><section class="research"><span>SEVERE-WEATHER FILE</span><p>Record hurricane/tropical-storm exposure in Florida, monsoon/dust-storm and extreme-heat concerns in Arizona/Nevada, and severe thunderstorm/freeze risk in Texas.</p></section><section class="research"><span>WEATHER SCORE COMPONENTS</span><p>Winter comfort 25%, summer tolerance 25%, humidity 15%, severe-weather risk 15%, outdoor usability 10%, utility/vehicle impact 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="tampa-cost">
+ <div class="shade" data-close="tampa-cost"></div>
+ <aside class="drawer-card tampa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">TAMPA // COST</div><h3>Tax advantage vs insurance</h3><p>No state income tax helps, but insurance and A/C costs matter.</p></div>
+ <button class="close" type="button" data-close="tampa-cost">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>THE REAL NUMBER</span><p>Rent is only one line item. Compare taxes, utilities, insurance, parking, fuel, groceries, gym membership and typical driving distance.</p></section><section class="research"><span>REMOTE-WORK EFFECT</span><p>State income tax can materially change take-home pay depending on Ethan&#x27;s income and employer setup.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Actual insurance quote, utility estimate for a comparable 1BR and average weekly driving from the finalist neighborhood.</p></section><section class="research"><span>DECISION RULE</span><p>Rank cities by monthly life cost, not apartment rent.</p></section>
+ <section class="research"><span>ALL-IN MONTHLY MODEL</span><p>Base rent + mandatory housing fees + utilities + internet + insurance + car fuel + parking + gym + groceries + estimated state income tax impact. This becomes Ethan's true city-to-city number.</p></section><section class="research"><span>TAX EFFECT</span><p>Florida, Nevada and Texas do not impose individual state income tax; Arizona taxes individual taxable income at a 2.5% flat rate. Ethan should still compare total tax burden and his own employment/tax situation rather than treating a 0% state-income-tax rate as zero taxation.</p></section><section class="research"><span>AUTO COST</span><p>Get ZIP-specific insurance quotes. Then estimate fuel from likely weekly mileage, parking and tolls. Car-dependent metros can erase part of a rent advantage.</p></section><section class="research"><span>UTILITY SEASONALITY</span><p>Model peak-summer electricity separately from mild-season bills. Phoenix, Vegas, Tampa and Orlando can all have meaningful cooling costs for different climate reasons.</p></section><section class="research"><span>GROCERY / DAILY SPEND</span><p>Use a consistent basket of groceries and common purchases across cities so lifestyle inflation is visible rather than anecdotal.</p></section><section class="research"><span>MOVE COST</span><p>Include truck/shipping, travel, deposits, application fees, registration changes, initial household purchases and any overlap between old and new housing.</p></section><section class="research"><span>12-MONTH VIEW</span><p>Compare first-year total cost rather than a single month. Include concessions, move-in costs, expected seasonal utilities and known annual fees.</p></section><section class="research"><span>COST SCORE COMPONENTS</span><p>Housing 40%, taxes 15%, transportation 15%, utilities 10%, insurance 10%, groceries/daily spending 5%, move-in cost 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="tampa-neighborhood">
+ <div class="shade" data-close="tampa-neighborhood"></div>
+ <aside class="drawer-card tampa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">TAMPA // NEIGHBORHOODS</div><h3>4 finalist areas</h3><p>Seminole Heights, West Tampa, Temple Terrace and Water Street serve very different priorities.</p></div>
+ <button class="close" type="button" data-close="tampa-neighborhood">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY CITY-LEVEL DATA IS NOT ENOUGH</span><p>A city can score perfectly while the wrong neighborhood destroys the fit. Ethan experiences a block and commute—not a metro average.</p></section><section class="research"><span>WHAT TO MAP</span><p>Apartment clusters, preferred gym, airport route, groceries, social areas, parks and recurring errands.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Night vs day feel, parking, traffic direction, construction, noise and building-specific fees.</p></section><section class="research"><span>DECISION RULE</span><p>Once a city makes the final three, neighborhood selection should become more important than the city score itself.</p></section>
+ <section class="research"><span>BLOCK-LEVEL FIT</span><p>City rankings stop being useful once Ethan has finalist neighborhoods. Evaluate exact apartment clusters and streets, because a neighborhood can change dramatically within a few blocks.</p></section><section class="research"><span>DAILY-LIFE MAP</span><p>Plot home, gym, grocery store, airport route, coffee/work spots, nightlife/social areas, parks/trails and any recurring errands. Count both distance and actual drive time.</p></section><section class="research"><span>DAY / NIGHT CHECK</span><p>Research daytime and nighttime activity separately. Noise, parking, traffic, lighting and pedestrian activity can change substantially after dark.</p></section><section class="research"><span>ACCESS PATTERN</span><p>Determine whether Ethan repeatedly has to cross a congested freeway, bridge or downtown corridor. One bad bottleneck can affect almost every day.</p></section><section class="research"><span>LIFESTYLE MATCH</span><p>Track whether the area feels urban, suburban, quiet, nightlife-heavy, outdoors-oriented or family-oriented and compare that with what Ethan actually wants around his home.</p></section><section class="research"><span>HOUSING INVENTORY</span><p>Count how many qualifying apartments exist—not just the single best listing. More inventory gives Ethan negotiating power and backup options.</p></section><section class="research"><span>FUTURE CHANGE</span><p>Note major construction, redevelopment, transit projects and rapidly rising rents that could change the neighborhood during a 12–24 month stay.</p></section><section class="research"><span>FINAL NEIGHBORHOOD SCORE</span><p>Housing 25%, training access 20%, airport 15%, daily errands 10%, lifestyle 10%, traffic 10%, inventory depth 5%, environmental/noise risk 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="phoenix-housing">
+ <div class="shade" data-close="phoenix-housing"></div>
+ <aside class="drawer-card phoenix-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">PHOENIX // HOUSING</div><h3>Midtown + North Phoenix</h3><p>More realistic value than Scottsdale while staying central.</p></div>
+ <button class="close" type="button" data-close="phoenix-housing">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT ETHAN IS REALLY DECIDING</span><p>Whether the housing stock gives him enough quality and location without forcing the rest of his life—training, airport, errands—to become inconvenient.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Real current listings, total monthly fees, parking, utilities, neighborhood noise, exact commute to the chosen gym and airport drive time during Ethan&#x27;s normal hours.</p></section><section class="research"><span>HOW TO COMPARE</span><p>Use all-in monthly cost, not advertised rent. A $1,430 apartment with $180 in mandatory fees is not cheaper than a $1,550 apartment with fewer add-ons.</p></section><section class="research"><span>DECISION RULE</span><p>Favor the neighborhood that keeps total cost near target while protecting Ethan&#x27;s two repeat trips: training and airport.</p></section>
+ <section class="research"><span>RENT TARGET MODEL</span><p>Treat $1,500 as Ethan's preferred ceiling, then separate base rent from mandatory fees, parking, internet, utilities and deposits. A listing only qualifies if the realistic recurring total still makes sense.</p></section><section class="research"><span>UNIT FILTERS</span><p>Track square footage, in-unit laundry, parking type, pet policy if relevant, lease term, construction age, floor level, A/C type, noise exposure, gym/pool amenities and whether advertised rent depends on concessions.</p></section><section class="research"><span>LEASE-UP / CONCESSION RISK</span><p>A '6 weeks free' special can make year-one effective rent look attractive while renewal rent jumps sharply. Store both effective rent and undiscounted monthly rent.</p></section><section class="research"><span>NEIGHBORHOOD MICRO-CHECK</span><p>Check the exact block rather than relying on neighborhood averages: grocery access, late-night noise, major-road exposure, nearby construction, parking security and the first/last five minutes of Ethan's gym commute.</p></section><section class="research"><span>MOVE-IN CASH</span><p>Estimate application fee, admin fee, security deposit, first month, parking, utility deposits, moving costs and basic setup purchases so Ethan knows the cash required before signing.</p></section><section class="research"><span>RENEWAL RISK</span><p>Record the normal asking rent for comparable units in the same property and nearby buildings. This gives Ethan a rough idea of whether the first-year deal is artificially cheap.</p></section><section class="research"><span>APARTMENT VERIFICATION LIST</span><p>Before applying: verify available-unit number, actual view/floor, all recurring fees, lease-break terms, guest parking, package handling, internet providers, utility billing method and whether the shown model unit matches the available unit.</p></section><section class="research"><span>HOUSING SCORE COMPONENTS</span><p>Budget fit 30%, gym commute 20%, airport access 15%, neighborhood fit 15%, unit quality 10%, recurring fees 5%, move-in cost 5%. The weighting can be changed if Ethan's priorities change.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="phoenix-training">
+ <div class="shade" data-close="phoenix-training"></div>
+ <aside class="drawer-card phoenix-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">PHOENIX // TRAINING</div><h3>Deep fight scene</h3><p>High-level MMA, boxing and Muay Thai options across the metro.</p></div>
+ <button class="close" type="button" data-close="phoenix-training">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT COUNTS AS A REAL FIT</span><p>A gym only counts if Ethan would actually train there. A generic fitness studio offering a &#x27;Muay Thai&#x27; class is not equal to a serious striking gym.</p></section><section class="research"><span>WHAT TO RESEARCH</span><p>Coach background, sparring culture, competition activity, class schedule, monthly price, commute, parking and whether advanced classes fit Ethan&#x27;s schedule.</p></section><section class="research"><span>COMMUTE TEST</span><p>Run the route from finalist apartments during the exact weekday hours Ethan would train.</p></section><section class="research"><span>DECISION RULE</span><p>A slightly more expensive apartment can be the better move if it turns a 35-minute training trip into 10–15 minutes.</p></section>
+ <section class="research"><span>GYM QUALITY FILE</span><p>For each serious candidate, store disciplines offered, head coach, coach competitive background, active fighters, beginner/advanced separation, sparring frequency, ring/bag space, strength equipment and overall training culture.</p></section><section class="research"><span>SCHEDULE COMPATIBILITY</span><p>Do not just count classes. Map the exact weekly classes Ethan would attend against his work routine. A great gym with incompatible advanced-class times is a poor practical fit.</p></section><section class="research"><span>REAL MONTHLY COST</span><p>Membership + enrollment fee + required gear + parking + private lessons if relevant. Also record contract length, cancellation terms, trial policy and whether open-gym access is included.</p></section><section class="research"><span>TRAINING DEPTH</span><p>Separate fitness-oriented striking from technical Muay Thai/boxing. Look for pad work, partner drilling, controlled sparring, clinch work for Muay Thai, competition team activity and coaching attention.</p></section><section class="research"><span>COMMUTE BURDEN</span><p>Calculate round-trip minutes × expected training days per week. A 25-minute one-way commute at 4 sessions/week creates more than 3 hours of weekly driving.</p></section><section class="research"><span>FIRST-VISIT CHECKLIST</span><p>Observe class size, coach-to-student ratio, cleanliness, ventilation, mat/ring condition, skill level of regulars, how new people are treated and whether hard sparring is controlled.</p></section><section class="research"><span>LONG-TERM FIT</span><p>Ask whether Ethan could still grow there after 6–12 months. A gym that is convenient now but lacks advanced training may force another commute or membership later.</p></section><section class="research"><span>GYM SCORE COMPONENTS</span><p>Coaching/training quality 35%, commute 20%, schedule 15%, culture 10%, price 10%, facilities 5%, competition opportunities 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="phoenix-airport">
+ <div class="shade" data-close="phoenix-airport"></div>
+ <aside class="drawer-card phoenix-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">PHOENIX // AIRPORT</div><h3>Sky Harbor</h3><p>Major hub close to the urban core.</p></div>
+ <button class="close" type="button" data-close="phoenix-airport">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY THIS MATTERS</span><p>Remote work gives Ethan location freedom, but airport friction determines how easy it is to actually use that freedom.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Drive time from the exact apartment at early morning, weekday rush hour and weekend travel windows; nonstop route coverage also matters.</p></section><section class="research"><span>HIDDEN COST</span><p>Long airport trips create parking, rideshare and time costs that don&#x27;t appear in rent comparisons.</p></section><section class="research"><span>DECISION RULE</span><p>Under ~30 minutes under normal conditions is a strong fit; consistently approaching Ethan&#x27;s 45-minute ceiling is a downgrade.</p></section>
+ <section class="research"><span>ROUTE QUALITY</span><p>Store nonstop destinations Ethan is most likely to use, typical frequency, airline competition and whether the airport is a true hub or simply has many flights.</p></section><section class="research"><span>DOOR-TO-GATE MODEL</span><p>Apartment → terminal drive, parking/rideshare buffer, security time and terminal walking. Airport proximity should be measured as total travel friction, not highway mileage.</p></section><section class="research"><span>TIME-OF-DAY TEST</span><p>Compare 5–7 AM, weekday afternoon, rush hour and late-night travel. A 17-minute midday airport can become a 35-minute rush-hour trip.</p></section><section class="research"><span>RIDESHARE / PARKING COST</span><p>Estimate typical rideshare cost from each finalist neighborhood and economy/garage parking rates for common 3-, 5- and 7-day trips.</p></section><section class="research"><span>DISRUPTION RISK</span><p>Weather, tourism peaks, major events and highway bottlenecks can affect reliability. Record the routes with the fewest single points of failure.</p></section><section class="research"><span>REMOTE-WORK VALUE</span><p>A better-connected airport increases the number of places Ethan can reach without burning a full day on connections—an important benefit of location-independent work.</p></section><section class="research"><span>AIRPORT SCORE COMPONENTS</span><p>Drive reliability 30%, nonstop network 25%, flight frequency 15%, fares/airline competition 10%, parking/rideshare cost 10%, terminal usability 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="phoenix-weather">
+ <div class="shade" data-close="phoenix-weather"></div>
+ <aside class="drawer-card phoenix-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">PHOENIX // WEATHER</div><h3>Dry + extreme</h3><p>Fantastic winter, brutally hot summer.</p></div>
+ <button class="close" type="button" data-close="phoenix-weather">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>LIFESTYLE EFFECT</span><p>Weather changes how much of the year Ethan can comfortably be outside, train, drive and explore.</p></section><section class="research"><span>WHAT TO SEPARATE</span><p>Absolute heat, humidity, rainfall, storm exposure and winter conditions should be evaluated separately.</p></section><section class="research"><span>HOUSING EFFECT</span><p>Climate also changes electricity use, insurance exposure, vehicle wear and apartment features Ethan should prioritize.</p></section><section class="research"><span>DECISION RULE</span><p>The best climate is the one Ethan actually tolerates—not the city with the nicest annual-average temperature.</p></section>
+ <section class="research"><span>MONTH-BY-MONTH VIEW</span><p>Track typical highs/lows, humidity, rainfall and severe-weather patterns by month rather than relying on annual averages.</p></section><section class="research"><span>HEAT TYPE</span><p>Separate dry heat from humid heat. Phoenix/Las Vegas can post higher temperatures while Tampa/Orlando can feel more oppressive because of humidity and warm nights.</p></section><section class="research"><span>OUTDOOR HOURS</span><p>Estimate how many months allow comfortable morning/evening outdoor activity. Ethan's 'warm city' preference should reward usable warmth, not simply high temperatures.</p></section><section class="research"><span>TRAINING EFFECT</span><p>Climate changes hydration, outdoor conditioning, driving comfort and how willing Ethan is to leave home for evening training.</p></section><section class="research"><span>VEHICLE EFFECT</span><p>Extreme heat accelerates battery wear and can punish tires/interiors; heavy rain and storm exposure create different vehicle risks.</p></section><section class="research"><span>HOUSING EFFECT</span><p>A/C efficiency, covered parking, building insulation, flood exposure, backup power and shaded orientation become more important in harsher climates.</p></section><section class="research"><span>SEVERE-WEATHER FILE</span><p>Record hurricane/tropical-storm exposure in Florida, monsoon/dust-storm and extreme-heat concerns in Arizona/Nevada, and severe thunderstorm/freeze risk in Texas.</p></section><section class="research"><span>WEATHER SCORE COMPONENTS</span><p>Winter comfort 25%, summer tolerance 25%, humidity 15%, severe-weather risk 15%, outdoor usability 10%, utility/vehicle impact 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="phoenix-cost">
+ <div class="shade" data-close="phoenix-cost"></div>
+ <aside class="drawer-card phoenix-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">PHOENIX // COST</div><h3>A/C + car costs</h3><p>Affordable pockets remain, but summer electricity and driving add up.</p></div>
+ <button class="close" type="button" data-close="phoenix-cost">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>THE REAL NUMBER</span><p>Rent is only one line item. Compare taxes, utilities, insurance, parking, fuel, groceries, gym membership and typical driving distance.</p></section><section class="research"><span>REMOTE-WORK EFFECT</span><p>State income tax can materially change take-home pay depending on Ethan&#x27;s income and employer setup.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Actual insurance quote, utility estimate for a comparable 1BR and average weekly driving from the finalist neighborhood.</p></section><section class="research"><span>DECISION RULE</span><p>Rank cities by monthly life cost, not apartment rent.</p></section>
+ <section class="research"><span>ALL-IN MONTHLY MODEL</span><p>Base rent + mandatory housing fees + utilities + internet + insurance + car fuel + parking + gym + groceries + estimated state income tax impact. This becomes Ethan's true city-to-city number.</p></section><section class="research"><span>TAX EFFECT</span><p>Florida, Nevada and Texas do not impose individual state income tax; Arizona taxes individual taxable income at a 2.5% flat rate. Ethan should still compare total tax burden and his own employment/tax situation rather than treating a 0% state-income-tax rate as zero taxation.</p></section><section class="research"><span>AUTO COST</span><p>Get ZIP-specific insurance quotes. Then estimate fuel from likely weekly mileage, parking and tolls. Car-dependent metros can erase part of a rent advantage.</p></section><section class="research"><span>UTILITY SEASONALITY</span><p>Model peak-summer electricity separately from mild-season bills. Phoenix, Vegas, Tampa and Orlando can all have meaningful cooling costs for different climate reasons.</p></section><section class="research"><span>GROCERY / DAILY SPEND</span><p>Use a consistent basket of groceries and common purchases across cities so lifestyle inflation is visible rather than anecdotal.</p></section><section class="research"><span>MOVE COST</span><p>Include truck/shipping, travel, deposits, application fees, registration changes, initial household purchases and any overlap between old and new housing.</p></section><section class="research"><span>12-MONTH VIEW</span><p>Compare first-year total cost rather than a single month. Include concessions, move-in costs, expected seasonal utilities and known annual fees.</p></section><section class="research"><span>COST SCORE COMPONENTS</span><p>Housing 40%, taxes 15%, transportation 15%, utilities 10%, insurance 10%, groceries/daily spending 5%, move-in cost 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="phoenix-neighborhood">
+ <div class="shade" data-close="phoenix-neighborhood"></div>
+ <aside class="drawer-card phoenix-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">PHOENIX // NEIGHBORHOODS</div><h3>Midtown / Tempe / North</h3><p>Each changes social life, commute and rent pressure.</p></div>
+ <button class="close" type="button" data-close="phoenix-neighborhood">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY CITY-LEVEL DATA IS NOT ENOUGH</span><p>A city can score perfectly while the wrong neighborhood destroys the fit. Ethan experiences a block and commute—not a metro average.</p></section><section class="research"><span>WHAT TO MAP</span><p>Apartment clusters, preferred gym, airport route, groceries, social areas, parks and recurring errands.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Night vs day feel, parking, traffic direction, construction, noise and building-specific fees.</p></section><section class="research"><span>DECISION RULE</span><p>Once a city makes the final three, neighborhood selection should become more important than the city score itself.</p></section>
+ <section class="research"><span>BLOCK-LEVEL FIT</span><p>City rankings stop being useful once Ethan has finalist neighborhoods. Evaluate exact apartment clusters and streets, because a neighborhood can change dramatically within a few blocks.</p></section><section class="research"><span>DAILY-LIFE MAP</span><p>Plot home, gym, grocery store, airport route, coffee/work spots, nightlife/social areas, parks/trails and any recurring errands. Count both distance and actual drive time.</p></section><section class="research"><span>DAY / NIGHT CHECK</span><p>Research daytime and nighttime activity separately. Noise, parking, traffic, lighting and pedestrian activity can change substantially after dark.</p></section><section class="research"><span>ACCESS PATTERN</span><p>Determine whether Ethan repeatedly has to cross a congested freeway, bridge or downtown corridor. One bad bottleneck can affect almost every day.</p></section><section class="research"><span>LIFESTYLE MATCH</span><p>Track whether the area feels urban, suburban, quiet, nightlife-heavy, outdoors-oriented or family-oriented and compare that with what Ethan actually wants around his home.</p></section><section class="research"><span>HOUSING INVENTORY</span><p>Count how many qualifying apartments exist—not just the single best listing. More inventory gives Ethan negotiating power and backup options.</p></section><section class="research"><span>FUTURE CHANGE</span><p>Note major construction, redevelopment, transit projects and rapidly rising rents that could change the neighborhood during a 12–24 month stay.</p></section><section class="research"><span>FINAL NEIGHBORHOOD SCORE</span><p>Housing 25%, training access 20%, airport 15%, daily errands 10%, lifestyle 10%, traffic 10%, inventory depth 5%, environmental/noise risk 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="vegas-housing">
+ <div class="shade" data-close="vegas-housing"></div>
+ <aside class="drawer-card vegas-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">LAS VEGAS // HOUSING</div><h3>Spring Valley + Henderson</h3><p>Good value if Ethan stays out of premium Summerlin pockets.</p></div>
+ <button class="close" type="button" data-close="vegas-housing">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT ETHAN IS REALLY DECIDING</span><p>Whether the housing stock gives him enough quality and location without forcing the rest of his life—training, airport, errands—to become inconvenient.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Real current listings, total monthly fees, parking, utilities, neighborhood noise, exact commute to the chosen gym and airport drive time during Ethan&#x27;s normal hours.</p></section><section class="research"><span>HOW TO COMPARE</span><p>Use all-in monthly cost, not advertised rent. A $1,430 apartment with $180 in mandatory fees is not cheaper than a $1,550 apartment with fewer add-ons.</p></section><section class="research"><span>DECISION RULE</span><p>Favor the neighborhood that keeps total cost near target while protecting Ethan&#x27;s two repeat trips: training and airport.</p></section>
+ <section class="research"><span>RENT TARGET MODEL</span><p>Treat $1,500 as Ethan's preferred ceiling, then separate base rent from mandatory fees, parking, internet, utilities and deposits. A listing only qualifies if the realistic recurring total still makes sense.</p></section><section class="research"><span>UNIT FILTERS</span><p>Track square footage, in-unit laundry, parking type, pet policy if relevant, lease term, construction age, floor level, A/C type, noise exposure, gym/pool amenities and whether advertised rent depends on concessions.</p></section><section class="research"><span>LEASE-UP / CONCESSION RISK</span><p>A '6 weeks free' special can make year-one effective rent look attractive while renewal rent jumps sharply. Store both effective rent and undiscounted monthly rent.</p></section><section class="research"><span>NEIGHBORHOOD MICRO-CHECK</span><p>Check the exact block rather than relying on neighborhood averages: grocery access, late-night noise, major-road exposure, nearby construction, parking security and the first/last five minutes of Ethan's gym commute.</p></section><section class="research"><span>MOVE-IN CASH</span><p>Estimate application fee, admin fee, security deposit, first month, parking, utility deposits, moving costs and basic setup purchases so Ethan knows the cash required before signing.</p></section><section class="research"><span>RENEWAL RISK</span><p>Record the normal asking rent for comparable units in the same property and nearby buildings. This gives Ethan a rough idea of whether the first-year deal is artificially cheap.</p></section><section class="research"><span>APARTMENT VERIFICATION LIST</span><p>Before applying: verify available-unit number, actual view/floor, all recurring fees, lease-break terms, guest parking, package handling, internet providers, utility billing method and whether the shown model unit matches the available unit.</p></section><section class="research"><span>HOUSING SCORE COMPONENTS</span><p>Budget fit 30%, gym commute 20%, airport access 15%, neighborhood fit 15%, unit quality 10%, recurring fees 5%, move-in cost 5%. The weighting can be changed if Ethan's priorities change.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="vegas-training">
+ <div class="shade" data-close="vegas-training"></div>
+ <aside class="drawer-card vegas-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">LAS VEGAS // TRAINING</div><h3>Fight capital</h3><p>Boxing, MMA and Muay Thai access is a major advantage.</p></div>
+ <button class="close" type="button" data-close="vegas-training">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT COUNTS AS A REAL FIT</span><p>A gym only counts if Ethan would actually train there. A generic fitness studio offering a &#x27;Muay Thai&#x27; class is not equal to a serious striking gym.</p></section><section class="research"><span>WHAT TO RESEARCH</span><p>Coach background, sparring culture, competition activity, class schedule, monthly price, commute, parking and whether advanced classes fit Ethan&#x27;s schedule.</p></section><section class="research"><span>COMMUTE TEST</span><p>Run the route from finalist apartments during the exact weekday hours Ethan would train.</p></section><section class="research"><span>DECISION RULE</span><p>A slightly more expensive apartment can be the better move if it turns a 35-minute training trip into 10–15 minutes.</p></section>
+ <section class="research"><span>GYM QUALITY FILE</span><p>For each serious candidate, store disciplines offered, head coach, coach competitive background, active fighters, beginner/advanced separation, sparring frequency, ring/bag space, strength equipment and overall training culture.</p></section><section class="research"><span>SCHEDULE COMPATIBILITY</span><p>Do not just count classes. Map the exact weekly classes Ethan would attend against his work routine. A great gym with incompatible advanced-class times is a poor practical fit.</p></section><section class="research"><span>REAL MONTHLY COST</span><p>Membership + enrollment fee + required gear + parking + private lessons if relevant. Also record contract length, cancellation terms, trial policy and whether open-gym access is included.</p></section><section class="research"><span>TRAINING DEPTH</span><p>Separate fitness-oriented striking from technical Muay Thai/boxing. Look for pad work, partner drilling, controlled sparring, clinch work for Muay Thai, competition team activity and coaching attention.</p></section><section class="research"><span>COMMUTE BURDEN</span><p>Calculate round-trip minutes × expected training days per week. A 25-minute one-way commute at 4 sessions/week creates more than 3 hours of weekly driving.</p></section><section class="research"><span>FIRST-VISIT CHECKLIST</span><p>Observe class size, coach-to-student ratio, cleanliness, ventilation, mat/ring condition, skill level of regulars, how new people are treated and whether hard sparring is controlled.</p></section><section class="research"><span>LONG-TERM FIT</span><p>Ask whether Ethan could still grow there after 6–12 months. A gym that is convenient now but lacks advanced training may force another commute or membership later.</p></section><section class="research"><span>GYM SCORE COMPONENTS</span><p>Coaching/training quality 35%, commute 20%, schedule 15%, culture 10%, price 10%, facilities 5%, competition opportunities 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="vegas-airport">
+ <div class="shade" data-close="vegas-airport"></div>
+ <aside class="drawer-card vegas-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">LAS VEGAS // AIRPORT</div><h3>LAS proximity</h3><p>The airport sits unusually close to the center of the metro.</p></div>
+ <button class="close" type="button" data-close="vegas-airport">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY THIS MATTERS</span><p>Remote work gives Ethan location freedom, but airport friction determines how easy it is to actually use that freedom.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Drive time from the exact apartment at early morning, weekday rush hour and weekend travel windows; nonstop route coverage also matters.</p></section><section class="research"><span>HIDDEN COST</span><p>Long airport trips create parking, rideshare and time costs that don&#x27;t appear in rent comparisons.</p></section><section class="research"><span>DECISION RULE</span><p>Under ~30 minutes under normal conditions is a strong fit; consistently approaching Ethan&#x27;s 45-minute ceiling is a downgrade.</p></section>
+ <section class="research"><span>ROUTE QUALITY</span><p>Store nonstop destinations Ethan is most likely to use, typical frequency, airline competition and whether the airport is a true hub or simply has many flights.</p></section><section class="research"><span>DOOR-TO-GATE MODEL</span><p>Apartment → terminal drive, parking/rideshare buffer, security time and terminal walking. Airport proximity should be measured as total travel friction, not highway mileage.</p></section><section class="research"><span>TIME-OF-DAY TEST</span><p>Compare 5–7 AM, weekday afternoon, rush hour and late-night travel. A 17-minute midday airport can become a 35-minute rush-hour trip.</p></section><section class="research"><span>RIDESHARE / PARKING COST</span><p>Estimate typical rideshare cost from each finalist neighborhood and economy/garage parking rates for common 3-, 5- and 7-day trips.</p></section><section class="research"><span>DISRUPTION RISK</span><p>Weather, tourism peaks, major events and highway bottlenecks can affect reliability. Record the routes with the fewest single points of failure.</p></section><section class="research"><span>REMOTE-WORK VALUE</span><p>A better-connected airport increases the number of places Ethan can reach without burning a full day on connections—an important benefit of location-independent work.</p></section><section class="research"><span>AIRPORT SCORE COMPONENTS</span><p>Drive reliability 30%, nonstop network 25%, flight frequency 15%, fares/airline competition 10%, parking/rideshare cost 10%, terminal usability 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="vegas-weather">
+ <div class="shade" data-close="vegas-weather"></div>
+ <aside class="drawer-card vegas-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">LAS VEGAS // WEATHER</div><h3>Dry desert climate</h3><p>Mild winters and extreme but dry summers.</p></div>
+ <button class="close" type="button" data-close="vegas-weather">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>LIFESTYLE EFFECT</span><p>Weather changes how much of the year Ethan can comfortably be outside, train, drive and explore.</p></section><section class="research"><span>WHAT TO SEPARATE</span><p>Absolute heat, humidity, rainfall, storm exposure and winter conditions should be evaluated separately.</p></section><section class="research"><span>HOUSING EFFECT</span><p>Climate also changes electricity use, insurance exposure, vehicle wear and apartment features Ethan should prioritize.</p></section><section class="research"><span>DECISION RULE</span><p>The best climate is the one Ethan actually tolerates—not the city with the nicest annual-average temperature.</p></section>
+ <section class="research"><span>MONTH-BY-MONTH VIEW</span><p>Track typical highs/lows, humidity, rainfall and severe-weather patterns by month rather than relying on annual averages.</p></section><section class="research"><span>HEAT TYPE</span><p>Separate dry heat from humid heat. Phoenix/Las Vegas can post higher temperatures while Tampa/Orlando can feel more oppressive because of humidity and warm nights.</p></section><section class="research"><span>OUTDOOR HOURS</span><p>Estimate how many months allow comfortable morning/evening outdoor activity. Ethan's 'warm city' preference should reward usable warmth, not simply high temperatures.</p></section><section class="research"><span>TRAINING EFFECT</span><p>Climate changes hydration, outdoor conditioning, driving comfort and how willing Ethan is to leave home for evening training.</p></section><section class="research"><span>VEHICLE EFFECT</span><p>Extreme heat accelerates battery wear and can punish tires/interiors; heavy rain and storm exposure create different vehicle risks.</p></section><section class="research"><span>HOUSING EFFECT</span><p>A/C efficiency, covered parking, building insulation, flood exposure, backup power and shaded orientation become more important in harsher climates.</p></section><section class="research"><span>SEVERE-WEATHER FILE</span><p>Record hurricane/tropical-storm exposure in Florida, monsoon/dust-storm and extreme-heat concerns in Arizona/Nevada, and severe thunderstorm/freeze risk in Texas.</p></section><section class="research"><span>WEATHER SCORE COMPONENTS</span><p>Winter comfort 25%, summer tolerance 25%, humidity 15%, severe-weather risk 15%, outdoor usability 10%, utility/vehicle impact 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="vegas-cost">
+ <div class="shade" data-close="vegas-cost"></div>
+ <aside class="drawer-card vegas-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">LAS VEGAS // COST</div><h3>No income tax</h3><p>Rent remains workable, utilities spike in summer.</p></div>
+ <button class="close" type="button" data-close="vegas-cost">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>THE REAL NUMBER</span><p>Rent is only one line item. Compare taxes, utilities, insurance, parking, fuel, groceries, gym membership and typical driving distance.</p></section><section class="research"><span>REMOTE-WORK EFFECT</span><p>State income tax can materially change take-home pay depending on Ethan&#x27;s income and employer setup.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Actual insurance quote, utility estimate for a comparable 1BR and average weekly driving from the finalist neighborhood.</p></section><section class="research"><span>DECISION RULE</span><p>Rank cities by monthly life cost, not apartment rent.</p></section>
+ <section class="research"><span>ALL-IN MONTHLY MODEL</span><p>Base rent + mandatory housing fees + utilities + internet + insurance + car fuel + parking + gym + groceries + estimated state income tax impact. This becomes Ethan's true city-to-city number.</p></section><section class="research"><span>TAX EFFECT</span><p>Florida, Nevada and Texas do not impose individual state income tax; Arizona taxes individual taxable income at a 2.5% flat rate. Ethan should still compare total tax burden and his own employment/tax situation rather than treating a 0% state-income-tax rate as zero taxation.</p></section><section class="research"><span>AUTO COST</span><p>Get ZIP-specific insurance quotes. Then estimate fuel from likely weekly mileage, parking and tolls. Car-dependent metros can erase part of a rent advantage.</p></section><section class="research"><span>UTILITY SEASONALITY</span><p>Model peak-summer electricity separately from mild-season bills. Phoenix, Vegas, Tampa and Orlando can all have meaningful cooling costs for different climate reasons.</p></section><section class="research"><span>GROCERY / DAILY SPEND</span><p>Use a consistent basket of groceries and common purchases across cities so lifestyle inflation is visible rather than anecdotal.</p></section><section class="research"><span>MOVE COST</span><p>Include truck/shipping, travel, deposits, application fees, registration changes, initial household purchases and any overlap between old and new housing.</p></section><section class="research"><span>12-MONTH VIEW</span><p>Compare first-year total cost rather than a single month. Include concessions, move-in costs, expected seasonal utilities and known annual fees.</p></section><section class="research"><span>COST SCORE COMPONENTS</span><p>Housing 40%, taxes 15%, transportation 15%, utilities 10%, insurance 10%, groceries/daily spending 5%, move-in cost 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="vegas-neighborhood">
+ <div class="shade" data-close="vegas-neighborhood"></div>
+ <aside class="drawer-card vegas-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">LAS VEGAS // NEIGHBORHOODS</div><h3>Spring Valley / Arts / Henderson</h3><p>Strongly different lifestyle profiles within a compact metro.</p></div>
+ <button class="close" type="button" data-close="vegas-neighborhood">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY CITY-LEVEL DATA IS NOT ENOUGH</span><p>A city can score perfectly while the wrong neighborhood destroys the fit. Ethan experiences a block and commute—not a metro average.</p></section><section class="research"><span>WHAT TO MAP</span><p>Apartment clusters, preferred gym, airport route, groceries, social areas, parks and recurring errands.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Night vs day feel, parking, traffic direction, construction, noise and building-specific fees.</p></section><section class="research"><span>DECISION RULE</span><p>Once a city makes the final three, neighborhood selection should become more important than the city score itself.</p></section>
+ <section class="research"><span>BLOCK-LEVEL FIT</span><p>City rankings stop being useful once Ethan has finalist neighborhoods. Evaluate exact apartment clusters and streets, because a neighborhood can change dramatically within a few blocks.</p></section><section class="research"><span>DAILY-LIFE MAP</span><p>Plot home, gym, grocery store, airport route, coffee/work spots, nightlife/social areas, parks/trails and any recurring errands. Count both distance and actual drive time.</p></section><section class="research"><span>DAY / NIGHT CHECK</span><p>Research daytime and nighttime activity separately. Noise, parking, traffic, lighting and pedestrian activity can change substantially after dark.</p></section><section class="research"><span>ACCESS PATTERN</span><p>Determine whether Ethan repeatedly has to cross a congested freeway, bridge or downtown corridor. One bad bottleneck can affect almost every day.</p></section><section class="research"><span>LIFESTYLE MATCH</span><p>Track whether the area feels urban, suburban, quiet, nightlife-heavy, outdoors-oriented or family-oriented and compare that with what Ethan actually wants around his home.</p></section><section class="research"><span>HOUSING INVENTORY</span><p>Count how many qualifying apartments exist—not just the single best listing. More inventory gives Ethan negotiating power and backup options.</p></section><section class="research"><span>FUTURE CHANGE</span><p>Note major construction, redevelopment, transit projects and rapidly rising rents that could change the neighborhood during a 12–24 month stay.</p></section><section class="research"><span>FINAL NEIGHBORHOOD SCORE</span><p>Housing 25%, training access 20%, airport 15%, daily errands 10%, lifestyle 10%, traffic 10%, inventory depth 5%, environmental/noise risk 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="sa-housing">
+ <div class="shade" data-close="sa-housing"></div>
+ <aside class="drawer-card sa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">SAN ANTONIO // HOUSING</div><h3>Best rent headroom</h3><p>Ethan gets the most room under budget here.</p></div>
+ <button class="close" type="button" data-close="sa-housing">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT ETHAN IS REALLY DECIDING</span><p>Whether the housing stock gives him enough quality and location without forcing the rest of his life—training, airport, errands—to become inconvenient.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Real current listings, total monthly fees, parking, utilities, neighborhood noise, exact commute to the chosen gym and airport drive time during Ethan&#x27;s normal hours.</p></section><section class="research"><span>HOW TO COMPARE</span><p>Use all-in monthly cost, not advertised rent. A $1,430 apartment with $180 in mandatory fees is not cheaper than a $1,550 apartment with fewer add-ons.</p></section><section class="research"><span>DECISION RULE</span><p>Favor the neighborhood that keeps total cost near target while protecting Ethan&#x27;s two repeat trips: training and airport.</p></section>
+ <section class="research"><span>RENT TARGET MODEL</span><p>Treat $1,500 as Ethan's preferred ceiling, then separate base rent from mandatory fees, parking, internet, utilities and deposits. A listing only qualifies if the realistic recurring total still makes sense.</p></section><section class="research"><span>UNIT FILTERS</span><p>Track square footage, in-unit laundry, parking type, pet policy if relevant, lease term, construction age, floor level, A/C type, noise exposure, gym/pool amenities and whether advertised rent depends on concessions.</p></section><section class="research"><span>LEASE-UP / CONCESSION RISK</span><p>A '6 weeks free' special can make year-one effective rent look attractive while renewal rent jumps sharply. Store both effective rent and undiscounted monthly rent.</p></section><section class="research"><span>NEIGHBORHOOD MICRO-CHECK</span><p>Check the exact block rather than relying on neighborhood averages: grocery access, late-night noise, major-road exposure, nearby construction, parking security and the first/last five minutes of Ethan's gym commute.</p></section><section class="research"><span>MOVE-IN CASH</span><p>Estimate application fee, admin fee, security deposit, first month, parking, utility deposits, moving costs and basic setup purchases so Ethan knows the cash required before signing.</p></section><section class="research"><span>RENEWAL RISK</span><p>Record the normal asking rent for comparable units in the same property and nearby buildings. This gives Ethan a rough idea of whether the first-year deal is artificially cheap.</p></section><section class="research"><span>APARTMENT VERIFICATION LIST</span><p>Before applying: verify available-unit number, actual view/floor, all recurring fees, lease-break terms, guest parking, package handling, internet providers, utility billing method and whether the shown model unit matches the available unit.</p></section><section class="research"><span>HOUSING SCORE COMPONENTS</span><p>Budget fit 30%, gym commute 20%, airport access 15%, neighborhood fit 15%, unit quality 10%, recurring fees 5%, move-in cost 5%. The weighting can be changed if Ethan's priorities change.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="sa-training">
+ <div class="shade" data-close="sa-training"></div>
+ <aside class="drawer-card sa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">SAN ANTONIO // TRAINING</div><h3>Solid gym scene</h3><p>Enough quality options, though less dense than Vegas or Phoenix.</p></div>
+ <button class="close" type="button" data-close="sa-training">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT COUNTS AS A REAL FIT</span><p>A gym only counts if Ethan would actually train there. A generic fitness studio offering a &#x27;Muay Thai&#x27; class is not equal to a serious striking gym.</p></section><section class="research"><span>WHAT TO RESEARCH</span><p>Coach background, sparring culture, competition activity, class schedule, monthly price, commute, parking and whether advanced classes fit Ethan&#x27;s schedule.</p></section><section class="research"><span>COMMUTE TEST</span><p>Run the route from finalist apartments during the exact weekday hours Ethan would train.</p></section><section class="research"><span>DECISION RULE</span><p>A slightly more expensive apartment can be the better move if it turns a 35-minute training trip into 10–15 minutes.</p></section>
+ <section class="research"><span>GYM QUALITY FILE</span><p>For each serious candidate, store disciplines offered, head coach, coach competitive background, active fighters, beginner/advanced separation, sparring frequency, ring/bag space, strength equipment and overall training culture.</p></section><section class="research"><span>SCHEDULE COMPATIBILITY</span><p>Do not just count classes. Map the exact weekly classes Ethan would attend against his work routine. A great gym with incompatible advanced-class times is a poor practical fit.</p></section><section class="research"><span>REAL MONTHLY COST</span><p>Membership + enrollment fee + required gear + parking + private lessons if relevant. Also record contract length, cancellation terms, trial policy and whether open-gym access is included.</p></section><section class="research"><span>TRAINING DEPTH</span><p>Separate fitness-oriented striking from technical Muay Thai/boxing. Look for pad work, partner drilling, controlled sparring, clinch work for Muay Thai, competition team activity and coaching attention.</p></section><section class="research"><span>COMMUTE BURDEN</span><p>Calculate round-trip minutes × expected training days per week. A 25-minute one-way commute at 4 sessions/week creates more than 3 hours of weekly driving.</p></section><section class="research"><span>FIRST-VISIT CHECKLIST</span><p>Observe class size, coach-to-student ratio, cleanliness, ventilation, mat/ring condition, skill level of regulars, how new people are treated and whether hard sparring is controlled.</p></section><section class="research"><span>LONG-TERM FIT</span><p>Ask whether Ethan could still grow there after 6–12 months. A gym that is convenient now but lacks advanced training may force another commute or membership later.</p></section><section class="research"><span>GYM SCORE COMPONENTS</span><p>Coaching/training quality 35%, commute 20%, schedule 15%, culture 10%, price 10%, facilities 5%, competition opportunities 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="sa-airport">
+ <div class="shade" data-close="sa-airport"></div>
+ <aside class="drawer-card sa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">SAN ANTONIO // AIRPORT</div><h3>SAT</h3><p>Convenient but not as connected as PHX or TPA.</p></div>
+ <button class="close" type="button" data-close="sa-airport">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY THIS MATTERS</span><p>Remote work gives Ethan location freedom, but airport friction determines how easy it is to actually use that freedom.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Drive time from the exact apartment at early morning, weekday rush hour and weekend travel windows; nonstop route coverage also matters.</p></section><section class="research"><span>HIDDEN COST</span><p>Long airport trips create parking, rideshare and time costs that don&#x27;t appear in rent comparisons.</p></section><section class="research"><span>DECISION RULE</span><p>Under ~30 minutes under normal conditions is a strong fit; consistently approaching Ethan&#x27;s 45-minute ceiling is a downgrade.</p></section>
+ <section class="research"><span>ROUTE QUALITY</span><p>Store nonstop destinations Ethan is most likely to use, typical frequency, airline competition and whether the airport is a true hub or simply has many flights.</p></section><section class="research"><span>DOOR-TO-GATE MODEL</span><p>Apartment → terminal drive, parking/rideshare buffer, security time and terminal walking. Airport proximity should be measured as total travel friction, not highway mileage.</p></section><section class="research"><span>TIME-OF-DAY TEST</span><p>Compare 5–7 AM, weekday afternoon, rush hour and late-night travel. A 17-minute midday airport can become a 35-minute rush-hour trip.</p></section><section class="research"><span>RIDESHARE / PARKING COST</span><p>Estimate typical rideshare cost from each finalist neighborhood and economy/garage parking rates for common 3-, 5- and 7-day trips.</p></section><section class="research"><span>DISRUPTION RISK</span><p>Weather, tourism peaks, major events and highway bottlenecks can affect reliability. Record the routes with the fewest single points of failure.</p></section><section class="research"><span>REMOTE-WORK VALUE</span><p>A better-connected airport increases the number of places Ethan can reach without burning a full day on connections—an important benefit of location-independent work.</p></section><section class="research"><span>AIRPORT SCORE COMPONENTS</span><p>Drive reliability 30%, nonstop network 25%, flight frequency 15%, fares/airline competition 10%, parking/rideshare cost 10%, terminal usability 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="sa-weather">
+ <div class="shade" data-close="sa-weather"></div>
+ <aside class="drawer-card sa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">SAN ANTONIO // WEATHER</div><h3>Hot + sometimes humid</h3><p>Warm overall with occasional severe-weather events.</p></div>
+ <button class="close" type="button" data-close="sa-weather">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>LIFESTYLE EFFECT</span><p>Weather changes how much of the year Ethan can comfortably be outside, train, drive and explore.</p></section><section class="research"><span>WHAT TO SEPARATE</span><p>Absolute heat, humidity, rainfall, storm exposure and winter conditions should be evaluated separately.</p></section><section class="research"><span>HOUSING EFFECT</span><p>Climate also changes electricity use, insurance exposure, vehicle wear and apartment features Ethan should prioritize.</p></section><section class="research"><span>DECISION RULE</span><p>The best climate is the one Ethan actually tolerates—not the city with the nicest annual-average temperature.</p></section>
+ <section class="research"><span>MONTH-BY-MONTH VIEW</span><p>Track typical highs/lows, humidity, rainfall and severe-weather patterns by month rather than relying on annual averages.</p></section><section class="research"><span>HEAT TYPE</span><p>Separate dry heat from humid heat. Phoenix/Las Vegas can post higher temperatures while Tampa/Orlando can feel more oppressive because of humidity and warm nights.</p></section><section class="research"><span>OUTDOOR HOURS</span><p>Estimate how many months allow comfortable morning/evening outdoor activity. Ethan's 'warm city' preference should reward usable warmth, not simply high temperatures.</p></section><section class="research"><span>TRAINING EFFECT</span><p>Climate changes hydration, outdoor conditioning, driving comfort and how willing Ethan is to leave home for evening training.</p></section><section class="research"><span>VEHICLE EFFECT</span><p>Extreme heat accelerates battery wear and can punish tires/interiors; heavy rain and storm exposure create different vehicle risks.</p></section><section class="research"><span>HOUSING EFFECT</span><p>A/C efficiency, covered parking, building insulation, flood exposure, backup power and shaded orientation become more important in harsher climates.</p></section><section class="research"><span>SEVERE-WEATHER FILE</span><p>Record hurricane/tropical-storm exposure in Florida, monsoon/dust-storm and extreme-heat concerns in Arizona/Nevada, and severe thunderstorm/freeze risk in Texas.</p></section><section class="research"><span>WEATHER SCORE COMPONENTS</span><p>Winter comfort 25%, summer tolerance 25%, humidity 15%, severe-weather risk 15%, outdoor usability 10%, utility/vehicle impact 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="sa-cost">
+ <div class="shade" data-close="sa-cost"></div>
+ <aside class="drawer-card sa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">SAN ANTONIO // COST</div><h3>Best overall value</h3><p>Rent advantage is real, but sprawl increases driving.</p></div>
+ <button class="close" type="button" data-close="sa-cost">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>THE REAL NUMBER</span><p>Rent is only one line item. Compare taxes, utilities, insurance, parking, fuel, groceries, gym membership and typical driving distance.</p></section><section class="research"><span>REMOTE-WORK EFFECT</span><p>State income tax can materially change take-home pay depending on Ethan&#x27;s income and employer setup.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Actual insurance quote, utility estimate for a comparable 1BR and average weekly driving from the finalist neighborhood.</p></section><section class="research"><span>DECISION RULE</span><p>Rank cities by monthly life cost, not apartment rent.</p></section>
+ <section class="research"><span>ALL-IN MONTHLY MODEL</span><p>Base rent + mandatory housing fees + utilities + internet + insurance + car fuel + parking + gym + groceries + estimated state income tax impact. This becomes Ethan's true city-to-city number.</p></section><section class="research"><span>TAX EFFECT</span><p>Florida, Nevada and Texas do not impose individual state income tax; Arizona taxes individual taxable income at a 2.5% flat rate. Ethan should still compare total tax burden and his own employment/tax situation rather than treating a 0% state-income-tax rate as zero taxation.</p></section><section class="research"><span>AUTO COST</span><p>Get ZIP-specific insurance quotes. Then estimate fuel from likely weekly mileage, parking and tolls. Car-dependent metros can erase part of a rent advantage.</p></section><section class="research"><span>UTILITY SEASONALITY</span><p>Model peak-summer electricity separately from mild-season bills. Phoenix, Vegas, Tampa and Orlando can all have meaningful cooling costs for different climate reasons.</p></section><section class="research"><span>GROCERY / DAILY SPEND</span><p>Use a consistent basket of groceries and common purchases across cities so lifestyle inflation is visible rather than anecdotal.</p></section><section class="research"><span>MOVE COST</span><p>Include truck/shipping, travel, deposits, application fees, registration changes, initial household purchases and any overlap between old and new housing.</p></section><section class="research"><span>12-MONTH VIEW</span><p>Compare first-year total cost rather than a single month. Include concessions, move-in costs, expected seasonal utilities and known annual fees.</p></section><section class="research"><span>COST SCORE COMPONENTS</span><p>Housing 40%, taxes 15%, transportation 15%, utilities 10%, insurance 10%, groceries/daily spending 5%, move-in cost 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="sa-neighborhood">
+ <div class="shade" data-close="sa-neighborhood"></div>
+ <aside class="drawer-card sa-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">SAN ANTONIO // NEIGHBORHOODS</div><h3>Southtown / Medical / Northwest</h3><p>The best neighborhood depends on whether Ethan prioritizes energy or savings.</p></div>
+ <button class="close" type="button" data-close="sa-neighborhood">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY CITY-LEVEL DATA IS NOT ENOUGH</span><p>A city can score perfectly while the wrong neighborhood destroys the fit. Ethan experiences a block and commute—not a metro average.</p></section><section class="research"><span>WHAT TO MAP</span><p>Apartment clusters, preferred gym, airport route, groceries, social areas, parks and recurring errands.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Night vs day feel, parking, traffic direction, construction, noise and building-specific fees.</p></section><section class="research"><span>DECISION RULE</span><p>Once a city makes the final three, neighborhood selection should become more important than the city score itself.</p></section>
+ <section class="research"><span>BLOCK-LEVEL FIT</span><p>City rankings stop being useful once Ethan has finalist neighborhoods. Evaluate exact apartment clusters and streets, because a neighborhood can change dramatically within a few blocks.</p></section><section class="research"><span>DAILY-LIFE MAP</span><p>Plot home, gym, grocery store, airport route, coffee/work spots, nightlife/social areas, parks/trails and any recurring errands. Count both distance and actual drive time.</p></section><section class="research"><span>DAY / NIGHT CHECK</span><p>Research daytime and nighttime activity separately. Noise, parking, traffic, lighting and pedestrian activity can change substantially after dark.</p></section><section class="research"><span>ACCESS PATTERN</span><p>Determine whether Ethan repeatedly has to cross a congested freeway, bridge or downtown corridor. One bad bottleneck can affect almost every day.</p></section><section class="research"><span>LIFESTYLE MATCH</span><p>Track whether the area feels urban, suburban, quiet, nightlife-heavy, outdoors-oriented or family-oriented and compare that with what Ethan actually wants around his home.</p></section><section class="research"><span>HOUSING INVENTORY</span><p>Count how many qualifying apartments exist—not just the single best listing. More inventory gives Ethan negotiating power and backup options.</p></section><section class="research"><span>FUTURE CHANGE</span><p>Note major construction, redevelopment, transit projects and rapidly rising rents that could change the neighborhood during a 12–24 month stay.</p></section><section class="research"><span>FINAL NEIGHBORHOOD SCORE</span><p>Housing 25%, training access 20%, airport 15%, daily errands 10%, lifestyle 10%, traffic 10%, inventory depth 5%, environmental/noise risk 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="orlando-housing">
+ <div class="shade" data-close="orlando-housing"></div>
+ <aside class="drawer-card orlando-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">ORLANDO // HOUSING</div><h3>Mills 50 + College Park</h3><p>Central areas fit Ethan better than tourist-heavy corridors.</p></div>
+ <button class="close" type="button" data-close="orlando-housing">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT ETHAN IS REALLY DECIDING</span><p>Whether the housing stock gives him enough quality and location without forcing the rest of his life—training, airport, errands—to become inconvenient.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Real current listings, total monthly fees, parking, utilities, neighborhood noise, exact commute to the chosen gym and airport drive time during Ethan&#x27;s normal hours.</p></section><section class="research"><span>HOW TO COMPARE</span><p>Use all-in monthly cost, not advertised rent. A $1,430 apartment with $180 in mandatory fees is not cheaper than a $1,550 apartment with fewer add-ons.</p></section><section class="research"><span>DECISION RULE</span><p>Favor the neighborhood that keeps total cost near target while protecting Ethan&#x27;s two repeat trips: training and airport.</p></section>
+ <section class="research"><span>RENT TARGET MODEL</span><p>Treat $1,500 as Ethan's preferred ceiling, then separate base rent from mandatory fees, parking, internet, utilities and deposits. A listing only qualifies if the realistic recurring total still makes sense.</p></section><section class="research"><span>UNIT FILTERS</span><p>Track square footage, in-unit laundry, parking type, pet policy if relevant, lease term, construction age, floor level, A/C type, noise exposure, gym/pool amenities and whether advertised rent depends on concessions.</p></section><section class="research"><span>LEASE-UP / CONCESSION RISK</span><p>A '6 weeks free' special can make year-one effective rent look attractive while renewal rent jumps sharply. Store both effective rent and undiscounted monthly rent.</p></section><section class="research"><span>NEIGHBORHOOD MICRO-CHECK</span><p>Check the exact block rather than relying on neighborhood averages: grocery access, late-night noise, major-road exposure, nearby construction, parking security and the first/last five minutes of Ethan's gym commute.</p></section><section class="research"><span>MOVE-IN CASH</span><p>Estimate application fee, admin fee, security deposit, first month, parking, utility deposits, moving costs and basic setup purchases so Ethan knows the cash required before signing.</p></section><section class="research"><span>RENEWAL RISK</span><p>Record the normal asking rent for comparable units in the same property and nearby buildings. This gives Ethan a rough idea of whether the first-year deal is artificially cheap.</p></section><section class="research"><span>APARTMENT VERIFICATION LIST</span><p>Before applying: verify available-unit number, actual view/floor, all recurring fees, lease-break terms, guest parking, package handling, internet providers, utility billing method and whether the shown model unit matches the available unit.</p></section><section class="research"><span>HOUSING SCORE COMPONENTS</span><p>Budget fit 30%, gym commute 20%, airport access 15%, neighborhood fit 15%, unit quality 10%, recurring fees 5%, move-in cost 5%. The weighting can be changed if Ethan's priorities change.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="orlando-training">
+ <div class="shade" data-close="orlando-training"></div>
+ <aside class="drawer-card orlando-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">ORLANDO // TRAINING</div><h3>Good selection</h3><p>Enough serious options, but traffic makes exact location important.</p></div>
+ <button class="close" type="button" data-close="orlando-training">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHAT COUNTS AS A REAL FIT</span><p>A gym only counts if Ethan would actually train there. A generic fitness studio offering a &#x27;Muay Thai&#x27; class is not equal to a serious striking gym.</p></section><section class="research"><span>WHAT TO RESEARCH</span><p>Coach background, sparring culture, competition activity, class schedule, monthly price, commute, parking and whether advanced classes fit Ethan&#x27;s schedule.</p></section><section class="research"><span>COMMUTE TEST</span><p>Run the route from finalist apartments during the exact weekday hours Ethan would train.</p></section><section class="research"><span>DECISION RULE</span><p>A slightly more expensive apartment can be the better move if it turns a 35-minute training trip into 10–15 minutes.</p></section>
+ <section class="research"><span>GYM QUALITY FILE</span><p>For each serious candidate, store disciplines offered, head coach, coach competitive background, active fighters, beginner/advanced separation, sparring frequency, ring/bag space, strength equipment and overall training culture.</p></section><section class="research"><span>SCHEDULE COMPATIBILITY</span><p>Do not just count classes. Map the exact weekly classes Ethan would attend against his work routine. A great gym with incompatible advanced-class times is a poor practical fit.</p></section><section class="research"><span>REAL MONTHLY COST</span><p>Membership + enrollment fee + required gear + parking + private lessons if relevant. Also record contract length, cancellation terms, trial policy and whether open-gym access is included.</p></section><section class="research"><span>TRAINING DEPTH</span><p>Separate fitness-oriented striking from technical Muay Thai/boxing. Look for pad work, partner drilling, controlled sparring, clinch work for Muay Thai, competition team activity and coaching attention.</p></section><section class="research"><span>COMMUTE BURDEN</span><p>Calculate round-trip minutes × expected training days per week. A 25-minute one-way commute at 4 sessions/week creates more than 3 hours of weekly driving.</p></section><section class="research"><span>FIRST-VISIT CHECKLIST</span><p>Observe class size, coach-to-student ratio, cleanliness, ventilation, mat/ring condition, skill level of regulars, how new people are treated and whether hard sparring is controlled.</p></section><section class="research"><span>LONG-TERM FIT</span><p>Ask whether Ethan could still grow there after 6–12 months. A gym that is convenient now but lacks advanced training may force another commute or membership later.</p></section><section class="research"><span>GYM SCORE COMPONENTS</span><p>Coaching/training quality 35%, commute 20%, schedule 15%, culture 10%, price 10%, facilities 5%, competition opportunities 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="orlando-airport">
+ <div class="shade" data-close="orlando-airport"></div>
+ <aside class="drawer-card orlando-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">ORLANDO // AIRPORT</div><h3>MCO network</h3><p>Excellent connectivity with inconsistent drive times.</p></div>
+ <button class="close" type="button" data-close="orlando-airport">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY THIS MATTERS</span><p>Remote work gives Ethan location freedom, but airport friction determines how easy it is to actually use that freedom.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Drive time from the exact apartment at early morning, weekday rush hour and weekend travel windows; nonstop route coverage also matters.</p></section><section class="research"><span>HIDDEN COST</span><p>Long airport trips create parking, rideshare and time costs that don&#x27;t appear in rent comparisons.</p></section><section class="research"><span>DECISION RULE</span><p>Under ~30 minutes under normal conditions is a strong fit; consistently approaching Ethan&#x27;s 45-minute ceiling is a downgrade.</p></section>
+ <section class="research"><span>ROUTE QUALITY</span><p>Store nonstop destinations Ethan is most likely to use, typical frequency, airline competition and whether the airport is a true hub or simply has many flights.</p></section><section class="research"><span>DOOR-TO-GATE MODEL</span><p>Apartment → terminal drive, parking/rideshare buffer, security time and terminal walking. Airport proximity should be measured as total travel friction, not highway mileage.</p></section><section class="research"><span>TIME-OF-DAY TEST</span><p>Compare 5–7 AM, weekday afternoon, rush hour and late-night travel. A 17-minute midday airport can become a 35-minute rush-hour trip.</p></section><section class="research"><span>RIDESHARE / PARKING COST</span><p>Estimate typical rideshare cost from each finalist neighborhood and economy/garage parking rates for common 3-, 5- and 7-day trips.</p></section><section class="research"><span>DISRUPTION RISK</span><p>Weather, tourism peaks, major events and highway bottlenecks can affect reliability. Record the routes with the fewest single points of failure.</p></section><section class="research"><span>REMOTE-WORK VALUE</span><p>A better-connected airport increases the number of places Ethan can reach without burning a full day on connections—an important benefit of location-independent work.</p></section><section class="research"><span>AIRPORT SCORE COMPONENTS</span><p>Drive reliability 30%, nonstop network 25%, flight frequency 15%, fares/airline competition 10%, parking/rideshare cost 10%, terminal usability 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="orlando-weather">
+ <div class="shade" data-close="orlando-weather"></div>
+ <aside class="drawer-card orlando-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">ORLANDO // WEATHER</div><h3>Warm + stormy</h3><p>Mild winter and humid summer.</p></div>
+ <button class="close" type="button" data-close="orlando-weather">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>LIFESTYLE EFFECT</span><p>Weather changes how much of the year Ethan can comfortably be outside, train, drive and explore.</p></section><section class="research"><span>WHAT TO SEPARATE</span><p>Absolute heat, humidity, rainfall, storm exposure and winter conditions should be evaluated separately.</p></section><section class="research"><span>HOUSING EFFECT</span><p>Climate also changes electricity use, insurance exposure, vehicle wear and apartment features Ethan should prioritize.</p></section><section class="research"><span>DECISION RULE</span><p>The best climate is the one Ethan actually tolerates—not the city with the nicest annual-average temperature.</p></section>
+ <section class="research"><span>MONTH-BY-MONTH VIEW</span><p>Track typical highs/lows, humidity, rainfall and severe-weather patterns by month rather than relying on annual averages.</p></section><section class="research"><span>HEAT TYPE</span><p>Separate dry heat from humid heat. Phoenix/Las Vegas can post higher temperatures while Tampa/Orlando can feel more oppressive because of humidity and warm nights.</p></section><section class="research"><span>OUTDOOR HOURS</span><p>Estimate how many months allow comfortable morning/evening outdoor activity. Ethan's 'warm city' preference should reward usable warmth, not simply high temperatures.</p></section><section class="research"><span>TRAINING EFFECT</span><p>Climate changes hydration, outdoor conditioning, driving comfort and how willing Ethan is to leave home for evening training.</p></section><section class="research"><span>VEHICLE EFFECT</span><p>Extreme heat accelerates battery wear and can punish tires/interiors; heavy rain and storm exposure create different vehicle risks.</p></section><section class="research"><span>HOUSING EFFECT</span><p>A/C efficiency, covered parking, building insulation, flood exposure, backup power and shaded orientation become more important in harsher climates.</p></section><section class="research"><span>SEVERE-WEATHER FILE</span><p>Record hurricane/tropical-storm exposure in Florida, monsoon/dust-storm and extreme-heat concerns in Arizona/Nevada, and severe thunderstorm/freeze risk in Texas.</p></section><section class="research"><span>WEATHER SCORE COMPONENTS</span><p>Winter comfort 25%, summer tolerance 25%, humidity 15%, severe-weather risk 15%, outdoor usability 10%, utility/vehicle impact 10%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="orlando-cost">
+ <div class="shade" data-close="orlando-cost"></div>
+ <aside class="drawer-card orlando-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">ORLANDO // COST</div><h3>Rent pressure</h3><p>Similar tax benefit to Tampa with weaker housing value.</p></div>
+ <button class="close" type="button" data-close="orlando-cost">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>THE REAL NUMBER</span><p>Rent is only one line item. Compare taxes, utilities, insurance, parking, fuel, groceries, gym membership and typical driving distance.</p></section><section class="research"><span>REMOTE-WORK EFFECT</span><p>State income tax can materially change take-home pay depending on Ethan&#x27;s income and employer setup.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Actual insurance quote, utility estimate for a comparable 1BR and average weekly driving from the finalist neighborhood.</p></section><section class="research"><span>DECISION RULE</span><p>Rank cities by monthly life cost, not apartment rent.</p></section>
+ <section class="research"><span>ALL-IN MONTHLY MODEL</span><p>Base rent + mandatory housing fees + utilities + internet + insurance + car fuel + parking + gym + groceries + estimated state income tax impact. This becomes Ethan's true city-to-city number.</p></section><section class="research"><span>TAX EFFECT</span><p>Florida, Nevada and Texas do not impose individual state income tax; Arizona taxes individual taxable income at a 2.5% flat rate. Ethan should still compare total tax burden and his own employment/tax situation rather than treating a 0% state-income-tax rate as zero taxation.</p></section><section class="research"><span>AUTO COST</span><p>Get ZIP-specific insurance quotes. Then estimate fuel from likely weekly mileage, parking and tolls. Car-dependent metros can erase part of a rent advantage.</p></section><section class="research"><span>UTILITY SEASONALITY</span><p>Model peak-summer electricity separately from mild-season bills. Phoenix, Vegas, Tampa and Orlando can all have meaningful cooling costs for different climate reasons.</p></section><section class="research"><span>GROCERY / DAILY SPEND</span><p>Use a consistent basket of groceries and common purchases across cities so lifestyle inflation is visible rather than anecdotal.</p></section><section class="research"><span>MOVE COST</span><p>Include truck/shipping, travel, deposits, application fees, registration changes, initial household purchases and any overlap between old and new housing.</p></section><section class="research"><span>12-MONTH VIEW</span><p>Compare first-year total cost rather than a single month. Include concessions, move-in costs, expected seasonal utilities and known annual fees.</p></section><section class="research"><span>COST SCORE COMPONENTS</span><p>Housing 40%, taxes 15%, transportation 15%, utilities 10%, insurance 10%, groceries/daily spending 5%, move-in cost 5%.</p></section></div>
+ </aside>
+</div>
+<div class="drawer" id="orlando-neighborhood">
+ <div class="shade" data-close="orlando-neighborhood"></div>
+ <aside class="drawer-card orlando-drawer">
+ <div class="drawer-head">
+ <div><div class="eyebrow">ORLANDO // NEIGHBORHOODS</div><h3>Mills 50 / College Park / Lake Nona</h3><p>Each produces a different balance of airport, lifestyle and cost.</p></div>
+ <button class="close" type="button" data-close="orlando-neighborhood">×</button>
+ </div>
+ <div class="drawer-body">
+ <section class="research"><span>WHY CITY-LEVEL DATA IS NOT ENOUGH</span><p>A city can score perfectly while the wrong neighborhood destroys the fit. Ethan experiences a block and commute—not a metro average.</p></section><section class="research"><span>WHAT TO MAP</span><p>Apartment clusters, preferred gym, airport route, groceries, social areas, parks and recurring errands.</p></section><section class="research"><span>WHAT TO VERIFY</span><p>Night vs day feel, parking, traffic direction, construction, noise and building-specific fees.</p></section><section class="research"><span>DECISION RULE</span><p>Once a city makes the final three, neighborhood selection should become more important than the city score itself.</p></section>
+ <section class="research"><span>BLOCK-LEVEL FIT</span><p>City rankings stop being useful once Ethan has finalist neighborhoods. Evaluate exact apartment clusters and streets, because a neighborhood can change dramatically within a few blocks.</p></section><section class="research"><span>DAILY-LIFE MAP</span><p>Plot home, gym, grocery store, airport route, coffee/work spots, nightlife/social areas, parks/trails and any recurring errands. Count both distance and actual drive time.</p></section><section class="research"><span>DAY / NIGHT CHECK</span><p>Research daytime and nighttime activity separately. Noise, parking, traffic, lighting and pedestrian activity can change substantially after dark.</p></section><section class="research"><span>ACCESS PATTERN</span><p>Determine whether Ethan repeatedly has to cross a congested freeway, bridge or downtown corridor. One bad bottleneck can affect almost every day.</p></section><section class="research"><span>LIFESTYLE MATCH</span><p>Track whether the area feels urban, suburban, quiet, nightlife-heavy, outdoors-oriented or family-oriented and compare that with what Ethan actually wants around his home.</p></section><section class="research"><span>HOUSING INVENTORY</span><p>Count how many qualifying apartments exist—not just the single best listing. More inventory gives Ethan negotiating power and backup options.</p></section><section class="research"><span>FUTURE CHANGE</span><p>Note major construction, redevelopment, transit projects and rapidly rising rents that could change the neighborhood during a 12–24 month stay.</p></section><section class="research"><span>FINAL NEIGHBORHOOD SCORE</span><p>Housing 25%, training access 20%, airport 15%, daily errands 10%, lifestyle 10%, traffic 10%, inventory depth 5%, environmental/noise risk 5%.</p></section></div>
+ </aside>
+</div>
+<script>
+(function(){
+ document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{document.getElementById(b.dataset.open).classList.add('open');document.body.classList.add('lock')}));
+ document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>{document.getElementById(b.dataset.close).classList.remove('open');document.body.classList.remove('lock')}));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.drawer.open').forEach(d=>d.classList.remove('open'));document.body.classList.remove('lock')}});
+})();
+</script>
+</body></html>

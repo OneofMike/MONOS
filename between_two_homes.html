@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BETWEEN TWO HOMES</title>
+<style>
+:root{--bg:#0a0f1a;--panel:#111827;--panel2:#151d2b;--line:#263248;--text:#f5f7fb;--muted:#9aa7b8;--soft:#dbe2ec;--good:#6fe3b4;--warn:#ffbe6b;--accent:#ef88c9;--accent2:#8da8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 10%,rgba(141,168,255,.12),transparent 32%),radial-gradient(circle at 10% 90%,rgba(239,136,201,.09),transparent 34%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.sidebar{border-right:1px solid var(--line);background:rgba(7,12,22,.9);padding:24px 18px;position:sticky;top:0;height:100vh}
+.brand{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;font-size:20px;margin-bottom:6px}.brand span{color:var(--accent)}.subbrand{color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px}
+.nav{display:grid;gap:8px}.nav button{text-align:left;width:100%;background:transparent;color:var(--soft);border:1px solid transparent;padding:12px 14px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover{background:rgba(239,136,201,.08);border-color:rgba(239,136,201,.28);color:#fff}
+.sidecard{margin-top:24px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border-radius:14px;padding:16px}.sidecard .label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.12em}.sidecard h3{margin:7px 0 2px;font-size:18px}.sidecard p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.main{padding:28px;max-width:1500px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.eyebrow{color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{margin:8px 0 6px;font-size:42px;line-height:1;letter-spacing:-.03em}.intro{color:var(--muted);max-width:700px;line-height:1.6;margin:0}.switcher{display:flex;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--line);padding:6px;border-radius:12px}.switcher button{border:none;background:transparent;color:var(--muted);padding:10px 13px;border-radius:8px;cursor:pointer}.switcher button.active{background:var(--panel2);color:#fff}
+.grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(17,24,39,.96),rgba(13,19,31,.94));border-radius:16px;overflow:hidden}.cardhead{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:18px 20px 14px;border-bottom:1px solid var(--line)}.cardhead h2{font-size:17px;margin:0 0 3px}.cardhead p{margin:0;color:var(--muted);font-size:13px}
+.badge{border:1px solid rgba(239,136,201,.3);color:var(--accent);background:rgba(239,136,201,.08);border-radius:999px;padding:6px 9px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.handoff{padding:20px}.handoff-top{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:18px}.handoff-date{font-size:28px;font-weight:700}.handoff-date small{display:block;margin-top:5px;color:var(--muted);font-size:13px;font-weight:500}.progress{color:var(--muted);text-align:right;font-size:12px}.progress b{color:var(--good);font-size:19px}
+.sections{display:grid;gap:12px}.section{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:12px;overflow:hidden}.section-title{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.section-title .count{color:var(--muted)}
+.item{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid rgba(38,50,72,.6)}.item:first-of-type{border-top:none}.check{width:22px;height:22px;border-radius:7px;border:1px solid #3a4963;display:grid;place-items:center;color:transparent;cursor:pointer}.item.done .check{border-color:rgba(111,227,180,.35);background:rgba(111,227,180,.12);color:var(--good)}
+.item .name{font-weight:600;font-size:14px}.item .meta{color:var(--muted);font-size:12px;margin-top:3px}.status{font-size:11px;padding:5px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}.status.warn{color:var(--warn);border-color:rgba(255,190,107,.25);background:rgba(255,190,107,.08)}.status.good{color:var(--good);border-color:rgba(111,227,180,.25);background:rgba(111,227,180,.08)}
+.inventory{padding:18px}.filters{display:grid;grid-template-columns:1fr repeat(2,160px);gap:10px;margin-bottom:12px}.filters input,.filters select{width:100%;background:#0c1320;border:1px solid var(--line);color:#fff;border-radius:10px;padding:11px 12px;outline:none}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px 10px;border-top:1px solid var(--line);text-align:left;font-size:13px}.table th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.loc{padding:5px 8px;border-radius:999px;font-size:11px;display:inline-block}.loc.dad{background:rgba(141,168,255,.1);color:#afc0ff}.loc.mom{background:rgba(239,136,201,.1);color:#ffaddd}.loc.travel{background:rgba(111,227,180,.1);color:#8df0c8}
+.detail{padding:18px;display:grid;gap:12px}.detailbox{border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(255,255,255,.025)}.detailbox .label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.detailbox .value{margin-top:5px;font-size:15px;font-weight:600}.alert{border:1px solid rgba(255,190,107,.28);background:rgba(255,190,107,.07);color:#ffd59a}
+.activity{padding:16px 18px}.activity-row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line)}.activity-row:first-child{border-top:none}.activity-row .left b{font-size:13px}.activity-row .left div{color:var(--muted);font-size:12px;margin-top:3px}.activity-row .time{color:var(--muted);font-size:12px}.footer-note{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}.nav{grid-template-columns:repeat(4,1fr)}.sidecard{display:none}.grid{grid-template-columns:1fr}}
+@media(max-width:650px){.main{padding:18px 14px}.sidebar{padding:16px 14px}.nav{grid-template-columns:1fr 1fr}.topbar{display:block}.switcher{margin-top:18px;width:100%;overflow:auto}h1{font-size:34px}.filters{grid-template-columns:1fr}.table thead{display:none}.table,.table tbody,.table tr,.table td{display:block;width:100%}.table tr{padding:10px 0;border-top:1px solid var(--line)}.table td{border:none;padding:4px 0}}
+</style></head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand">BETWEEN<span>//</span>HOMES</div><div class="subbrand">Ava's shared-home system</div>
+<div class="nav">
+<button class="active" data-view="dashboard">Overview</button><button data-view="inventory">Belongings</button><button data-view="handoff">Next Handoff</button><button data-view="activity">Activity</button>
+</div>
+<div class="sidecard"><div class="label">Next switch</div><h3>Friday · 5:30 PM</h3><p>Ava is coming to Dad's house.</p></div>
+<div class="sidecard"><div class="label">Why this exists</div><p>Know what Ava has at each home, what needs to move with her, and what needs attention before the next handoff.</p></div>
+</aside>
+<main class="main">
+<div class="topbar"><div><div class="eyebrow">01 / Personal Example</div><h1>BETWEEN TWO HOMES</h1><p class="intro">A custom tool for a dad whose daughter lives between two homes. Instead of rebuilding a checklist every week, the system uses where each item currently is and what Ava needs next to generate the handoff automatically.</p></div><div class="switcher"><button class="active">Dad's Week</button><button>Mom's Week</button></div></div>
+
+<section id="dashboard" class="view">
+<div class="grid">
+<div class="card"><div class="cardhead"><div><h2>Next Handoff</h2><p>Coming to Dad's</p></div><span class="badge">Friday · 5:30 PM</span></div>
+<div class="handoff"><div class="handoff-top"><div class="handoff-date">4 items need to move<small>Generated from Ava's upcoming week</small></div><div class="progress"><b id="doneCount">2 / 4</b><br>prepared</div></div>
+<div class="sections">
+<div class="section"><div class="section-title"><span>Bring with Ava</span><span class="count">4 items</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">iPad + charger</div><div class="meta">Needed for school Monday</div></div><span class="status good">Packed</span></div>
+<div class="item"><div class="check">✓</div><div><div class="name">Soccer cleats</div><div class="meta">Game Saturday · 9:00 AM</div></div><span class="status warn">At Mom's</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">School folder</div><div class="meta">Homework inside</div></div><span class="status good">Packed</span></div>
+<div class="item"><div class="check">✓</div><div><div class="name">Inhaler</div><div class="meta">Travels with Ava</div></div><span class="status warn">At Mom's</span></div>
+</div>
+<div class="section"><div class="section-title"><span>Already at Dad's</span><span class="count">5 items</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">Pajamas</div><div class="meta">2 sets</div></div><span class="status good">Ready</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">Toothbrush</div><div class="meta">Bathroom drawer</div></div><span class="status good">Ready</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">School clothes</div><div class="meta">5 outfits</div></div><span class="status good">Ready</span></div>
+</div>
+<div class="section"><div class="section-title"><span>Needs Attention</span><span class="count">3 items</span></div>
+<div class="item"><div></div><div><div class="name">Sneakers</div><div class="meta">Outgrown · replace before next week</div></div><span class="status warn">Replace</span></div>
+<div class="item"><div></div><div><div class="name">Science project</div><div class="meta">Currently at Mom's · due Monday</div></div><span class="status warn">Bring</span></div>
+<div class="item"><div></div><div><div class="name">Prescription</div><div class="meta">3 doses remaining</div></div><span class="status warn">Refill</span></div>
+</div></div></div></div>
+
+<div style="display:grid;gap:18px">
+<div class="card"><div class="cardhead"><div><h2>Where Her Things Are</h2><p>Current snapshot</p></div></div><div class="detail">
+<div class="detailbox"><div class="label">Dad's House</div><div class="value">24 items</div></div><div class="detailbox"><div class="label">Mom's House</div><div class="value">19 items</div></div><div class="detailbox"><div class="label">Travels With Ava</div><div class="value">8 items</div></div><div class="detailbox alert"><div class="label">Potential Duplicate Purchase</div><div class="value">Ava already has a purple rain jacket at Dad's.</div></div>
+</div></div>
+<div class="card"><div class="cardhead"><div><h2>Upcoming Week</h2><p>What changes what she needs</p></div></div><div class="activity">
+<div class="activity-row"><div class="left"><b>Soccer game</b><div>Cleats + uniform needed</div></div><div class="time">Sat</div></div><div class="activity-row"><div class="left"><b>Science project due</b><div>Project currently at Mom's</div></div><div class="time">Mon</div></div><div class="activity-row"><div class="left"><b>School picture day</b><div>Blue cardigan tagged as preferred</div></div><div class="time">Tue</div></div>
+</div></div></div></div>
+</section>
+
+<section id="inventory" class="view" style="display:none"><div class="card"><div class="cardhead"><div><h2>Ava's Belongings</h2><p>Search what she has, where it is, and whether it travels between homes.</p></div><span class="badge">51 tracked items</span></div><div class="inventory">
+<div class="filters"><input id="search" placeholder="Search belongings..."><select id="locationFilter"><option value="">All locations</option><option>Dad's</option><option>Mom's</option><option>Travels</option></select><select id="statusFilter"><option value="">All statuses</option><option>Ready</option><option>Bring</option><option>Replace</option></select></div>
+<table class="table" id="inventoryTable"><thead><tr><th>Item</th><th>Category</th><th>Current Location</th><th>Next Need</th><th>Status</th></tr></thead><tbody>
+<tr><td>Soccer cleats</td><td>Sports</td><td><span class="loc mom">Mom's</span></td><td>Saturday game</td><td>Bring</td></tr>
+<tr><td>iPad charger</td><td>School</td><td><span class="loc travel">Travels</span></td><td>Monday school</td><td>Ready</td></tr>
+<tr><td>Blue cardigan</td><td>Clothes</td><td><span class="loc dad">Dad's</span></td><td>Picture day Tuesday</td><td>Ready</td></tr>
+<tr><td>Science project</td><td>School</td><td><span class="loc mom">Mom's</span></td><td>Due Monday</td><td>Bring</td></tr>
+<tr><td>Purple rain jacket</td><td>Clothes</td><td><span class="loc dad">Dad's</span></td><td>Rainy season</td><td>Ready</td></tr>
+<tr><td>Everyday sneakers</td><td>Clothes</td><td><span class="loc dad">Dad's</span></td><td>Replace soon</td><td>Replace</td></tr>
+<tr><td>Inhaler</td><td>Health</td><td><span class="loc travel">Travels</span></td><td>Always travels</td><td>Bring</td></tr>
+</tbody></table></div></div></section>
+
+<section id="handoff" class="view" style="display:none"><div class="card"><div class="cardhead"><div><h2>Friday Handoff</h2><p>Generated list for Ava's upcoming stay at Dad's.</p></div><span class="badge">5:30 PM</span></div><div class="handoff"><div class="section"><div class="section-title"><span>Auto-generated because of next week's schedule</span><span class="count">Live list</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">iPad + charger</div><div class="meta">School Monday</div></div><span class="status good">Packed</span></div>
+<div class="item"><div class="check">✓</div><div><div class="name">Soccer cleats</div><div class="meta">Game Saturday</div></div><span class="status warn">Needed</span></div>
+<div class="item"><div class="check">✓</div><div><div class="name">Science project</div><div class="meta">Due Monday</div></div><span class="status warn">Needed</span></div>
+<div class="item done"><div class="check">✓</div><div><div class="name">School folder</div><div class="meta">Homework</div></div><span class="status good">Packed</span></div>
+<div class="item"><div class="check">✓</div><div><div class="name">Inhaler</div><div class="meta">Always travels</div></div><span class="status warn">Needed</span></div>
+</div></div></div></section>
+
+<section id="activity" class="view" style="display:none"><div class="card"><div class="cardhead"><div><h2>Recent Movement</h2><p>A simple history of where important things moved.</p></div></div><div class="activity">
+<div class="activity-row"><div class="left"><b>School folder moved to Mom's</b><div>Marked during last handoff</div></div><div class="time">Aug 23</div></div>
+<div class="activity-row"><div class="left"><b>Blue cardigan added at Dad's</b><div>For school picture day</div></div><div class="time">Aug 21</div></div>
+<div class="activity-row"><div class="left"><b>Sneakers flagged as outgrown</b><div>Replacement needed</div></div><div class="time">Aug 20</div></div>
+<div class="activity-row"><div class="left"><b>Inhaler marked “travels with Ava”</b><div>Always included on handoff lists</div></div><div class="time">Aug 18</div></div>
+</div></div></section>
+
+<div class="footer-note">Built around one specific family problem: knowing what Ava needs, where it is, and what should move next.</div>
+</main></div>
+<script>
+const navBtns=[...document.querySelectorAll('.nav button')],views=[...document.querySelectorAll('.view')];
+navBtns.forEach(btn=>btn.addEventListener('click',()=>{navBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');views.forEach(v=>v.style.display='none');document.getElementById(btn.dataset.view).style.display='block'}));
+document.querySelectorAll('.check').forEach(check=>check.addEventListener('click',()=>{const item=check.closest('.item');item.classList.toggle('done');const status=item.querySelector('.status');if(status){if(item.classList.contains('done')){status.textContent='Packed';status.classList.remove('warn');status.classList.add('good')}else{status.textContent='Needed';status.classList.remove('good');status.classList.add('warn')}}const primary=[...document.querySelectorAll('#dashboard .section:first-child .item')],done=primary.filter(i=>i.classList.contains('done')).length;const dc=document.getElementById('doneCount');if(dc)dc.textContent=`${done} / ${primary.length}`}));
+function filterTable(){const q=document.getElementById('search').value.toLowerCase(),loc=document.getElementById('locationFilter').value.toLowerCase(),status=document.getElementById('statusFilter').value.toLowerCase();[...document.querySelectorAll('#inventoryTable tbody tr')].forEach(row=>{const t=row.textContent.toLowerCase();row.style.display=(!q||t.includes(q))&&(!loc||t.includes(loc))&&(!status||t.includes(status))?'':'none'})}
+['search','locationFilter','statusFilter'].forEach(id=>document.getElementById(id).addEventListener('input',filterTable));
+</script></body></html>
