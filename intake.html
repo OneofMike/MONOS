@@ -158,13 +158,13 @@ body{
 .num{font-size:41px;line-height:1;color:var(--pink);letter-spacing:-.06em}
 .content h2{font-size:17px;line-height:1.28;font-weight:400;margin:2px 0 5px}
 .sub{font-size:12px;color:#dbd5e4;margin-bottom:9px}
-textarea,input[type=text]{
+textarea,input[type=text],input[type=email]{
   width:100%;border:1px solid rgba(177,173,193,.37);
   background:rgba(24,34,55,.82);color:#fff;
   font-family:inherit;font-size:13px;outline:none;padding:11px 13px
 }
 textarea{resize:vertical;min-height:65px}
-textarea:focus,input[type=text]:focus{border-color:var(--pink2)}
+textarea:focus,input[type=text]:focus,input[type=email]:focus{border-color:var(--pink2)}
 .options{display:flex;flex-wrap:wrap;gap:7px}
 .opt{
   border:1px solid rgba(178,171,197,.39);
@@ -289,7 +289,8 @@ textarea:focus,input[type=text]:focus{border-color:var(--pink2)}
         <div class="side-rule"></div>
         <div class="progress-title">YOUR PROGRESS</div>
         <div class="progress">
-          <div class="pstep active"><span class="b"></span><span>01 THE PROBLEM</span></div>
+          <div class="pstep active"><span class="b"></span><span>YOUR DETAILS</span></div>
+          <div class="pstep"><span class="b"></span><span>01 THE PROBLEM</span></div>
           <div class="pstep"><span class="b"></span><span>02 WHAT’S HARD</span></div>
           <div class="pstep"><span class="b"></span><span>03 WHAT WOULD HELP</span></div>
           <div class="pstep"><span class="b"></span><span>04 WHAT YOU HAVE</span></div>
@@ -301,7 +302,23 @@ textarea:focus,input[type=text]:focus{border-color:var(--pink2)}
       </aside>
 
       <main class="main">
-        <section class="card">
+        
+          <section class="card">
+  <div class="num">●</div>
+  <div class="content">
+    <h2>FIRST, WHO AM I BUILDING THIS FOR?</h2>
+    <div class="sub">Your contact information.</div>
+
+    <div class="field-label">First name</div>
+    <input id="firstName" type="text" placeholder="First name">
+
+    <div class="field-label">Last name</div>
+    <input id="lastName" type="text" placeholder="Last name">
+
+    <div class="field-label">Email</div>
+    <input id="email" type="email" placeholder="you@example.com">
+  </div>
+</section>
           <div class="num">01</div>
           <div class="content">
             <h2>WHAT DO YOU NEED HELP MAKING SENSE OF?</h2>
@@ -450,9 +467,12 @@ const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const payload = {
  submissionId: crypto.randomUUID(),
+    firstName: document.getElementById('firstName').value.trim(),
+lastName: document.getElementById('lastName').value.trim(),
+email: document.getElementById('email').value.trim(),
     problem: document.getElementById('problem').value.trim(),
-    difficult: vals('difficult'),
-    success: document.getElementById('success').value.trim(),
+difficult: vals('difficult'),
+success: document.getElementById('success').value.trim(),
     materials: vals('materials'),
     storage: document.getElementById('storage').value.trim(),
     actions: vals('actions'),
