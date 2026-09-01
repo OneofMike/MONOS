@@ -432,7 +432,7 @@ currentPaymentIntentId = data.paymentIntentId;
   }catch(error){
     console.error(error);
     document.getElementById('paymentMessage').textContent =
-      'Unable to load payment. Please try again.';
+  error.message || 'Unable to load payment. Please try again.';
   }
 }
   document.getElementById('payStripeBtn').addEventListener('click', async()=>{
