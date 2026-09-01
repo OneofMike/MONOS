@@ -341,7 +341,12 @@ tiers.forEach(card=>{
       behavior:'smooth',
       block:'start'
     });
+const payBtn = document.getElementById('payStripeBtn');
+const paymentMessage = document.getElementById('paymentMessage');
 
+payBtn.disabled = false;
+payBtn.textContent = 'COMPLETE PAYMENT →';
+paymentMessage.textContent = '';
     await startStripeCheckout(choice);
   });
 });
