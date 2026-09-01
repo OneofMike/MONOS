@@ -350,6 +350,33 @@ let elements;
 let paymentElement;
 let currentPaymentIntentId = null;
 async function startStripeCheckout(choice){
+
+  if(currentPaymentIntentId){
+    try{
+      await fetch(
+        'https://monos-beta.vercel.app/api/cancel-payment-intent',
+        {
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            paymentIntentId: currentPaymentIntentId
+          })
+        }
+      );
+    }catch(error){
+      console.error('Unable to cancel previous payment:', error);
+    }
+
+    currentPaymentIntentId = null;
+  }
+
+  if(paymentElement){
+    paymentElement.destroy();
+    paymentElement = null;
+  }
+
   try{
     const response = await fetch(
       'https://monos-beta.vercel.app/api/create-checkout-session',
