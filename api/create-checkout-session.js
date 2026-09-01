@@ -76,9 +76,10 @@ export default async function handler(req, res) {
       });
     }
 
-    return res.status(200).json({
-      clientSecret: paymentIntent.client_secret
-    });
+   return res.status(200).json({
+  clientSecret: paymentIntent.client_secret,
+  paymentIntentId: paymentIntent.id
+});
 
   } catch (error) {
     console.error(error);
