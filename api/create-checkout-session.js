@@ -1,7 +1,8 @@
 export default async function handler(req, res) {
   const allowedOrigins = [
     'https://oneofmike.github.io',
-    'https://monos-beta.vercel.app'
+    'https://monos-beta.vercel.app',
+    'https://builtbymonos.com',
   ];
 
   const origin = req.headers.origin;
