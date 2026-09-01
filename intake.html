@@ -447,25 +447,49 @@ fileInput.addEventListener('change',()=>{
   fileName.textContent=!fileInput.files.length?'':fileInput.files.length===1?fileInput.files[0].name:`${fileInput.files.length} files selected`;
 });
 const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)].map(x=>x.innerText.trim());
-document.getElementById('sendBtn').addEventListener('click',()=>{
-  const payload={
-    problem:document.getElementById('problem').value.trim(),
-    difficult:vals('difficult'),
-    success:document.getElementById('success').value.trim(),
-    materials:vals('materials'),
-    storage:document.getElementById('storage').value.trim(),
-    actions:vals('actions'),
-    device:vals('device')[0]||'',
-    users:vals('users')[0]||'',
-    style:vals('style'),
-    files:[...fileInput.files].map(f=>f.name)
+document.getElementById('sendBtn').addEventListener('click', async () => {
+  const payload = {
+    problem: document.getElementById('problem').value.trim(),
+    difficult: vals('difficult'),
+    success: document.getElementById('success').value.trim(),
+    materials: vals('materials'),
+    storage: document.getElementById('storage').value.trim(),
+    actions: vals('actions'),
+    device: vals('device')[0] || '',
+    users: vals('users')[0] || '',
+    style: vals('style'),
+    files: [...fileInput.files].map(f => f.name)
   };
-  localStorage.setItem('systemFieldIntake',JSON.stringify(payload));
-const t=document.getElementById('toast');
-t.classList.add('show');
-setTimeout(()=>{
-  window.location.href='review.html';
-},450);
+
+  localStorage.setItem('systemFieldIntake', JSON.stringify(payload));
+
+  try {
+    const response = await fetch(
+      'https://monos-beta.vercel.app/api/submit-intake',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Submission failed');
+    }
+
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+
+    setTimeout(() => {
+      window.location.href = 'review.html';
+    }, 450);
+
+  } catch (error) {
+    console.error('Intake submission failed:', error);
+    alert('Something went wrong submitting your request. Please try again.');
+  }
 });
 </script>
 </body>
