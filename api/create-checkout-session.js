@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
     const tiers = {
       CORE: {
-        amount: 100,
+        amount: 5000,
         label: 'CORE'
       },
       SYSTEM: {
