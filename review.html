@@ -323,6 +323,9 @@ function selectTier(card){
 
 tiers.forEach(card=>{
   card.querySelector('.purchase').addEventListener('click',async()=>{
+    tiers.forEach(tierCard=>{
+  tierCard.querySelector('.purchase').disabled = true;
+});
     selectTier(card);
 
     const choice={
@@ -348,6 +351,9 @@ payBtn.disabled = false;
 payBtn.textContent = 'COMPLETE PAYMENT →';
 paymentMessage.textContent = '';
     await startStripeCheckout(choice);
+    tiers.forEach(tierCard=>{
+  tierCard.querySelector('.purchase').disabled = false;
+});
   });
 });
 let stripe;
