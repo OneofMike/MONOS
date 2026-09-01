@@ -449,6 +449,7 @@ fileInput.addEventListener('change',()=>{
 const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)].map(x=>x.innerText.trim());
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const payload = {
+ submissionId: crypto.randomUUID(),
     problem: document.getElementById('problem').value.trim(),
     difficult: vals('difficult'),
     success: document.getElementById('success').value.trim(),
