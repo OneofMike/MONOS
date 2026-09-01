@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About MONOS</title>
+<style>
+:root{
+  --bg:#07142b;
+  --panel:rgba(10,19,41,.78);
+  --pink:#ef83c2;
+  --pink2:#f4a6d2;
+  --text:#f4f1f8;
+  --muted:#bcb5c8;
+  --line:rgba(200,189,214,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Courier New",Courier,monospace;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+.page{
+  min-height:100vh;
+  position:relative;
+  background:
+    radial-gradient(circle at 74% 9%,rgba(199,126,212,.28),transparent 24%),
+    radial-gradient(circle at 10% 42%,rgba(238,111,186,.15),transparent 28%),
+    linear-gradient(180deg,#08142b 0%,#101a3a 42%,#17183d 69%,#08142c 100%);
+}
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  overflow:hidden;
+  pointer-events:none;
+}
+.bg:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 14% 74%,rgba(238,104,184,.14),transparent 26%),
+    radial-gradient(ellipse at 85% 72%,rgba(57,168,221,.12),transparent 29%);
+  filter:blur(18px);
+}
+.vline{
+  position:absolute;
+  top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,rgba(239,131,194,.14),rgba(239,131,194,.02) 55%,transparent 88%);
+}
+.v1{left:1.5%}.v2{left:18%}.v3{right:18%}.v4{right:1.5%}
+.city{position:absolute;bottom:0;width:30%;height:64%;opacity:.9}
+.city.left{left:-3%}.city.right{right:-3%;transform:scaleX(-1)}
+.tower{
+  position:absolute;bottom:0;left:var(--x);width:var(--w);height:var(--h);
+  border-radius:45% 45% 6% 6%/8% 8% 2% 2%;
+  border:1px solid rgba(105,132,199,.12);
+  background:linear-gradient(90deg,#071226 0%,#172752 48%,#332e69 72%,#08152c 100%);
+}
+.tower:before{
+  content:"";position:absolute;left:50%;top:-66px;transform:translateX(-50%);
+  width:3px;height:72px;background:linear-gradient(180deg,rgba(247,141,209,.9),rgba(85,79,167,.45));
+  box-shadow:0 0 14px rgba(239,107,191,.32);
+}
+.tower:after{
+  content:"";position:absolute;left:-14%;width:128%;height:18px;bottom:var(--rb);
+  border-radius:50%;border:1px solid rgba(111,148,203,.2);
+  background:linear-gradient(180deg,rgba(29,44,83,.7),rgba(9,18,40,.85));
+}
+.t1{--x:0%;--w:24%;--h:48%;--rb:22%}
+.t2{--x:18%;--w:22%;--h:70%;--rb:37%}
+.t3{--x:38%;--w:18%;--h:56%;--rb:52%}
+.t4{--x:55%;--w:21%;--h:42%;--rb:28%}
+.t5{--x:72%;--w:18%;--h:60%;--rb:45%}
+.t6{--x:87%;--w:16%;--h:35%;--rb:22%}
+.canal{
+  position:absolute;left:6%;right:6%;bottom:-2%;height:30%;
+  clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);
+  background:linear-gradient(180deg,rgba(41,124,180,.11),rgba(7,20,43,.66));
+  border-top:1px solid rgba(73,176,224,.14);
+}
+.scan{
+  position:fixed;inset:0;z-index:20;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.014) 0 1px,transparent 1px 4px);
+  mix-blend-mode:soft-light;
+}
+.shell{width:min(1180px,100%);margin:0 auto;padding:24px 22px 70px}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  border-bottom:1px solid var(--line);padding:4px 0 18px;
+}
+.brand{font-size:18px;font-weight:700;letter-spacing:.08em}
+.brand .dot{color:var(--pink)}
+.links{display:flex;align-items:center;gap:34px;font-size:13px}
+.links a{padding:10px 0;color:#ece8f1}
+.links a:hover{color:var(--pink2)}
+.get-started{border:1px solid rgba(239,131,194,.72);padding:14px 24px!important}
+.hero{
+  display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:44px;align-items:end;
+  min-height:570px;padding:76px 0 46px;
+}
+.eyebrow{color:var(--pink);font-size:13px;margin-bottom:18px}
+.hero h1{
+  margin:0;max-width:790px;font-size:clamp(44px,7vw,88px);line-height:.96;
+  letter-spacing:-.055em;font-weight:400;
+}
+.hero h1 span{color:var(--pink)}
+.hero-copy{max-width:720px;margin-top:28px;font-size:16px;line-height:1.9;color:#d1cada}
+.node{
+  justify-self:end;width:100%;max-width:250px;border:1px solid var(--line);
+  background:rgba(9,17,35,.55);padding:22px 20px 24px;backdrop-filter:blur(8px);
+}
+.node-label{font-size:12px;color:var(--pink);margin-bottom:12px}
+.node-big{font-size:27px;line-height:1.15;margin-bottom:26px}
+.node-rule{height:1px;background:linear-gradient(90deg,var(--pink),transparent)}
+.node-small{font-size:11px;color:var(--muted);line-height:1.7;margin-top:16px}
+.section{border-top:1px solid var(--line);padding:54px 0 58px}
+.section-grid{display:grid;grid-template-columns:250px minmax(0,1fr);gap:52px}
+.section-kicker{color:var(--pink);font-size:13px}
+.section-number{display:block;color:#8f88a2;font-size:11px;margin-top:10px}
+.section h2{
+  margin:0 0 22px;font-size:clamp(30px,4.3vw,55px);line-height:1.04;
+  font-weight:400;letter-spacing:-.045em;
+}
+.section p{margin:0 0 18px;max-width:820px;color:#d4cedc;font-size:15px;line-height:1.9}
+.section strong{color:#fff}
+.process{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:28px}
+.step{
+  min-height:156px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(10,19,41,.72),rgba(17,28,53,.62));padding:18px;
+}
+.step-num{font-size:11px;color:#8f88a2;margin-bottom:26px}
+.step-title{color:var(--pink2);font-size:17px;margin-bottom:10px}
+.step-copy{font-size:12px;line-height:1.7;color:var(--muted)}
+.quote{
+  margin:30px 0 0;border-left:2px solid var(--pink);padding:16px 0 16px 22px;
+  color:#fff;font-size:19px;line-height:1.55;max-width:760px;
+}
+.cta{
+  margin-top:12px;border:1px solid rgba(239,131,194,.52);
+  background:linear-gradient(135deg,rgba(239,131,194,.13),rgba(57,168,221,.06)),rgba(8,17,35,.70);
+  padding:46px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end;
+}
+.cta h2{margin:0;font-size:clamp(36px,6vw,72px);line-height:.98;font-weight:400;letter-spacing:-.05em}
+.cta h2 span{color:var(--pink)}
+.cta p{margin:18px 0 0;max-width:620px;color:#d4cedc;line-height:1.8;font-size:14px}
+.cta-btn{
+  display:inline-flex;align-items:center;justify-content:center;min-width:190px;min-height:58px;
+  padding:14px 22px;border:1px solid var(--pink);
+  background:linear-gradient(90deg,#e96fb7,#f08bc7);color:#10132a;font-size:15px;font-weight:700;
+}
+.footer{display:flex;justify-content:space-between;gap:20px;padding:24px 0 0;color:#9790a5;font-size:11px}
+@media(max-width:850px){
+  .links{gap:16px}.links a:not(.get-started){display:none}
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:58px}
+  .node{justify-self:start}.section-grid{grid-template-columns:1fr;gap:18px}
+  .process{grid-template-columns:1fr 1fr}.cta{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .shell{padding:16px 12px 44px}.brand{font-size:15px}
+  .get-started{padding:11px 14px!important;font-size:11px}
+  .hero{padding:50px 0 36px}.hero h1{font-size:44px}.hero-copy{font-size:14px;line-height:1.8}
+  .process{grid-template-columns:1fr}.section{padding:42px 0}.cta{padding:26px 20px}
+  .cta-btn{width:100%}.city{width:44%;height:48%;opacity:.7}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="vline v1"></div><div class="vline v2"></div><div class="vline v3"></div><div class="vline v4"></div>
+  <div class="city left">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div>
+    <div class="tower t4"></div><div class="tower t5"></div><div class="tower t6"></div>
+  </div>
+  <div class="city right">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div>
+    <div class="tower t4"></div><div class="tower t5"></div><div class="tower t6"></div>
+  </div>
+  <div class="canal"></div>
+</div>
+<div class="scan"></div>
+
+<div class="page">
+  <div class="shell">
+    <nav class="nav">
+      <a class="brand" href="index.html"><span class="dot">●</span> MONOS</a>
+      <div class="links">
+        <a href="examples.html">EXAMPLES</a>
+        <a href="index.html#how-it-works">HOW IT WORKS</a>
+        <a href="about.html">ABOUT</a>
+        <a class="get-started" href="intake.html">GET STARTED</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <div class="eyebrow">● ABOUT</div>
+        <h1>I BUILD AROUND THE <span>PROBLEM</span>, NOT A PRESET SOLUTION.</h1>
+        <div class="hero-copy">
+          Most people don’t need another generic template, app, or system. They need someone to look at what’s actually going on, understand the moving pieces, and figure out what would make the situation easier to manage.
+        </div>
+      </div>
+      <aside class="node">
+        <div class="node-label">NODE_001</div>
+        <div class="node-big">BUILT<br>DIFFERENTLY</div>
+        <div class="node-rule"></div>
+        <div class="node-small">NO PRESET OUTPUT.<br>NO REQUIRED FORMAT.<br>START WITH THE SITUATION.</div>
+      </aside>
+    </header>
+
+    <section class="section">
+      <div class="section-grid">
+        <div>
+          <div class="section-kicker">● THE IDEA</div>
+          <span class="section-number">FIELD//01</span>
+        </div>
+        <div>
+          <h2>THIS IS THE IDEA BEHIND WHAT I DO.</h2>
+          <p>You bring me something messy, unclear, scattered, repetitive, difficult to compare, or hard to keep track of. I research it, organize it, and figure out what should exist around your specific situation.</p>
+          <p>Sometimes that becomes a dashboard. Sometimes it’s research, a comparison system, a tracker, an analysis, a planning tool, an interactive workspace, or something completely different.</p>
+          <div class="quote">I don’t start with the answer. I start with the situation.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-grid">
+        <div>
+          <div class="section-kicker">● HOW I WORK</div>
+          <span class="section-number">FIELD//02</span>
+        </div>
+        <div>
+          <h2>UNDERSTAND → RESEARCH → ORGANIZE → BUILD</h2>
+          <p>I first understand what you’re actually trying to accomplish, what’s getting in the way, what information already exists, and how you need to use it.</p>
+          <p>From there, I research what’s missing, organize the important pieces, and build the solution around the way you actually operate.</p>
+          <p><strong>There’s no predetermined format you have to fit into.</strong> What gets built depends on what would actually be useful.</p>
+
+          <div class="process">
+            <div class="step">
+              <div class="step-num">01</div>
+              <div class="step-title">UNDERSTAND</div>
+              <div class="step-copy">What are you trying to do? What’s getting in the way? What actually matters here?</div>
+            </div>
+            <div class="step">
+              <div class="step-num">02</div>
+              <div class="step-title">RESEARCH</div>
+              <div class="step-copy">Find what’s missing, useful, relevant, comparable, or worth paying attention to.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">03</div>
+              <div class="step-title">ORGANIZE</div>
+              <div class="step-copy">Turn scattered information into something clear, usable, and easier to act on.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">04</div>
+              <div class="step-title">BUILD</div>
+              <div class="step-copy">Create whatever format actually makes the situation easier to use, manage, or understand.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-grid">
+        <div>
+          <div class="section-kicker">● PERSONALIZATION</div>
+          <span class="section-number">FIELD//03</span>
+        </div>
+        <div>
+          <h2>SAME PROCESS. COMPLETELY DIFFERENT OUTCOME EVERY TIME.</h2>
+          <p>Two people can come to me with the same general problem and still end up with completely different solutions.</p>
+          <p>Your priorities, information, decisions, workflow, preferences, and circumstances determine what gets created.</p>
+          <p><strong>That’s the point.</strong></p>
+          <div class="quote">I don’t start with a solution and try to fit you into it. I start with your situation and figure out what should exist.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-grid">
+        <div>
+          <div class="section-kicker">● WHY I DO THIS</div>
+          <span class="section-number">FIELD//04</span>
+        </div>
+        <div>
+          <h2>SOME PROBLEMS ARE TOO SPECIFIC FOR A TEMPLATE.</h2>
+          <p>A lot of useful solutions never get built because the problem feels too specific, too personal, too small for traditional software, or too complicated to solve with a template.</p>
+          <p>That’s the space I like working in.</p>
+          <p>If something would make your life, work, research, planning, organization, or decision-making easier, it’s worth figuring out.</p>
+          <p>It doesn’t have to fit neatly into a category before you bring it here.</p>
+          <div class="quote">Bring the situation. We’ll figure out the rest.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div>
+        <h2>YOU BRING THE <span>MESS.</span><br>I ORGANIZE IT.</h2>
+        <p>Tell me what you’re dealing with. I’ll figure out what would actually help.</p>
+      </div>
+      <a class="cta-btn" href="intake.html">GET STARTED →</a>
+    </section>
+
+    <footer class="footer">
+      <span>MONOS</span>
+      <span>BUILT AROUND YOUR SITUATION.</span>
+    </footer>
+  </div>
+</div>
+</body>
+</html>
