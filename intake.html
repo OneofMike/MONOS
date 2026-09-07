@@ -435,10 +435,10 @@ footer {
         <section class="card">
           <div class="num">05</div>
           <div class="content">
-            <h2>WHAT WOULD YOU LIKE TO BE ABLE TO DO WITH IT?</h2>
+            <h2>WHAT WOULD YOU LIKE TO GET OUT OF THIS?</h2>
             <div class="sub">Select all that apply.</div>
             <div class="options" data-group="actions">
-  <button class="opt"><span class="icon">▦</span>Get It Organized</button>
+  <button class="opt"><span class="icon">▦</span>Get Organized</button>
   <button class="opt"><span class="icon">⌕</span>Find / Research Something</button>
   <button class="opt"><span class="icon">⚖</span>Compare Options</button>
   <button class="opt"><span class="icon">☆</span>See What’s Important</button>
@@ -455,7 +455,7 @@ footer {
         <section class="card">
           <div class="num">06</div>
           <div class="content">
-            <h2>HOW WILL YOU MOSTLY USE IT?</h2>
+            <h2>HOW WILL YOU MOSTLY USE THE END RESULT?</h2>
             <div class="sub">Select all that apply.</div>
             <div class="options single" data-group="device">
               <button class="opt"><span class="icon">▯</span>Phone</button>
@@ -473,27 +473,33 @@ footer {
         <section class="card">
           <div class="num">07</div>
           <div class="content">
-            <h2>MAKE IT YOURS.</h2>
-            <div class="sub">What kind of look or feeling do you want?</div>
-            <div class="options" data-group="style">
-              <button class="opt">Minimal</button>
-              <button class="opt">Dark</button>
-              <button class="opt">Clean / Professional</button>
-              <button class="opt">Colorful</button>
-              <button class="opt">Futuristic</button>
-              <button class="opt">Soft</button>
-              <button class="opt">Luxury</button>
-              <button class="opt">Playful</button>
-              <button class="opt">Technical / Data Heavy</button>
-              <button class="opt">Something Else</button>
-            </div>
-            <div class="field-label">Any inspiration? (Optional)</div>
-            <label class="upload" for="fileInput">⇧ &nbsp; Upload images or add links (optional)</label>
-            <input id="fileInput" type="file" multiple accept="image/*,.pdf,.csv,.xlsx,.xls,.doc,.docx,.txt">
-            <div id="fileName" class="file-name"></div>
-          </div>
-        </section>
+            
+           <section class="card">
+  <div class="num">07</div>
+  <div class="content">
+    <h2>HOW WOULD YOU LIKE THE END RESULT?</h2>
+    <div class="sub">Select anything that matters to you.</div>
 
+    <div class="options" data-group="style">
+      <button class="opt">Simple / Straightforward</button>
+      <button class="opt">Detailed / In-Depth</button>
+      <button class="opt">Visual</button>
+      <button class="opt">Easy to Update</button>
+      <button class="opt">Easy to Share</button>
+      <button class="opt">Something I Can Keep Using</button>
+      <button class="opt">Just Handle It For Me</button>
+      <button class="opt">No Preference — You Decide</button>
+    </div>
+
+    <div class="field-label">Anything else you want me to know? (Optional)</div>
+    <textarea id="inspiration" style="min-height:100px;" placeholder="Add any preferences, ideas, links, or other details here..."></textarea>
+
+    <div class="field-label">Have anything that might help? (Optional)</div>
+    <label class="upload" for="fileInput">⇧ &nbsp; Upload images or files (optional)</label>
+    <input id="fileInput" type="file" multiple accept="image/*,.pdf,.csv,.xlsx,.xls,.doc,.docx,.txt">
+    <div id="fileName" class="file-name"></div>
+  </div>
+</section>
         <div class="footerrow">
           <div class="note"><span class="dot">●</span> &nbsp; I’LL REVIEW YOUR ANSWERS AND FOLLOW UP<br>&nbsp;&nbsp;&nbsp;IF I NEED ANYTHING ELSE.</div>
           <button class="send" id="sendBtn">SEND IT TO ME →<small>REVIEW YOUR ANSWERS ON THE NEXT STEP</small></button>
