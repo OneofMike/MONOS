@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maya Ecommerce Operations</title>
+<style>
+:root{
+  --bg:#e7e8e2;
+  --paper:#fbfaf4;
+  --paper2:#f3f1e8;
+  --ink:#26302c;
+  --muted:#758078;
+  --line:#cfd4cd;
+  --green:#355f4e;
+  --green2:#5d836f;
+  --sage:#d7e3da;
+  --rose:#d8b7b7;
+  --blue:#cbdbe3;
+  --gold:#dfd0a8;
+  --shadow:0 12px 30px rgba(40,52,44,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{max-width:1440px;margin:auto;padding:18px}
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-bottom:10px;
+}
+.tab{
+  border:1px solid var(--line);
+  background:#eef0eb;
+  padding:14px;
+  text-align:left;
+  cursor:pointer;
+  min-height:82px;
+}
+.tab span{display:block;font:9px "Courier New";color:var(--muted);margin-bottom:7px}
+.tab b{font-size:18px}
+.tab.active{
+  background:var(--green);
+  color:#fff;
+  border-color:var(--green);
+}
+.tab.active span{color:#cfe0d7}
+.panel{display:none}
+.panel.active{display:block}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:16px;
+  background:linear-gradient(120deg,#d8e6dc,#eef3ef);
+  border:1px solid var(--line);
+  padding:18px;
+}
+.section-head h1{margin:0;font-size:34px;letter-spacing:-.025em}
+.section-head .meta{
+  font:10px "Courier New";
+  color:var(--muted);
+  text-align:right;
+}
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  border:1px solid var(--line);
+  border-top:0;
+  background:var(--paper);
+}
+.kpi{padding:14px;border-right:1px solid var(--line)}
+.kpi:last-child{border-right:0}
+.kpi span{display:block;font:8px "Courier New";color:var(--muted)}
+.kpi b{display:block;font-size:20px;margin-top:5px}
+
+.grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:10px;
+  margin-top:10px;
+}
+.stack{display:grid;gap:10px}
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.card-head{
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.card-head b{font-size:15px}
+.card-head small{font:8px "Courier New";color:var(--muted)}
+.card-body{padding:12px}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+th,td{
+  border:1px solid #d9ddd8;
+  padding:9px 10px;
+  text-align:left;
+  vertical-align:middle;
+}
+th{
+  background:#eff2ed;
+  font:8px "Courier New";
+  letter-spacing:.06em;
+  color:#68756e;
+}
+td{font-size:12px}
+td[contenteditable="true"]{
+  background:#fffef9;
+  outline:none;
+}
+td[contenteditable="true"]:focus{
+  box-shadow:inset 0 0 0 2px #8eb39f;
+}
+.status{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:999px;
+  font:8px "Courier New";
+  background:#e6efe9;
+  color:#35644e;
+}
+.status.warn{background:#f2ead7;color:#8b6a25}
+.status.bad{background:#f2dddd;color:#9b4949}
+
+.row-actions{
+  display:flex;gap:7px;align-items:center;
+}
+.btn{
+  border:1px solid #bfc7c1;
+  background:#fff;
+  padding:7px 9px;
+  cursor:pointer;
+  font:9px "Courier New";
+}
+.btn:hover{background:#eef2ed}
+.btn.primary{background:var(--green);color:white;border-color:var(--green)}
+.btn.danger{color:#9a5555}
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+.field label{
+  display:block;
+  font:8px "Courier New";
+  color:var(--muted);
+  margin-bottom:5px;
+}
+.field input,.field select,.field textarea{
+  width:100%;
+  border:1px solid #ccd2cd;
+  background:white;
+  padding:9px;
+}
+.field textarea{min-height:82px;resize:vertical}
+.note-list{display:grid;gap:7px}
+.note{
+  border:1px solid #d9ddd8;
+  background:#fff;
+  padding:10px;
+  display:grid;
+  grid-template-columns:18px 1fr;
+  gap:8px;
+}
+.note input{margin-top:2px}
+.note div[contenteditable="true"]{outline:none;font-size:12px}
+.note div[contenteditable="true"]:focus{box-shadow:inset 0 -2px 0 #8eb39f}
+.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.metric{
+  border:1px solid #d9ddd8;
+  background:#fff;
+  padding:12px;
+}
+.metric span{display:block;font:8px "Courier New";color:var(--muted)}
+.metric b{font-size:18px;display:block;margin-top:5px}
+.bar{
+  height:8px;background:#e4e7e2;margin-top:8px;overflow:hidden
+}
+.bar i{display:block;height:100%;background:var(--green)}
+.footer-tools{
+  display:flex;justify-content:flex-end;gap:7px;margin-top:10px
+}
+@media(max-width:1000px){
+  .tabs{grid-template-columns:repeat(2,1fr)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .app{padding:10px}
+  .tabs{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .form-grid,.mini-grid{grid-template-columns:1fr}
+  .section-head{align-items:start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="tabs">
+    <button class="tab active" data-tab="profit"><span>01</span><b>Profitability</b></button>
+    <button class="tab" data-tab="products"><span>02</span><b>Products</b></button>
+    <button class="tab" data-tab="inventory"><span>03</span><b>Inventory</b></button>
+    <button class="tab" data-tab="customers"><span>04</span><b>Customers</b></button>
+    <button class="tab" data-tab="marketing"><span>05</span><b>Marketing</b></button>
+  </div>
+
+  <!-- PROFITABILITY -->
+  <section class="panel active" id="profit">
+    <div class="section-head">
+      <h1>Profitability</h1>
+      <div class="meta">30 DAY PERIOD<br>UPDATED SEP 07</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>REVENUE</span><b>$18,640</b></div>
+      <div class="kpi"><span>CONTRIBUTION PROFIT</span><b>$5,126</b></div>
+      <div class="kpi"><span>AVG ORDER</span><b>$46.28</b></div>
+      <div class="kpi"><span>BLENDED MARGIN</span><b>27.5%</b></div>
+      <div class="kpi"><span>REFUND RATE</span><b>3.8%</b></div>
+    </div>
+
+    <div class="grid">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Order Economics</b><small>EDIT CELLS DIRECTLY</small></div>
+          <div class="card-body">
+            <table data-table="orderEconomics">
+              <thead><tr><th>ORDER</th><th>REVENUE</th><th>COGS</th><th>SHIPPING</th><th>FEES</th><th>AD COST</th><th>CONTRIBUTION</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">#1842</td><td contenteditable="true">$72.00</td><td contenteditable="true">$24.10</td><td contenteditable="true">$6.40</td><td contenteditable="true">$2.39</td><td contenteditable="true">$13.20</td><td contenteditable="true">$25.91</td></tr>
+                <tr><td contenteditable="true">#1841</td><td contenteditable="true">$48.00</td><td contenteditable="true">$15.80</td><td contenteditable="true">$5.90</td><td contenteditable="true">$1.70</td><td contenteditable="true">$9.60</td><td contenteditable="true">$15.00</td></tr>
+                <tr><td contenteditable="true">#1840</td><td contenteditable="true">$39.00</td><td contenteditable="true">$14.60</td><td contenteditable="true">$7.80</td><td contenteditable="true">$1.44</td><td contenteditable="true">$11.10</td><td contenteditable="true">$4.06</td></tr>
+                <tr><td contenteditable="true">#1839</td><td contenteditable="true">$86.00</td><td contenteditable="true">$31.40</td><td contenteditable="true">$8.15</td><td contenteditable="true">$2.81</td><td contenteditable="true">$14.40</td><td contenteditable="true">$29.24</td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="orderEconomics">+ Add Order</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Monthly Cost Ledger</b><small>CURRENT PERIOD</small></div>
+          <div class="card-body">
+            <table data-table="costLedger">
+              <thead><tr><th>CATEGORY</th><th>VENDOR</th><th>AMOUNT</th><th>TYPE</th><th>DUE</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Packaging</td><td contenteditable="true">Packlane</td><td contenteditable="true">$475</td><td contenteditable="true">Variable</td><td contenteditable="true">Sep 14</td><td><span class="status">Paid</span></td></tr>
+                <tr><td contenteditable="true">Shopify</td><td contenteditable="true">Shopify</td><td contenteditable="true">$105</td><td contenteditable="true">Fixed</td><td contenteditable="true">Sep 18</td><td><span class="status warn">Upcoming</span></td></tr>
+                <tr><td contenteditable="true">Klaviyo</td><td contenteditable="true">Klaviyo</td><td contenteditable="true">$150</td><td contenteditable="true">Fixed</td><td contenteditable="true">Sep 21</td><td><span class="status warn">Upcoming</span></td></tr>
+                <tr><td contenteditable="true">Creator payout</td><td contenteditable="true">A. Lane</td><td contenteditable="true">$320</td><td contenteditable="true">Marketing</td><td contenteditable="true">Sep 25</td><td><span class="status warn">Upcoming</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="costLedger">+ Add Cost</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Margin Snapshot</b><small>BY COST AREA</small></div>
+          <div class="card-body mini-grid">
+            <div class="metric"><span>PRODUCT COST</span><b>34.2%</b><div class="bar"><i style="width:34%"></i></div></div>
+            <div class="metric"><span>SHIPPING</span><b>11.5%</b><div class="bar"><i style="width:12%"></i></div></div>
+            <div class="metric"><span>PAYMENT + PLATFORM</span><b>4.1%</b><div class="bar"><i style="width:4%"></i></div></div>
+            <div class="metric"><span>PAID ACQUISITION</span><b>22.7%</b><div class="bar"><i style="width:23%"></i></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Cash Commitments</b><small>NEXT 30 DAYS</small></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>ITEM</th><th>AMOUNT</th><th>DATE</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Glow Serum reorder</td><td contenteditable="true">$2,100</td><td contenteditable="true">Sep 10</td></tr>
+                <tr><td contenteditable="true">Barrier Cream reorder</td><td contenteditable="true">$1,260</td><td contenteditable="true">Sep 18</td></tr>
+                <tr><td contenteditable="true">Packaging run</td><td contenteditable="true">$940</td><td contenteditable="true">Sep 22</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Working Notes</b><small>SAVED IN BROWSER</small></div>
+          <div class="card-body note-list">
+            <div class="note"><input type="checkbox"><div contenteditable="true">Raise free-shipping threshold test from $50 to $55.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Review Mini Set packaging cost before next production run.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Check Meta spend cap after September week 2 results.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="panel" id="products">
+    <div class="section-head">
+      <h1>Products</h1>
+      <div class="meta">18 ACTIVE SKUS<br>5 CORE PRODUCTS</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>TOP REVENUE</span><b>Glow Serum</b></div>
+      <div class="kpi"><span>TOP MARGIN</span><b>Barrier Cream</b></div>
+      <div class="kpi"><span>FASTEST GROWTH</span><b>+31%</b></div>
+      <div class="kpi"><span>LOWEST MARGIN</span><b>Mini Set</b></div>
+      <div class="kpi"><span>ACTIVE SKUS</span><b>18</b></div>
+    </div>
+
+    <div class="grid">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>SKU Performance</b><small>EDIT CELLS DIRECTLY</small></div>
+          <div class="card-body">
+            <table data-table="skuTable">
+              <thead><tr><th>SKU</th><th>PRICE</th><th>UNIT COST</th><th>30D UNITS</th><th>REVENUE</th><th>MARGIN</th><th>90D REPEAT</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Glow Serum</td><td contenteditable="true">$42</td><td contenteditable="true">$12.80</td><td contenteditable="true">188</td><td contenteditable="true">$7,896</td><td contenteditable="true">69.5%</td><td contenteditable="true">37%</td><td><span class="status">Core</span></td></tr>
+                <tr><td contenteditable="true">Barrier Cream</td><td contenteditable="true">$36</td><td contenteditable="true">$8.90</td><td contenteditable="true">121</td><td contenteditable="true">$4,356</td><td contenteditable="true">75.3%</td><td contenteditable="true">32%</td><td><span class="status">Core</span></td></tr>
+                <tr><td contenteditable="true">Overnight Mask</td><td contenteditable="true">$38</td><td contenteditable="true">$11.40</td><td contenteditable="true">82</td><td contenteditable="true">$3,116</td><td contenteditable="true">70.0%</td><td contenteditable="true">22%</td><td><span class="status warn">Watch</span></td></tr>
+                <tr><td contenteditable="true">Mini Discovery Set</td><td contenteditable="true">$24</td><td contenteditable="true">$10.20</td><td contenteditable="true">64</td><td contenteditable="true">$1,536</td><td contenteditable="true">57.5%</td><td contenteditable="true">16%</td><td><span class="status bad">Review</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="skuTable">+ Add SKU</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Bundles + Offers</b><small>CURRENT SETUP</small></div>
+          <div class="card-body">
+            <table data-table="bundleTable">
+              <thead><tr><th>OFFER</th><th>PRICE</th><th>COGS</th><th>30D ORDERS</th><th>AOV LIFT</th><th>CONTRIBUTION</th><th>ACTIVE</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Glow + Barrier</td><td contenteditable="true">$72</td><td contenteditable="true">$21.70</td><td contenteditable="true">49</td><td contenteditable="true">+$21.40</td><td contenteditable="true">$33.70</td><td><input type="checkbox" checked></td></tr>
+                <tr><td contenteditable="true">Night Routine</td><td contenteditable="true">$74</td><td contenteditable="true">$24.20</td><td contenteditable="true">28</td><td contenteditable="true">+$18.30</td><td contenteditable="true">$30.80</td><td><input type="checkbox" checked></td></tr>
+                <tr><td contenteditable="true">Mini Set + Serum</td><td contenteditable="true">$59</td><td contenteditable="true">$23.00</td><td contenteditable="true">14</td><td contenteditable="true">+$12.10</td><td contenteditable="true">$20.50</td><td><input type="checkbox"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Product Queue</b><small>CHANGES / TESTS</small></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>ITEM</th><th>OWNER</th><th>DUE</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Barrier Cream photo refresh</td><td contenteditable="true">Maya</td><td contenteditable="true">Sep 12</td><td><span class="status warn">In progress</span></td></tr>
+                <tr><td contenteditable="true">Mini Set packaging quote</td><td contenteditable="true">Vendor</td><td contenteditable="true">Sep 09</td><td><span class="status warn">Waiting</span></td></tr>
+                <tr><td contenteditable="true">Overnight Mask FAQ update</td><td contenteditable="true">Maya</td><td contenteditable="true">Sep 11</td><td><span class="status">Ready</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><b>Product Notes</b><small>LIVE</small></div>
+          <div class="card-body note-list">
+            <div class="note"><input type="checkbox"><div contenteditable="true">Barrier Cream should stay paired with Glow Serum on PDP and cart upsell.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Mini Set needs lower packaging cost before another discount test.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Overnight Mask demand spike is still active; hold ad budget until next stock update.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVENTORY -->
+  <section class="panel" id="inventory">
+    <div class="section-head">
+      <h1>Inventory</h1>
+      <div class="meta">47 DAYS ON HAND<br>$11,820 STOCK VALUE</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>STOCK VALUE</span><b>$11,820</b></div>
+      <div class="kpi"><span>DAYS ON HAND</span><b>47</b></div>
+      <div class="kpi"><span>REORDER NOW</span><b>1 SKU</b></div>
+      <div class="kpi"><span>AT RISK</span><b>3 SKUs</b></div>
+      <div class="kpi"><span>SLOW STOCK</span><b>$2,460</b></div>
+    </div>
+
+    <div class="grid">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Stock Levels</b><small>CURRENT</small></div>
+          <div class="card-body">
+            <table data-table="stockTable">
+              <thead><tr><th>SKU</th><th>ON HAND</th><th>30D VELOCITY</th><th>DAYS LEFT</th><th>REORDER POINT</th><th>ON ORDER</th><th>ETA</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Glow Serum</td><td contenteditable="true">126</td><td contenteditable="true">188</td><td contenteditable="true">20</td><td contenteditable="true">140</td><td contenteditable="true">240</td><td contenteditable="true">Sep 29</td><td><span class="status bad">Reorder</span></td></tr>
+                <tr><td contenteditable="true">Barrier Cream</td><td contenteditable="true">154</td><td contenteditable="true">121</td><td contenteditable="true">38</td><td contenteditable="true">120</td><td contenteditable="true">180</td><td contenteditable="true">Oct 02</td><td><span class="status warn">Watch</span></td></tr>
+                <tr><td contenteditable="true">Overnight Mask</td><td contenteditable="true">109</td><td contenteditable="true">82</td><td contenteditable="true">40</td><td contenteditable="true">95</td><td contenteditable="true">0</td><td contenteditable="true">—</td><td><span class="status warn">Watch</span></td></tr>
+                <tr><td contenteditable="true">Mini Discovery Set</td><td contenteditable="true">244</td><td contenteditable="true">64</td><td contenteditable="true">114</td><td contenteditable="true">70</td><td contenteditable="true">0</td><td contenteditable="true">—</td><td><span class="status">Healthy</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="stockTable">+ Add SKU</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Purchase Orders</b><small>OPEN + RECENT</small></div>
+          <div class="card-body">
+            <table data-table="poTable">
+              <thead><tr><th>PO</th><th>SUPPLIER</th><th>ITEMS</th><th>TOTAL</th><th>ORDERED</th><th>ETA</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">PO-091</td><td contenteditable="true">Nova Labs</td><td contenteditable="true">Glow Serum x240</td><td contenteditable="true">$2,100</td><td contenteditable="true">Sep 06</td><td contenteditable="true">Sep 29</td><td><span class="status warn">In production</span></td></tr>
+                <tr><td contenteditable="true">PO-090</td><td contenteditable="true">PureForm</td><td contenteditable="true">Barrier Cream x180</td><td contenteditable="true">$1,260</td><td contenteditable="true">Sep 02</td><td contenteditable="true">Oct 02</td><td><span class="status warn">Open</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="poTable">+ Add PO</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Suppliers</b><small>REFERENCE</small></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>SUPPLIER</th><th>LEAD TIME</th><th>MOQ</th><th>TERMS</th><th>CONTACT</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Nova Labs</td><td contenteditable="true">23–28d</td><td contenteditable="true">200</td><td contenteditable="true">50% / 50%</td><td contenteditable="true">lena@novalabs.co</td></tr>
+                <tr><td contenteditable="true">PureForm</td><td contenteditable="true">26–33d</td><td contenteditable="true">150</td><td contenteditable="true">Net 15</td><td contenteditable="true">orders@pureform.co</td></tr>
+                <tr><td contenteditable="true">Packlane</td><td contenteditable="true">12–16d</td><td contenteditable="true">500</td><td contenteditable="true">Prepaid</td><td contenteditable="true">maya acct</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><b>Inventory Notes</b><small>LIVE</small></div>
+          <div class="card-body note-list">
+            <div class="note"><input type="checkbox"><div contenteditable="true">Glow Serum PO confirmed. Production slot locked.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Do not reorder Mini Set until on-hand drops below 120.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Request secondary supplier quote for Barrier Cream.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOMERS -->
+  <section class="panel" id="customers">
+    <div class="section-head">
+      <h1>Customers</h1>
+      <div class="meta">318 NEW CUSTOMERS<br>41% RETURNING</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>NEW CUSTOMERS</span><b>318</b></div>
+      <div class="kpi"><span>RETURNING SHARE</span><b>41%</b></div>
+      <div class="kpi"><span>90D REPEAT</span><b>29%</b></div>
+      <div class="kpi"><span>AOV</span><b>$46.28</b></div>
+      <div class="kpi"><span>EMAIL SHARE</span><b>24%</b></div>
+    </div>
+
+    <div class="grid">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Customer Cohorts</b><small>90 DAY VIEW</small></div>
+          <div class="card-body">
+            <table data-table="cohortTable">
+              <thead><tr><th>COHORT</th><th>SOURCE</th><th>CUSTOMERS</th><th>1ST AOV</th><th>90D REPEAT</th><th>90D CONTRIB.</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Jul 2026</td><td contenteditable="true">Google</td><td contenteditable="true">76</td><td contenteditable="true">$48.90</td><td contenteditable="true">34%</td><td contenteditable="true">$35.10</td><td><span class="status">Strong</span></td></tr>
+                <tr><td contenteditable="true">Jul 2026</td><td contenteditable="true">Meta</td><td contenteditable="true">104</td><td contenteditable="true">$45.20</td><td contenteditable="true">27%</td><td contenteditable="true">$27.80</td><td><span class="status warn">Average</span></td></tr>
+                <tr><td contenteditable="true">Jun 2026</td><td contenteditable="true">Email</td><td contenteditable="true">41</td><td contenteditable="true">$52.70</td><td contenteditable="true">41%</td><td contenteditable="true">$44.30</td><td><span class="status">Strong</span></td></tr>
+                <tr><td contenteditable="true">Jun 2026</td><td contenteditable="true">Creators</td><td contenteditable="true">38</td><td contenteditable="true">$43.80</td><td contenteditable="true">25%</td><td contenteditable="true">$24.20</td><td><span class="status warn">Average</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="cohortTable">+ Add Cohort</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Segments</b><small>ACTIVE LISTS</small></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>SEGMENT</th><th>SIZE</th><th>LAST ORDER</th><th>AOV</th><th>FLOW / CAMPAIGN</th><th>ACTIVE</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Glow Serum repeat buyers</td><td contenteditable="true">412</td><td contenteditable="true">0–60d</td><td contenteditable="true">$51.20</td><td contenteditable="true">Replenishment 35d</td><td><input type="checkbox" checked></td></tr>
+                <tr><td contenteditable="true">High AOV customers</td><td contenteditable="true">186</td><td contenteditable="true">0–90d</td><td contenteditable="true">$82.40</td><td contenteditable="true">VIP launch</td><td><input type="checkbox" checked></td></tr>
+                <tr><td contenteditable="true">Lapsed 120d+</td><td contenteditable="true">534</td><td contenteditable="true">120d+</td><td contenteditable="true">$39.60</td><td contenteditable="true">Winback</td><td><input type="checkbox" checked></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Customer Issues</b><small>OPEN CASES</small></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>ORDER</th><th>ISSUE</th><th>PRODUCT</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">#1826</td><td contenteditable="true">Damaged jar</td><td contenteditable="true">Overnight Mask</td><td><span class="status warn">Replacement sent</span></td></tr>
+                <tr><td contenteditable="true">#1819</td><td contenteditable="true">Late delivery</td><td contenteditable="true">Glow Serum</td><td><span class="status">Closed</span></td></tr>
+                <tr><td contenteditable="true">#1807</td><td contenteditable="true">Skin reaction</td><td contenteditable="true">Mini Set</td><td><span class="status warn">Review</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><b>Customer Notes</b><small>LIVE</small></div>
+          <div class="card-body note-list">
+            <div class="note"><input type="checkbox"><div contenteditable="true">Move Glow replenishment email from day 42 to day 35.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Create segment for 2+ purchases and $100+ lifetime spend.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Review Mini Set refund reasons before next promotion.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKETING -->
+  <section class="panel" id="marketing">
+    <div class="section-head">
+      <h1>Marketing</h1>
+      <div class="meta">$4,980 SPEND<br>30 DAY PERIOD</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>SPEND</span><b>$4,980</b></div>
+      <div class="kpi"><span>BLENDED CAC</span><b>$15.66</b></div>
+      <div class="kpi"><span>GOOGLE CAC</span><b>$13.20</b></div>
+      <div class="kpi"><span>META CAC</span><b>$17.40</b></div>
+      <div class="kpi"><span>EMAIL REVENUE SHARE</span><b>24%</b></div>
+    </div>
+
+    <div class="grid">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Channel Performance</b><small>30 DAY</small></div>
+          <div class="card-body">
+            <table data-table="channelTable">
+              <thead><tr><th>CHANNEL</th><th>SPEND</th><th>NEW CUSTOMERS</th><th>CAC</th><th>CONTRIB ROAS</th><th>90D REPEAT</th><th>BUDGET STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Google</td><td contenteditable="true">$1,540</td><td contenteditable="true">117</td><td contenteditable="true">$13.20</td><td contenteditable="true">2.7x</td><td contenteditable="true">34%</td><td><span class="status">Increase</span></td></tr>
+                <tr><td contenteditable="true">Meta</td><td contenteditable="true">$2,480</td><td contenteditable="true">143</td><td contenteditable="true">$17.40</td><td contenteditable="true">1.9x</td><td contenteditable="true">27%</td><td><span class="status warn">Hold</span></td></tr>
+                <tr><td contenteditable="true">Creators</td><td contenteditable="true">$960</td><td contenteditable="true">46</td><td contenteditable="true">$21.10</td><td contenteditable="true">1.5x</td><td contenteditable="true">25%</td><td><span class="status warn">Test</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="channelTable">+ Add Channel</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Campaigns</b><small>ACTIVE + RECENT</small></div>
+          <div class="card-body">
+            <table data-table="campaignTable">
+              <thead><tr><th>CAMPAIGN</th><th>CHANNEL</th><th>PRODUCT</th><th>SPEND</th><th>CAC</th><th>ROAS</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">Glow Search</td><td contenteditable="true">Google</td><td contenteditable="true">Glow Serum</td><td contenteditable="true">$820</td><td contenteditable="true">$11.90</td><td contenteditable="true">3.1x</td><td><span class="status">Scale</span></td></tr>
+                <tr><td contenteditable="true">Routine UGC 08</td><td contenteditable="true">Meta</td><td contenteditable="true">Glow + Barrier</td><td contenteditable="true">$1,120</td><td contenteditable="true">$16.80</td><td contenteditable="true">2.0x</td><td><span class="status">Live</span></td></tr>
+                <tr><td contenteditable="true">Mini Set Prospecting</td><td contenteditable="true">Meta</td><td contenteditable="true">Mini Set</td><td contenteditable="true">$460</td><td contenteditable="true">$24.60</td><td contenteditable="true">1.1x</td><td><span class="status bad">Pause</span></td></tr>
+              </tbody>
+            </table>
+            <div class="footer-tools"><button class="btn" data-add-row="campaignTable">+ Add Campaign</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-head"><b>Creative Library</b><small>ACTIVE TESTS</small></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>CREATIVE</th><th>ANGLE</th><th>FORMAT</th><th>CTR</th><th>CVR</th><th>STATUS</th></tr></thead>
+              <tbody>
+                <tr><td contenteditable="true">UGC-31</td><td contenteditable="true">Dry skin routine</td><td contenteditable="true">UGC video</td><td contenteditable="true">2.6%</td><td contenteditable="true">4.8%</td><td><span class="status">Winner</span></td></tr>
+                <tr><td contenteditable="true">STATIC-18</td><td contenteditable="true">Before / after</td><td contenteditable="true">Static</td><td contenteditable="true">1.4%</td><td contenteditable="true">3.1%</td><td><span class="status warn">Testing</span></td></tr>
+                <tr><td contenteditable="true">FOUNDER-07</td><td contenteditable="true">Routine explanation</td><td contenteditable="true">Founder video</td><td contenteditable="true">1.9%</td><td contenteditable="true">4.0%</td><td><span class="status">Live</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><b>Marketing Queue</b><small>THIS WEEK</small></div>
+          <div class="card-body note-list">
+            <div class="note"><input type="checkbox"><div contenteditable="true">Increase Glow Search budget +15%.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Pause Mini Set prospecting after current attribution window closes.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Launch 3 new UGC hooks for Barrier Cream.</div></div>
+            <div class="note"><input type="checkbox"><div contenteditable="true">Send creator brief to A. Lane and J. Moore.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.panel');
+
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    panels.forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    localStorage.setItem('maya-active-tab', tab.dataset.tab);
+  });
+});
+
+const savedTab = localStorage.getItem('maya-active-tab');
+if(savedTab && document.getElementById(savedTab)){
+  document.querySelector(`.tab[data-tab="${savedTab}"]`).click();
+}
+
+document.querySelectorAll('[data-add-row]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const table = document.querySelector(`table[data-table="${btn.dataset.addRow}"]`);
+    if(!table) return;
+    const cols = table.querySelectorAll('thead th').length;
+    const tr = document.createElement('tr');
+    for(let i=0;i<cols;i++){
+      const td = document.createElement('td');
+      td.contentEditable = 'true';
+      td.textContent = i===0 ? 'New' : '';
+      tr.appendChild(td);
+    }
+    table.querySelector('tbody').appendChild(tr);
+    saveState();
+  });
+});
+
+function saveState(){
+  const data = {};
+  document.querySelectorAll('[contenteditable="true"]').forEach((el,i)=>data['e'+i]=el.innerHTML);
+  document.querySelectorAll('input[type="checkbox"]').forEach((el,i)=>data['c'+i]=el.checked);
+  localStorage.setItem('maya-operation-state', JSON.stringify(data));
+}
+
+function loadState(){
+  const raw = localStorage.getItem('maya-operation-state');
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    document.querySelectorAll('[contenteditable="true"]').forEach((el,i)=>{
+      if(data['e'+i] !== undefined) el.innerHTML = data['e'+i];
+    });
+    document.querySelectorAll('input[type="checkbox"]').forEach((el,i)=>{
+      if(data['c'+i] !== undefined) el.checked = data['c'+i];
+    });
+  }catch(e){}
+}
+loadState();
+
+document.addEventListener('input', e=>{
+  if(e.target.matches('[contenteditable="true"]')) saveState();
+});
+document.addEventListener('change', e=>{
+  if(e.target.matches('input[type="checkbox"]')) saveState();
+});
+
+const saveBtn = document.createElement('button');
+saveBtn.className='btn primary';
+saveBtn.textContent='Save';
+saveBtn.style.position='fixed';
+saveBtn.style.right='18px';
+saveBtn.style.bottom='18px';
+saveBtn.style.zIndex='99';
+saveBtn.addEventListener('click',()=>{
+  saveState();
+  const old=saveBtn.textContent;
+  saveBtn.textContent='Saved';
+  setTimeout(()=>saveBtn.textContent=old,900);
+});
+document.body.appendChild(saveBtn);
+</script>
+</body>
+</html>
