@@ -215,7 +215,132 @@ nav a{text-decoration:none}
   line-height:1.55;
 }
 .node .on{color:#eab0cf}
+/* ---------- hero pricing preview ---------- */
+.hero-pricing{
+  align-self:start;
+  margin:158px 12px 0 28px;
+  position:relative;
+  border:1px solid rgba(239,131,194,.58);
+  background:linear-gradient(
+    145deg,
+    rgba(10,29,68,.88),
+    rgba(14,25,61,.92)
+  );
+  box-shadow:
+    0 20px 55px rgba(2,8,28,.34),
+    inset 0 0 35px rgba(75,139,215,.05);
+  padding:20px;
+  backdrop-filter:blur(8px);
+}
 
+.hero-pricing:before{
+  content:"";
+  position:absolute;
+  top:-1px;
+  right:-1px;
+  width:26px;
+  height:26px;
+  background:var(--pink);
+  clip-path:polygon(100% 0,100% 100%,0 0);
+  opacity:.82;
+}
+
+.pricing-label{
+  color:var(--pink);
+  font-size:11px;
+  letter-spacing:.09em;
+  margin-bottom:8px;
+}
+
+.hero-pricing h2{
+  margin:0 0 18px;
+  font-size:19px;
+  line-height:1.25;
+  font-weight:400;
+}
+
+.pricing-options{
+  display:grid;
+  gap:9px;
+}
+
+.pricing-option{
+  display:grid;
+  grid-template-columns:74px 1fr;
+  gap:14px;
+  align-items:center;
+  min-height:84px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.20);
+  background:rgba(5,17,43,.58);
+  text-decoration:none;
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    background .18s ease;
+}
+
+.pricing-option:hover{
+  transform:translateX(-4px);
+  border-color:var(--pink);
+  background:rgba(25,35,72,.82);
+}
+
+.pricing-option.featured{
+  border-color:rgba(239,131,194,.55);
+  background:linear-gradient(
+    90deg,
+    rgba(102,54,132,.35),
+    rgba(8,24,57,.70)
+  );
+}
+
+.pricing-amount{
+  color:var(--pink);
+  font-size:25px;
+  line-height:1;
+}
+
+.pricing-copy strong{
+  display:block;
+  margin-bottom:5px;
+  color:var(--text);
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:.04em;
+}
+
+.pricing-copy span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.4;
+}
+
+.pricing-terms{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px 12px;
+  margin-top:15px;
+  color:#eee8f1;
+  font-size:10px;
+  letter-spacing:.05em;
+}
+
+.pricing-terms span:not(:last-child):after{
+  content:" /";
+  color:var(--pink);
+  margin-left:10px;
+}
+
+.pricing-note{
+  margin:12px 0 0;
+  color:#aaa7b6;
+  font-size:10px;
+  line-height:1.45;
+  text-align:center;
+}
 /* ---------- sections ---------- */
 .section{
   position:relative;
@@ -342,6 +467,10 @@ footer{
   .crumb{margin-bottom:72px}
   .hero h1{font-size:52px}
   .node{right:12px}
+  .hero-pricing{
+  margin:0 8px 50px;
+  max-width:540px;
+}
   .cards{grid-template-columns:repeat(2,1fr)}
   .card{min-height:245px}
 }
@@ -378,6 +507,25 @@ footer{
     max-width:340px;
   }
   .actions{width:100%;max-width:340px}
+  .hero-pricing{
+  margin:12px 8px 34px;
+  padding:16px;
+}
+
+.pricing-option{
+  grid-template-columns:68px 1fr;
+  padding:13px 12px;
+}
+
+.pricing-terms{
+  flex-direction:column;
+  align-items:center;
+}
+
+.pricing-terms span:not(:last-child):after{
+  content:"";
+  margin:0;
+}
   .node{
     position:relative;
     top:auto;
@@ -450,7 +598,67 @@ footer{
         <a class="btn" href="examples.html">SEE EXAMPLES</a>
       </div>
     </div>
-    <div class="node">NODE 001<br><span class="on">ONLINE</span><br><br><span class="dot">●</span></div>
+    <aside class="hero-pricing" aria-labelledby="pricing-preview-title">
+  <div class="pricing-label">PROJECT LEVELS / 001</div>
+
+  <h2 id="pricing-preview-title">
+    SMALL PROJECTS.<br>
+    FIXED PRICES.
+  </h2>
+
+  <div class="pricing-options">
+
+    <a class="pricing-option" href="intake.html">
+      <div class="pricing-amount">$50</div>
+
+      <div class="pricing-copy">
+        <strong>CORE</strong>
+        <span>
+          One clearly defined task, completed from start to finish.
+        </span>
+      </div>
+    </a>
+
+    <a class="pricing-option featured" href="intake.html">
+      <div class="pricing-amount">$100</div>
+
+      <div class="pricing-copy">
+        <strong>SYSTEM</strong>
+        <span>
+          More depth, moving parts, or connected information.
+        </span>
+      </div>
+    </a>
+
+    <a class="pricing-option" href="intake.html">
+      <div class="pricing-amount">$150</div>
+
+      <div class="pricing-copy">
+        <strong>COMMAND</strong>
+        <span>
+          A more involved solution with greater structure and customization.
+        </span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="pricing-terms">
+    <span>ONE-TIME</span>
+    <span>NO RETAINER</span>
+    <span>NO LONG COMMITMENT</span>
+  </div>
+
+  <p class="pricing-note">
+    Every project is delivered as a finished, usable solution.
+  </p>
+</aside>
+
+<div class="node">
+  NODE 001<br>
+  <span class="on">ONLINE</span><br><br>
+  <span class="dot">●</span>
+</div>
   </section>
 
 <section class="section" id="examples">
