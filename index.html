@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MONOS</title>
+
+<style>
+:root{
+  --bg:#07152d;
+  --bg2:#0b1d3d;
+  --panel:rgba(6,17,39,.72);
+  --panel2:rgba(8,20,44,.90);
+  --line:rgba(228,134,199,.46);
+  --line-soft:rgba(255,255,255,.20);
+  --text:#f4f3f7;
+  --muted:#c7c3cf;
+  --pink:#ef83c2;
+  --pink2:#f5a2d1;
+  --purple:#a78bd2;
+  --cyan:#39a8dd;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:#07152d;
+  color:var(--text);
+  font-family:"Courier New",Courier,monospace;
+  overflow-x:hidden;
+}
+
+button,
+a{
+  font:inherit;
+}
+
+a{
+  color:inherit;
+}
+
+/* --------------------------------
+   BACKGROUND ENVIRONMENT
+-------------------------------- */
+
+.scene{
+  position:fixed;
+  inset:0;
+  z-index:-5;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 82% 8%,
+      rgba(245,171,221,.42),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(244,117,196,.22),
+      transparent 20%
+    ),
+    linear-gradient(
+      180deg,
+      #0b1830 0%,
+      #10284d 47%,
+      #0a1d3c 100%
+    );
+}
+
+.scene:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4,11,27,.65),
+      transparent 24%,
+      transparent 74%,
+      rgba(6,13,31,.18)
+    );
+}
+
+.city{
+  position:absolute;
+  bottom:0;
+  width:32%;
+  height:86%;
+}
+
+.city.left{
+  left:-5%;
+}
+
+.city.right{
+  right:-5%;
+  transform:scaleX(-1);
+}
+
+.tower{
+  position:absolute;
+  bottom:0;
+  left:var(--x);
+  width:var(--w);
+  height:var(--h);
+  border:1px solid rgba(120,148,208,.14);
+  border-radius:45% 45% 7% 7% / 6% 6% 2% 2%;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5,14,33,.98),
+      rgba(24,44,83,.94) 48%,
+      rgba(69,47,102,.72) 74%,
+      rgba(8,20,43,.98)
+    );
+  box-shadow:
+    inset 14px 0 26px rgba(63,166,220,.06),
+    inset -12px 0 30px rgba(239,111,191,.08),
+    0 0 26px rgba(47,128,180,.08);
+}
+
+.tower:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:-78px;
+  transform:translateX(-50%);
+  width:3px;
+  height:86px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(249,180,222,.95),
+      rgba(117,82,177,.48)
+    );
+  box-shadow:
+    0 0 16px rgba(245,130,199,.42);
+}
+
+.tower:after{
+  content:"";
+  position:absolute;
+  left:-18%;
+  width:136%;
+  height:22px;
+  bottom:var(--ring);
+  border-radius:50%;
+  border:1px solid rgba(111,150,208,.18);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(43,60,104,.74),
+      rgba(12,25,51,.92)
+    );
+  box-shadow:
+    0 -1px 0 rgba(246,115,194,.15),
+    0 0 18px rgba(56,132,184,.10);
+}
+
+.t1{
+  --x:0%;
+  --w:27%;
+  --h:56%;
+  --ring:24%;
+}
+
+.t2{
+  --x:20%;
+  --w:25%;
+  --h:75%;
+  --ring:38%;
+}
+
+.t3{
+  --x:42%;
+  --w:19%;
+  --h:63%;
+  --ring:52%;
+}
+
+.t4{
+  --x:59%;
+  --w:21%;
+  --h:48%;
+  --ring:29%;
+}
+
+.t5{
+  --x:77%;
+  --w:18%;
+  --h:70%;
+  --ring:44%;
+}
+
+.water{
+  position:absolute;
+  left:17%;
+  right:0;
+  bottom:0;
+  height:42%;
+  clip-path:
+    polygon(
+      16% 0,
+      100% 0,
+      100% 100%,
+      0 100%
+    );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(38,128,182,.18),
+      rgba(7,21,45,.78)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 12%,
+      rgba(47,167,219,.08) 12.3%,
+      transparent 13% 25%,
+      rgba(237,91,182,.06) 25.4%,
+      transparent 26%
+    );
+  border-top:
+    1px solid rgba(76,174,222,.15);
+}
+
+.bridge{
+  position:absolute;
+  left:20%;
+  right:-6%;
+  bottom:36%;
+  height:6%;
+  transform:
+    perspective(900px)
+    rotateX(65deg);
+  transform-origin:bottom;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(21,45,79,.18),
+      rgba(6,18,40,.58)
+    );
+  border-top:
+    1px solid rgba(68,176,224,.18);
+  border-bottom:
+    1px solid rgba(244,118,194,.13);
+}
+
+.haze{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(
+      ellipse at 57% 45%,
+      rgba(250,152,214,.28),
+      transparent 28%
+    ),
+    radial-gradient(
+      ellipse at 26% 75%,
+      rgba(236,89,179,.18),
+      transparent 26%
+    );
+  filter:blur(18px);
+}
+
+/* --------------------------------
+   PAGE
+-------------------------------- */
+
+.page{
+  width:min(1120px,100%);
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+  padding:0 34px 30px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4,13,31,.20),
+      transparent 28%,
+      transparent 72%,
+      rgba(6,14,30,.08)
+    );
+}
+
+.page:before,
+.page:after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:1px;
+  background:rgba(255,255,255,.14);
+  pointer-events:none;
+}
+
+.page:before{
+  left:14px;
+}
+
+.page:after{
+  right:14px;
+}
+
+/* --------------------------------
+   HEADER
+-------------------------------- */
+
+header{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:
+    1px solid rgba(255,255,255,.26);
+  position:relative;
+  z-index:3;
+}
+
+.brand{
+  font-weight:700;
+  letter-spacing:.02em;
+  font-size:16px;
+}
+
+.brand .dot{
+  color:var(--pink);
+  margin-right:9px;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:34px;
+  font-size:14px;
+}
+
+nav a{
+  text-decoration:none;
+}
+
+.nav-cta{
+  border:
+    1px solid rgba(239,122,189,.48);
+  padding:12px 24px;
+  background:
+    rgba(239,122,189,.06);
+}
+
+.nav-cta:hover{
+  background:
+    rgba(239,122,189,.14);
+}
+
+/* --------------------------------
+   HERO
+-------------------------------- */
+
+.hero{
+  position:relative;
+  z-index:2;
+
+  min-height:700px;
+
+  display:grid;
+  grid-template-columns:
+    minmax(0,1.08fr)
+    minmax(380px,.92fr);
+
+  gap:64px;
+
+  align-items:center;
+
+  padding:
+    72px 18px 82px;
+}
+
+.hero-left{
+  max-width:600px;
+}
+
+.crumb{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  color:#fff;
+
+  font-size:12px;
+  letter-spacing:.06em;
+
+  margin-bottom:36px;
+}
+
+.crumb .dot{
+  color:var(--pink);
+}
+
+.hero-kicker{
+  color:var(--pink);
+  font-size:12px;
+  letter-spacing:.14em;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  margin:0;
+
+  max-width:620px;
+
+  font-size:64px;
+  line-height:.98;
+
+  font-weight:400;
+
+  letter-spacing:-.025em;
+}
+
+.hero h1 span{
+  color:var(--pink);
+}
+
+.hero-divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  margin:
+    30px 0 28px;
+}
+
+.hero-divider:before{
+  content:"";
+  width:58px;
+  height:2px;
+  background:var(--pink);
+}
+
+.hero-divider:after{
+  content:"";
+  width:7px;
+  height:7px;
+  border:
+    1px solid var(--pink);
+  transform:rotate(45deg);
+}
+
+.hero-copy{
+  max-width:525px;
+
+  margin:0;
+
+  color:#f0ebf3;
+
+  font-size:16px;
+  line-height:1.7;
+
+  text-shadow:
+    0 1px 12px rgba(0,0,0,.22);
+}
+
+.hero-copy + .hero-copy{
+  margin-top:12px;
+}
+
+.hero-actions{
+  display:flex;
+  align-items:center;
+  gap:18px;
+
+  margin-top:32px;
+}
+
+.primary-cta{
+  min-width:270px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:17px 24px;
+
+  background:var(--pink);
+  color:#101426;
+
+  border:
+    1px solid var(--pink);
+
+  text-decoration:none;
+
+  font-weight:700;
+
+  box-shadow:
+    0 12px 34px rgba(239,131,194,.18);
+
+  transition:
+    transform .18s ease,
+    filter .18s ease;
+}
+
+.primary-cta:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.04);
+}
+
+/* --------------------------------
+   OFFER PANEL
+-------------------------------- */
+
+.website-offer{
+  position:relative;
+
+  border:
+    1px solid rgba(239,131,194,.68);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(7,21,49,.92),
+      rgba(15,28,67,.92)
+    );
+
+  box-shadow:
+    0 28px 70px rgba(2,8,28,.34),
+    inset 0 0 42px rgba(75,139,215,.05);
+
+  backdrop-filter:blur(8px);
+
+  padding:30px;
+}
+
+.website-offer:before{
+  content:"";
+
+  position:absolute;
+
+  top:-1px;
+  right:-1px;
+
+  width:32px;
+  height:32px;
+
+  background:var(--pink);
+
+  clip-path:
+    polygon(
+      100% 0,
+      100% 100%,
+      0 0
+    );
+
+  opacity:.88;
+}
+
+.offer-topline{
+  color:var(--pink);
+
+  font-size:11px;
+  letter-spacing:.12em;
+
+  margin-bottom:14px;
+}
+
+.offer-heading{
+  margin:0;
+
+  font-size:27px;
+  line-height:1.15;
+
+  font-weight:400;
+}
+
+.offer-sub{
+  margin:
+    12px 0 26px;
+
+  color:#c9c4d0;
+
+  font-size:13px;
+  line-height:1.55;
+}
+
+.offer-price{
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+
+  padding:
+    22px 0 24px;
+
+  border-top:
+    1px solid rgba(255,255,255,.16);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.16);
+}
+
+.offer-price strong{
+  color:var(--pink);
+
+  font-size:42px;
+  line-height:1;
+
+  font-weight:400;
+}
+
+.offer-price span{
+  padding-bottom:5px;
+
+  color:#bcb6c6;
+
+  font-size:11px;
+}
+
+.offer-list{
+  display:grid;
+
+  margin-top:20px;
+}
+
+.offer-row{
+  display:grid;
+
+  grid-template-columns:
+    28px 1fr;
+
+  gap:12px;
+
+  padding:
+    15px 0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.12);
+}
+
+.offer-row:last-child{
+  border-bottom:0;
+}
+
+.offer-number{
+  color:var(--pink);
+  font-size:11px;
+  padding-top:2px;
+}
+
+.offer-copy strong{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:13px;
+  font-weight:400;
+}
+
+.offer-copy span{
+  color:#bfb9c8;
+
+  font-size:11px;
+  line-height:1.5;
+}
+
+.offer-footer{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+
+  margin-top:22px;
+  padding-top:18px;
+
+  border-top:
+    1px solid rgba(239,131,194,.25);
+
+  color:#eee9f0;
+
+  font-size:10px;
+  letter-spacing:.05em;
+}
+
+.offer-footer span{
+  white-space:nowrap;
+}
+
+/* --------------------------------
+   SECTIONS
+-------------------------------- */
+
+.section{
+  position:relative;
+  z-index:2;
+
+  padding:
+    34px 18px 28px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  font-size:13px;
+
+  margin-bottom:18px;
+}
+
+.section-title .dot{
+  color:var(--pink);
+}
+
+.section-title:after{
+  content:"";
+
+  height:1px;
+  flex:1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(237,132,194,.55),
+      rgba(255,255,255,.18)
+    );
+}
+
+/* --------------------------------
+   WEBSITE NEEDS CARDS
+-------------------------------- */
+
+.cards{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:14px;
+}
+
+.card{
+  min-height:278px;
+
+  border:
+    1px solid var(--line);
+
+  background:
+    rgba(6,16,37,.78);
+
+  padding:
+    32px 26px 22px;
+
+  backdrop-filter:blur(6px);
+
+  text-decoration:none;
+
+  transition:.18s ease;
+}
+
+.card:hover{
+  transform:
+    translateY(-3px);
+
+  background:
+    rgba(16,27,54,.88);
+
+  box-shadow:
+    0 0 26px rgba(239,123,189,.09);
+}
+
+.card-icon{
+  font-size:34px;
+
+  color:var(--pink);
+
+  margin-bottom:18px;
+}
+
+.card:nth-child(2) .card-icon{
+  color:#aa8bd1;
+}
+
+.card:nth-child(3) .card-icon{
+  color:#ef7abd;
+}
+
+.card:nth-child(4) .card-icon{
+  color:#b18bd0;
+}
+
+.card h3{
+  font-size:16px;
+  font-weight:400;
+
+  margin:
+    0 0 14px;
+}
+
+.card p{
+  color:#d5d0dd;
+
+  font-size:13px;
+  line-height:1.55;
+
+  margin:
+    0 0 18px;
+}
+
+.arrow{
+  color:var(--pink);
+  font-size:22px;
+}
+
+/* --------------------------------
+   HOW IT WORKS
+-------------------------------- */
+
+.how-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  margin-top:28px;
+}
+
+.step{
+  min-height:170px;
+
+  padding:
+    0 30px 18px 12px;
+}
+
+.step + .step{
+  border-left:
+    1px solid rgba(255,255,255,.24);
+
+  padding-left:36px;
+}
+
+.step-num{
+  font-size:28px;
+
+  color:var(--pink);
+
+  margin-bottom:18px;
+}
+
+.step-num span{
+  color:#868098;
+}
+
+.step h3{
+  font-size:16px;
+  font-weight:400;
+
+  margin:
+    0 0 10px;
+}
+
+.step p{
+  margin:0;
+
+  color:#d5d0dd;
+
+  font-size:13px;
+  line-height:1.55;
+}
+
+/* --------------------------------
+   FOOTER
+-------------------------------- */
+
+footer{
+  position:relative;
+  z-index:2;
+
+  border:
+    1px solid rgba(255,255,255,.28);
+
+  margin:
+    24px 0 0;
+
+  padding:20px;
+
+  display:flex;
+  justify-content:space-between;
+
+  gap:20px;
+
+  color:#aaa7b6;
+
+  font-size:13px;
+  line-height:1.55;
+}
+
+.footer-right{
+  text-align:right;
+}
+
+.footer-cta{
+  color:var(--pink);
+  text-decoration:none;
+}
+
+.footer-links{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.footer-links a{
+  color:#aaa7b6;
+  text-decoration:none;
+}
+
+.footer-links a:hover{
+  color:var(--pink);
+}
+
+/* --------------------------------
+   TABLET
+-------------------------------- */
+
+@media(max-width:900px){
+
+  .page{
+    padding:
+      0 20px 24px;
+  }
+
+  nav{
+    gap:20px;
+    font-size:12px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+
+    gap:46px;
+
+    padding:
+      54px 10px 64px;
+  }
+
+  .hero-left{
+    max-width:650px;
+  }
+
+  .hero h1{
+    font-size:58px;
+  }
+
+  .website-offer{
+    max-width:620px;
+  }
+
+  .cards{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+}
+
+/* --------------------------------
+   MOBILE
+-------------------------------- */
+
+@media(max-width:600px){
+
+  .page{
+    width:100%;
+
+    padding:
+      0 12px 18px;
+  }
+
+  .page:before{
+    left:4px;
+  }
+
+  .page:after{
+    right:4px;
+  }
+
+  header{
+    padding:
+      0 4px;
+
+    min-height:60px;
+  }
+
+  .brand{
+    font-size:14px;
+  }
+
+  nav a:not(.nav-cta){
+    display:none;
+  }
+
+  .nav-cta{
+    padding:
+      9px 12px;
+
+    font-size:11px;
+  }
+
+  .hero{
+    min-height:auto;
+
+    display:block;
+
+    padding:
+      34px 8px 48px;
+  }
+
+  .crumb{
+    margin-bottom:32px;
+  }
+
+  .hero-kicker{
+    font-size:11px;
+  }
+
+  .hero h1{
+    font-size:43px;
+    line-height:1.02;
+
+    max-width:360px;
+  }
+
+  .hero-divider{
+    margin:
+      24px 0 22px;
+  }
+
+  .hero-copy{
+    font-size:14px;
+
+    max-width:355px;
+  }
+
+  .hero-actions{
+    display:block;
+
+    margin-top:26px;
+  }
+
+  .primary-cta{
+    width:100%;
+
+    min-width:0;
+
+    max-width:355px;
+  }
+
+  .website-offer{
+    margin-top:42px;
+
+    padding:22px 18px;
+  }
+
+  .offer-heading{
+    font-size:23px;
+  }
+
+  .offer-price strong{
+    font-size:36px;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .card{
+    min-height:auto;
+
+    padding:
+      24px 20px;
+  }
+
+  .section{
+    padding:
+      24px 8px 18px;
+  }
+
+  .how-grid{
+    grid-template-columns:1fr;
+  }
+
+  .step{
+    min-height:auto;
+
+    padding:
+      18px 6px 22px;
+
+    border-bottom:
+      1px solid rgba(255,255,255,.18);
+  }
+
+  .step + .step{
+    border-left:0;
+    padding-left:6px;
+  }
+
+  footer{
+    flex-direction:column;
+    padding:18px;
+  }
+
+  .footer-right{
+    text-align:left;
+  }
+
+  .city{
+    width:58%;
+    opacity:.72;
+  }
+
+  .water{
+    left:0;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="scene" aria-hidden="true">
+
+  <div class="city left">
+    <div class="tower t1"></div>
+    <div class="tower t2"></div>
+    <div class="tower t3"></div>
+    <div class="tower t4"></div>
+    <div class="tower t5"></div>
+  </div>
+
+  <div class="city right">
+    <div class="tower t1"></div>
+    <div class="tower t2"></div>
+    <div class="tower t3"></div>
+    <div class="tower t4"></div>
+    <div class="tower t5"></div>
+  </div>
+
+  <div class="bridge"></div>
+  <div class="water"></div>
+  <div class="haze"></div>
+
+</div>
+
+<main class="page">
+
+  <header>
+
+    <div class="brand">
+      <span class="dot">●</span>MONOS
+    </div>
+
+    <nav>
+      <a href="#website-needs">WHAT YOU GET</a>
+      <a href="#how">HOW IT WORKS</a>
+
+      <a
+        class="nav-cta"
+        href="intake.html"
+      >
+        GET STARTED
+      </a>
+    </nav>
+
+  </header>
+
+  <section
+    class="hero"
+    id="home"
+  >
+
+    <div class="hero-left">
+
+      <div class="crumb">
+        <span class="dot">●</span>
+        <span>01 / HOME</span>
+      </div>
+
+      <div class="hero-kicker">
+        STARTER WEBSITES / MONOS
+      </div>
+
+      <h1>
+        YOUR BUSINESS.<br>
+        YOUR WEBSITE.<br>
+        <span>WITHOUT THE HASSLE.</span>
+      </h1>
+
+      <div class="hero-divider"></div>
+
+      <p class="hero-copy">
+        Getting a website up can feel like more work than it should be,
+        especially when you’re already trying to run your business.
+      </p>
+
+      <p class="hero-copy">
+        And having someone build it for you can get expensive quickly.
+        I make that part easier by building affordable websites around
+        what your business actually needs.
+      </p>
+
+      <div class="hero-actions">
+
+        <a
+          class="primary-cta"
+          href="intake.html"
+        >
+          GET YOUR WEBSITE →
+        </a>
+
+      </div>
+
+    </div>
+
+    <aside class="website-offer">
+
+      <div class="offer-topline">
+        STARTER WEBSITE / 001
+      </div>
+
+      <h2 class="offer-heading">
+        A WEBSITE BUILT<br>
+        AROUND YOUR BUSINESS.
+      </h2>
+
+      <p class="offer-sub">
+        A clean, custom website for small businesses
+        that need a real place online without paying
+        traditional agency prices.
+      </p>
+
+      <div class="offer-price">
+
+        <strong>
+          $100–$200
+        </strong>
+
+        <span>
+          STARTER RANGE
+        </span>
+
+      </div>
+
+      <div class="offer-list">
+
+        <div class="offer-row">
+
+          <div class="offer-number">
+            01
+          </div>
+
+          <div class="offer-copy">
+            <strong>
+              CUSTOM DESIGN
+            </strong>
+
+            <span>
+              Built around your business,
+              branding, content, and style.
+            </span>
+          </div>
+
+        </div>
+
+        <div class="offer-row">
+
+          <div class="offer-number">
+            02
+          </div>
+
+          <div class="offer-copy">
+            <strong>
+              MOBILE READY
+            </strong>
+
+            <span>
+              Designed to work cleanly
+              across phones and desktop.
+            </span>
+          </div>
+
+        </div>
+
+        <div class="offer-row">
+
+          <div class="offer-number">
+            03
+          </div>
+
+          <div class="offer-copy">
+            <strong>
+              THE ESSENTIALS
+            </strong>
+
+            <span>
+              Business info, services or products,
+              socials, contact details, and what
+              customers need to know.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="offer-footer">
+        <span>ONE-TIME PRICE</span>
+        <span>NO RETAINER</span>
+        <span>BUILT FOR YOU</span>
+      </div>
+
+    </aside>
+
+  </section>
+
+  <section
+    class="section"
+    id="website-needs"
+  >
+
+    <div class="section-title">
+      <span class="dot">●</span>
+      WHAT DOES YOUR WEBSITE NEED?
+    </div>
+
+    <div class="cards">
+
+      <a
+        class="card"
+        href="intake.html"
+      >
+
+        <div class="card-icon">
+          ▥
+        </div>
+
+        <h3>
+          YOUR BUSINESS
+        </h3>
+
+        <p>
+          Tell me what your business does,
+          who it’s for, and the basic
+          information customers need to know.
+        </p>
+
+        <div class="arrow">
+          →
+        </div>
+
+      </a>
+
+      <a
+        class="card"
+        href="intake.html"
+      >
+
+        <div class="card-icon">
+          ▣
+        </div>
+
+        <h3>
+          SERVICES + PRODUCTS
+        </h3>
+
+        <p>
+          Show what you offer, how it works,
+          pricing if you want it listed,
+          and anything customers should know
+          before reaching out.
+        </p>
+
+        <div class="arrow">
+          →
+        </div>
+
+      </a>
+
+      <a
+        class="card"
+        href="intake.html"
+      >
+
+        <div class="card-icon">
+          ♙
+        </div>
+
+        <h3>
+          LOOK + FEEL
+        </h3>
+
+        <p>
+          Your colors, logo, photos, style,
+          references, or anything else you
+          want the website to feel like.
+        </p>
+
+        <div class="arrow">
+          →
+        </div>
+
+      </a>
+
+      <a
+        class="card"
+        href="intake.html"
+      >
+
+        <div class="card-icon">
+          ✳
+        </div>
+
+        <h3>
+          NOT SURE YET?
+        </h3>
+
+        <p>
+          You don’t need to have everything
+          figured out. Send me what you have
+          and I’ll help organize it into a
+          website that makes sense.
+        </p>
+
+        <div class="arrow">
+          →
+        </div>
+
+      </a>
+
+    </div>
+
+  </section>
+
+  <section
+    class="section"
+    id="how"
+  >
+
+    <div class="section-title">
+      <span class="dot">●</span>
+      HOW IT WORKS
+    </div>
+
+    <div class="how-grid">
+
+      <div class="step">
+
+        <div class="step-num">
+          01 <span>/</span>
+        </div>
+
+        <h3>
+          SEND ME WHAT YOU HAVE
+        </h3>
+
+        <p>
+          Business info, services or products,
+          photos, socials, branding, and anything
+          else you want included.
+        </p>
+
+      </div>
+
+      <div class="step">
+
+        <div class="step-num">
+          02 <span>/</span>
+        </div>
+
+        <h3>
+          I BUILD YOUR WEBSITE
+        </h3>
+
+        <p>
+          I organize everything, design the site,
+          and build it around your business.
+        </p>
+
+      </div>
+
+      <div class="step">
+
+        <div class="step-num">
+          03 <span>/</span>
+        </div>
+
+        <h3>
+          YOU REVIEW IT
+        </h3>
+
+        <p>
+          You look it over, tell me what you want
+          changed, and once it feels right,
+          we get it live.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+
+    <div>
+
+      <span class="dot">●</span>
+      MONOS
+
+      <br><br>
+
+      <div class="footer-links">
+
+        <a
+          href="mailto:mikepd102002@gmail.com"
+        >
+          GMAIL
+        </a>
+
+        <a
+          href="https://www.instagram.com/oneofmike/"
+          target="_blank"
+        >
+          INSTAGRAM
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/michael-davis-315b69428"
+          target="_blank"
+        >
+          LINKEDIN
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="footer-right">
+
+      AFFORDABLE WEBSITES.<br>
+      BUILT AROUND YOUR BUSINESS.
+
+      <br>
+
+      <a
+        class="footer-cta"
+        href="intake.html"
+      >
+        GET YOUR WEBSITE →
+      </a>
+
+    </div>
+
+  </footer>
+
+</main>
+
+</body>
+</html>
