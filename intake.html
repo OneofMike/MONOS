@@ -538,10 +538,14 @@ footer {
               <button class="opt"><span class="icon">•••</span>Something Else</button>
             </div>
 
-            <div class="field-label">Have files that might help? (Optional)</div>
-            <label class="upload" for="fileInput">⇧ &nbsp; Upload logos, photos, documents, or other files</label>
-            <input id="fileInput" type="file" multiple accept="image/*,.pdf,.csv,.xlsx,.xls,.doc,.docx,.txt">
-            <div id="fileName" class="file-name"></div>
+            <div class="field-label">Have photos, logos, or files for the website? (Optional)</div>
+            <div class="note" style="margin-top:6px; min-height:auto;">
+              Please email any logos, photos, menus, product images, documents, or other website files to
+              <a href="mailto:mikepd102002@gmail.com" style="color:var(--pink2); text-decoration:none;">
+                mikepd102002@gmail.com
+              </a>
+              after submitting this form.
+            </div>
           </div>
         </section>
 
@@ -630,7 +634,6 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
     features: vals('features'),
 
     materials: vals('materials'),
-    files: [...fileInput.files].map(f => f.name),
 
     finalDetails: document.getElementById('finalDetails').value.trim(),
     timeline: vals('timeline')[0] || '',
