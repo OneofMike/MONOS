@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Received</title>
+  <title>MONOS — Payment Received</title>
 
   <style>
     :root{
@@ -14,6 +14,7 @@
       --cyan:#39a8dd;
       --text:#f4f7ff;
       --muted:#aab6d3;
+      --green:#7de2c5;
     }
 
     *{
@@ -23,22 +24,43 @@
     body{
       margin:0;
       min-height:100vh;
+
       background:
-        radial-gradient(circle at 20% 20%, rgba(167,139,210,.18), transparent 35%),
-        radial-gradient(circle at 80% 75%, rgba(57,168,221,.16), transparent 35%),
+        radial-gradient(
+          circle at 20% 20%,
+          rgba(167,139,210,.18),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 80% 75%,
+          rgba(57,168,221,.16),
+          transparent 35%
+        ),
         var(--bg);
+
       color:var(--text);
-      font-family:"Courier New", monospace;
+
+      font-family:
+        "Courier New",
+        monospace;
+
       display:flex;
+
       align-items:center;
       justify-content:center;
+
       padding:30px 20px;
     }
 
     .wrap{
-      width:min(900px, 100%);
-      border:1px solid rgba(239,131,194,.65);
-      background:rgba(7,21,45,.86);
+      width:min(900px,100%);
+
+      border:
+        1px solid rgba(239,131,194,.65);
+
+      background:
+        rgba(7,21,45,.86);
+
       box-shadow:
         0 0 40px rgba(239,131,194,.08),
         inset 0 0 40px rgba(57,168,221,.04);
@@ -46,10 +68,31 @@
 
     .topbar{
       padding:14px 18px;
-      border-bottom:1px solid rgba(239,131,194,.45);
+
+      border-bottom:
+        1px solid rgba(239,131,194,.45);
+
       color:var(--pink);
+
       font-size:12px;
       letter-spacing:1px;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      color:var(--text);
+    }
+
+    .dot{
+      color:var(--pink);
+    }
+
+    .confirmed{
+      color:var(--green);
     }
 
     .content{
@@ -57,80 +100,165 @@
     }
 
     .status{
-      color:var(--cyan);
+      color:var(--green);
+
       font-size:13px;
+
       margin-bottom:18px;
     }
 
     h1{
       margin:0 0 18px;
-      font-size:clamp(34px, 7vw, 72px);
+
+      font-size:
+        clamp(34px,7vw,72px);
+
       line-height:.95;
+
       font-weight:500;
+
       color:var(--pink);
     }
 
     .lead{
       max-width:700px;
+
       font-size:16px;
       line-height:1.7;
+
       color:var(--text);
+
       margin-bottom:38px;
     }
 
     .divider{
       height:1px;
-      background:linear-gradient(
-        90deg,
-        var(--pink),
-        var(--purple),
-        var(--cyan),
-        transparent
-      );
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--pink),
+          var(--purple),
+          var(--cyan),
+          transparent
+        );
+
       margin:32px 0;
     }
 
     .section-title{
       color:var(--purple);
+
       font-size:12px;
       letter-spacing:1px;
+
       margin-bottom:12px;
     }
 
     .next{
       font-size:15px;
       line-height:1.8;
+
       color:var(--muted);
+
       max-width:720px;
     }
 
     .project-box{
       margin-top:30px;
+
       padding:20px;
-      border:1px solid rgba(57,168,221,.45);
-      background:rgba(13,31,63,.6);
+
+      border:
+        1px solid rgba(57,168,221,.45);
+
+      background:
+        rgba(13,31,63,.6);
     }
 
     .project-box .label{
       font-size:11px;
+
       color:var(--cyan);
+
       margin-bottom:9px;
     }
 
     #tierDisplay{
       font-size:20px;
+
       color:var(--text);
     }
 
-    .footer{
-      border-top:1px solid rgba(239,131,194,.35);
+    .email-note{
+      margin-top:18px;
+
       padding:16px 18px;
+
+      border:
+        1px solid rgba(239,131,194,.28);
+
+      background:
+        rgba(239,131,194,.04);
+
+      color:var(--muted);
+
+      font-size:12px;
+      line-height:1.65;
+    }
+
+    .email-note a{
+      color:var(--pink);
+      text-decoration:none;
+    }
+
+    .footer{
+      border-top:
+        1px solid rgba(239,131,194,.35);
+
+      padding:16px 18px;
+
       display:flex;
       justify-content:space-between;
+
       gap:20px;
+
       color:var(--muted);
+
       font-size:10px;
+
       flex-wrap:wrap;
+    }
+
+    @media(max-width:600px){
+
+      body{
+        padding:16px 12px;
+      }
+
+      .content{
+        padding:36px 22px;
+      }
+
+      .topbar{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:6px;
+      }
+
+      .lead{
+        font-size:14px;
+      }
+
+      .next{
+        font-size:13px;
+      }
+
+      #tierDisplay{
+        font-size:16px;
+        line-height:1.5;
+      }
+
     }
   </style>
 </head>
@@ -138,25 +266,35 @@
 <body>
 
   <main class="wrap">
+
     <div class="topbar">
-      SYSTEM//FIELD — PAYMENT CONFIRMED
+
+      <div class="brand">
+        <span class="dot">●</span>
+        MONOS
+      </div>
+
+      <div class="confirmed">
+        PAYMENT CONFIRMED ✓
+      </div>
+
     </div>
 
     <section class="content">
 
       <div class="status">
-        ● PAYMENT RECEIVED ✓
+        ● WEBSITE BUILD CONFIRMED ✓
       </div>
 
       <h1>
-        YOUR REQUEST<br>
+        YOUR WEBSITE<br>
         IS CONFIRMED.
       </h1>
 
       <p class="lead">
-        Your payment and project selection have been received.
-        I’ll review everything you submitted and start figuring out
-        the right approach based on your situation.
+        Your payment and website selection have been received.
+        I’ll review everything you submitted and start organizing
+        the build around your business, content, and preferences.
       </p>
 
       <div class="divider"></div>
@@ -166,41 +304,95 @@
       </div>
 
       <div class="next">
-        I’ll go through your intake, your priorities, and the project
-        level you selected. If I need anything else before getting
-        started, I’ll reach out using the contact information you provided.
+        I’ll go through your intake, the website build you selected,
+        the content you want included, and the style you’re looking for.
+        If I need anything else before I start building, I’ll reach out
+        using the contact information you provided.
       </div>
 
       <div class="project-box">
-        <div class="label">YOUR PROJECT</div>
-        <div id="tierDisplay">Loading selection...</div>
+
+        <div class="label">
+          YOUR WEBSITE BUILD
+        </div>
+
+        <div id="tierDisplay">
+          Loading selection...
+        </div>
+
+      </div>
+
+      <div class="email-note">
+
+        Have logos, photos, menus, product images, or other files
+        you want included on the website?
+
+        <br><br>
+
+        Email them to
+
+        <a href="mailto:mikepd102002@gmail.com">
+          mikepd102002@gmail.com
+        </a>
+
+        and include your business name so I can match them
+        to your website request.
+
       </div>
 
     </section>
 
     <footer class="footer">
-      <span>BUILT AROUND YOUR SITUATION.</span>
-      <span>PAYMENT CONFIRMED ✓</span>
+
+      <span>
+        AFFORDABLE WEBSITES.
+        BUILT AROUND YOUR BUSINESS.
+      </span>
+
+      <span>
+        PAYMENT CONFIRMED ✓
+      </span>
+
     </footer>
+
   </main>
 
   <script>
+
     try{
-      const selected = JSON.parse(
-        localStorage.getItem('systemFieldSelectedTier')
-      );
+
+      const selected =
+        JSON.parse(
+          localStorage.getItem(
+            'monosWebsiteSelectedTier'
+          )
+        );
 
       if(selected){
-        document.getElementById('tierDisplay').textContent =
+
+        document.getElementById(
+          'tierDisplay'
+        ).textContent =
           `${selected.code} — ${selected.tier} — $${selected.price}`;
+
       }else{
-        document.getElementById('tierDisplay').textContent =
-          'PROJECT SELECTION RECEIVED';
+
+        document.getElementById(
+          'tierDisplay'
+        ).textContent =
+          'WEBSITE BUILD SELECTION RECEIVED';
+
       }
+
     }catch(error){
-      document.getElementById('tierDisplay').textContent =
-        'PROJECT SELECTION RECEIVED';
+
+      document.getElementById(
+        'tierDisplay'
+      ).textContent =
+        'WEBSITE BUILD SELECTION RECEIVED';
+
     }
+
   </script>
 
 </body>
