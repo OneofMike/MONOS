@@ -191,26 +191,20 @@ nav a{text-decoration:none}
   margin-bottom:24px;
 }
 
-.actions{
+..actions{
   display:flex;
   flex-direction:column;
   gap:14px;
-  width:300px;
+  width:270px;
 }
 
 .btn{
-  border:2px solid var(--pink);
-  padding:16px 26px;
+  border:1px solid var(--line);
+  padding:16px 18px;
   text-align:center;
   text-decoration:none;
   cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  min-height:54px;
-  border-radius:999px;
-  transition:.18s ease;
+  background:rgba(7,15,34,.52);
 }
 
 .btn.primary{
@@ -218,8 +212,8 @@ nav a{text-decoration:none}
   color:#101426;
   border-color:var(--pink);
   font-weight:700;
-  box-shadow:0 8px 22px rgba(239,131,194,.28);
 }
+
 .btn:hover{filter:brightness(1.05)}
 .node{
   position:absolute;
