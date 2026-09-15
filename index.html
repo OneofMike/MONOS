@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MONOS</title>
+
 <style>
 :root{
   --bg:#07152d;
@@ -21,6 +22,7 @@
 }
 
 *{box-sizing:border-box}
+
 html{scroll-behavior:smooth}
 
 body{
@@ -51,7 +53,13 @@ a{color:inherit}
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(90deg,rgba(4,11,27,.65),transparent 24%,transparent 74%,rgba(6,13,31,.18));
+  background:linear-gradient(
+    90deg,
+    rgba(4,11,27,.65),
+    transparent 24%,
+    transparent 74%,
+    rgba(6,13,31,.18)
+  );
 }
 
 .city{
@@ -62,7 +70,11 @@ a{color:inherit}
 }
 
 .city.left{left:-5%}
-.city.right{right:-5%;transform:scaleX(-1)}
+
+.city.right{
+  right:-5%;
+  transform:scaleX(-1);
+}
 
 .tower{
   position:absolute;
@@ -73,7 +85,13 @@ a{color:inherit}
   border:1px solid rgba(120,148,208,.14);
   border-radius:45% 45% 7% 7%/6% 6% 2% 2%;
   background:
-    linear-gradient(90deg,rgba(5,14,33,.98),rgba(24,44,83,.94) 48%,rgba(69,47,102,.72) 74%,rgba(8,20,43,.98));
+    linear-gradient(
+      90deg,
+      rgba(5,14,33,.98),
+      rgba(24,44,83,.94) 48%,
+      rgba(69,47,102,.72) 74%,
+      rgba(8,20,43,.98)
+    );
   box-shadow:
     inset 14px 0 26px rgba(63,166,220,.06),
     inset -12px 0 30px rgba(239,111,191,.08),
@@ -88,7 +106,11 @@ a{color:inherit}
   transform:translateX(-50%);
   width:3px;
   height:86px;
-  background:linear-gradient(180deg,rgba(249,180,222,.95),rgba(117,82,177,.48));
+  background:linear-gradient(
+    180deg,
+    rgba(249,180,222,.95),
+    rgba(117,82,177,.48)
+  );
   box-shadow:0 0 16px rgba(245,130,199,.42);
 }
 
@@ -101,8 +123,14 @@ a{color:inherit}
   bottom:var(--ring);
   border-radius:50%;
   border:1px solid rgba(111,150,208,.18);
-  background:linear-gradient(180deg,rgba(43,60,104,.74),rgba(12,25,51,.92));
-  box-shadow:0 -1px 0 rgba(246,115,194,.15),0 0 18px rgba(56,132,184,.10);
+  background:linear-gradient(
+    180deg,
+    rgba(43,60,104,.74),
+    rgba(12,25,51,.92)
+  );
+  box-shadow:
+    0 -1px 0 rgba(246,115,194,.15),
+    0 0 18px rgba(56,132,184,.10);
 }
 
 .t1{--x:0%;--w:27%;--h:56%;--ring:24%}
@@ -119,8 +147,19 @@ a{color:inherit}
   height:42%;
   clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);
   background:
-    linear-gradient(180deg,rgba(38,128,182,.18),rgba(7,21,45,.78)),
-    repeating-linear-gradient(90deg,transparent 0 12%,rgba(47,167,219,.08) 12.3%,transparent 13% 25%,rgba(237,91,182,.06) 25.4%,transparent 26%);
+    linear-gradient(
+      180deg,
+      rgba(38,128,182,.18),
+      rgba(7,21,45,.78)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 12%,
+      rgba(47,167,219,.08) 12.3%,
+      transparent 13% 25%,
+      rgba(237,91,182,.06) 25.4%,
+      transparent 26%
+    );
   border-top:1px solid rgba(76,174,222,.15);
 }
 
@@ -132,7 +171,11 @@ a{color:inherit}
   height:6%;
   transform:perspective(900px) rotateX(65deg);
   transform-origin:bottom;
-  background:linear-gradient(180deg,rgba(21,45,79,.18),rgba(6,18,40,.58));
+  background:linear-gradient(
+    180deg,
+    rgba(21,45,79,.18),
+    rgba(6,18,40,.58)
+  );
   border-top:1px solid rgba(68,176,224,.18);
   border-bottom:1px solid rgba(244,118,194,.13);
 }
@@ -141,8 +184,16 @@ a{color:inherit}
   position:absolute;
   inset:0;
   background:
-    radial-gradient(ellipse at 57% 45%,rgba(250,152,214,.28),transparent 28%),
-    radial-gradient(ellipse at 26% 75%,rgba(236,89,179,.18),transparent 26%);
+    radial-gradient(
+      ellipse at 57% 45%,
+      rgba(250,152,214,.28),
+      transparent 28%
+    ),
+    radial-gradient(
+      ellipse at 26% 75%,
+      rgba(236,89,179,.18),
+      transparent 26%
+    );
   filter:blur(18px);
 }
 
@@ -154,7 +205,13 @@ a{color:inherit}
   min-height:100vh;
   position:relative;
   padding:0 28px 26px;
-  background:linear-gradient(90deg,rgba(4,13,31,.20),transparent 28%,transparent 72%,rgba(6,14,30,.08));
+  background:linear-gradient(
+    90deg,
+    rgba(4,13,31,.20),
+    transparent 28%,
+    transparent 72%,
+    rgba(6,14,30,.08)
+  );
 }
 
 .page:before,
@@ -199,7 +256,9 @@ nav{
   font-size:14px;
 }
 
-nav a{text-decoration:none}
+nav a{
+  text-decoration:none;
+}
 
 .nav-cta{
   border:1px solid rgba(239,122,189,.36);
@@ -460,7 +519,11 @@ nav a{text-decoration:none}
   content:"";
   height:1px;
   flex:1;
-  background:linear-gradient(90deg,rgba(237,132,194,.55),rgba(255,255,255,.18));
+  background:linear-gradient(
+    90deg,
+    rgba(237,132,194,.55),
+    rgba(255,255,255,.18)
+  );
 }
 
 .cards{
@@ -491,9 +554,17 @@ nav a{text-decoration:none}
   margin-bottom:18px;
 }
 
-.card:nth-child(2) .card-icon{color:#aa8bd1}
-.card:nth-child(3) .card-icon{color:#ef7abd}
-.card:nth-child(4) .card-icon{color:#b18bd0}
+.card:nth-child(2) .card-icon{
+  color:#aa8bd1;
+}
+
+.card:nth-child(3) .card-icon{
+  color:#ef7abd;
+}
+
+.card:nth-child(4) .card-icon{
+  color:#b18bd0;
+}
 
 .card h3{
   font-size:16px;
@@ -793,6 +864,7 @@ footer{
 <body>
 
 <div class="scene" aria-hidden="true">
+
   <div class="city left">
     <div class="tower t1"></div>
     <div class="tower t2"></div>
@@ -812,11 +884,13 @@ footer{
   <div class="bridge"></div>
   <div class="water"></div>
   <div class="haze"></div>
+
 </div>
 
 <main class="page">
 
   <header>
+
     <div class="brand">
       <span class="dot">●</span>MONOS
     </div>
@@ -827,6 +901,7 @@ footer{
       <a href="about.html">ABOUT</a>
       <a class="nav-cta" href="intake.html">GET STARTED</a>
     </nav>
+
   </header>
 
   <section class="hero" id="about">
@@ -857,11 +932,7 @@ footer{
 
       <div class="actions">
         <a class="btn primary" href="intake.html">
-          TELL ME WHAT YOU NEED →
-        </a>
-
-        <a class="btn" href="examples.html">
-          SEE EXAMPLES
+          GET YOUR WEBSITE →
         </a>
       </div>
 
@@ -943,56 +1014,74 @@ footer{
 
   </section>
 
-  <section class="section" id="examples">
+  <section class="section" id="website-needs">
 
     <div class="section-title">
       <span class="dot">●</span>
-      WHAT DO YOU NEED HELP WITH?
+      WHAT DOES YOUR WEBSITE NEED?
     </div>
 
     <div class="cards">
 
-      <a class="card" href="intake.html?type=business">
+      <a class="card" href="intake.html">
+
         <div class="card-icon">▥</div>
-        <h3>MY BUSINESS</h3>
+
+        <h3>YOUR BUSINESS</h3>
+
         <p>
-          Projects, clients, research, comparisons, workflows,
-          tracking, decisions, or anything behind the scenes
-          that's getting harder to manage.
+          Tell me what your business does, who it’s for,
+          and the basic information customers need to know.
         </p>
+
         <div class="arrow">→</div>
+
       </a>
 
-      <a class="card" href="intake.html?type=work">
+      <a class="card" href="intake.html">
+
         <div class="card-icon">▣</div>
-        <h3>RESEARCH + DECISIONS</h3>
+
+        <h3>SERVICES + PRODUCTS</h3>
+
         <p>
-          Options to compare, things to research, information
-          to make sense of, or a decision you want to feel
-          more confident about.
+          Show what you offer, how it works, pricing if you want it listed,
+          and anything customers should know before reaching out.
         </p>
+
         <div class="arrow">→</div>
+
       </a>
 
-      <a class="card" href="intake.html?type=life">
+      <a class="card" href="intake.html">
+
         <div class="card-icon">♙</div>
-        <h3>MY EVERYDAY LIFE</h3>
+
+        <h3>LOOK + FEEL</h3>
+
         <p>
-          Shopping, travel, moving, cars, collections, job searches,
-          big decisions, or anything in your everyday life that's
-          gotten too messy to sort through alone.
+          Your colors, logo, photos, style, references,
+          or anything else you want the website to feel like.
         </p>
+
         <div class="arrow">→</div>
+
       </a>
 
-      <a class="card" href="intake.html?type=other">
+      <a class="card" href="intake.html">
+
         <div class="card-icon">✳</div>
-        <h3>SOMETHING ELSE</h3>
+
+        <h3>NOT SURE YET?</h3>
+
         <p>
-          Not sure how to explain it yet?
-          Tell me what you're dealing with and we'll figure it out together.
+          You don’t need to have everything figured out.
+          Send me what you have and I’ll help organize it
+          into a website that makes sense.
         </p>
+
         <div class="arrow">→</div>
+
       </a>
 
     </div>
@@ -1009,30 +1098,48 @@ footer{
     <div class="how-grid">
 
       <div class="step">
-        <div class="step-num">01 <span>/</span></div>
-        <h3>SHOW ME THE PROBLEM</h3>
+
+        <div class="step-num">
+          01 <span>/</span>
+        </div>
+
+        <h3>SEND ME WHAT YOU HAVE</h3>
+
         <p>
-          You explain what you're dealing with.
-          It doesn't have to be organized first.
+          Business info, services or products, photos, socials,
+          branding, and anything else you want included.
         </p>
+
       </div>
 
       <div class="step">
-        <div class="step-num">02 <span>/</span></div>
-        <h3>I FIGURE OUT WHAT WOULD HELP</h3>
+
+        <div class="step-num">
+          02 <span>/</span>
+        </div>
+
+        <h3>I BUILD YOUR WEBSITE</h3>
+
         <p>
-          I look at what you're trying to accomplish
-          and figure out what would actually be most useful.
+          I organize everything, design the site,
+          and build it around your business.
         </p>
+
       </div>
 
       <div class="step">
-        <div class="step-num">03 <span>/</span></div>
-        <h3>I BUILD IT AROUND YOU</h3>
+
+        <div class="step-num">
+          03 <span>/</span>
+        </div>
+
+        <h3>YOU REVIEW IT</h3>
+
         <p>
-          You get something built specifically around your situation,
-          priorities, and the way you need to use it.
+          You look it over, tell me what you want changed,
+          and once it feels right, we get it live.
         </p>
+
       </div>
 
     </div>
@@ -1042,11 +1149,16 @@ footer{
   <footer>
 
     <div>
+
       <span class="dot">●</span>MONOS
+
       <br><br>
 
       <div class="footer-links">
-        <a href="mailto:mikepd102002@gmail.com">GMAIL</a>
+
+        <a href="mailto:mikepd102002@gmail.com">
+          GMAIL
+        </a>
 
         <a
           href="https://www.instagram.com/oneofmike/"
@@ -1061,16 +1173,21 @@ footer{
         >
           LINKEDIN
         </a>
+
       </div>
 
     </div>
 
     <div class="footer-right">
+
       BUILT AROUND YOUR SITUATION.
+
       <br>
+
       <a class="footer-cta" href="intake.html">
         GET STARTED →
       </a>
+
     </div>
 
   </footer>
