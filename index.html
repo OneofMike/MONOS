@@ -199,29 +199,26 @@ nav a{text-decoration:none}
 }
 
 .btn{
-  border:1px solid var(--pink);
-  padding:16px 22px;
+  border:2px solid var(--pink);
+  padding:16px 26px;
   text-align:center;
   text-decoration:none;
   cursor:pointer;
-  background:rgba(7,15,34,.62);
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
   width:100%;
-  border-radius:6px;
+  min-height:54px;
+  border-radius:999px;
+  transition:.18s ease;
 }
-  border:1px solid var(--line);
-  padding:16px 18px;
-  text-align:center;
-  text-decoration:none;
-  cursor:pointer;
-  background:rgba(7,15,34,.52);
-}
+
 .btn.primary{
   background:var(--pink);
   color:#101426;
   border-color:var(--pink);
   font-weight:700;
-  box-shadow:0 8px 22px rgba(239,131,194,.18);
+  box-shadow:0 8px 22px rgba(239,131,194,.28);
 }
 .btn:hover{filter:brightness(1.05)}
 .node{
