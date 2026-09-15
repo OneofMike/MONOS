@@ -190,8 +190,22 @@ nav a{text-decoration:none}
 .hero-copy-wrap{
   margin-bottom:24px;
 }
-.actions{display:flex;flex-direction:column;gap:14px;width:270px}
+
+.actions{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  width:270px;
+}
+
 .btn{
+  border:1px solid var(--line);
+  padding:16px 18px;
+  text-align:center;
+  text-decoration:none;
+  cursor:pointer;
+  background:rgba(7,15,34,.52);
+}
   border:1px solid var(--line);
   padding:16px 18px;
   text-align:center;
@@ -587,6 +601,15 @@ footer{
       <a class="nav-cta" href="intake.html">GET STARTED</a>
     </nav>
   </header>
+</header>
+
+<section class="hero" id="about">
+  <div class="hero-left">
+
+    <div class="crumb">
+      <span class="dot">●</span> 01 /
+      <span style="color:var(--pink)">HOME</span>
+    </div>
 
  <h1>YOUR BUSINESS<br>YOUR WEBSITE.<br><span>WITHOUT THE HASSLE.</span></h1>
 
@@ -608,8 +631,8 @@ footer{
 <div class="actions">
   <a class="btn primary" href="intake.html">GET YOUR WEBSITE →</a>
 </div>
-      </div>
-    </div>
+    
+</div>
     <aside class="hero-pricing" aria-labelledby="pricing-preview-title">
   <div class="pricing-label">PROJECT LEVELS / 001</div>
 
