@@ -675,7 +675,7 @@ async function emailUploadedFiles(payload) {
 
     const content = await fileToBase64(file);
 
-    const response = await fetch('/api/email-files', {
+  const response = await fetch('https://monos-beta.vercel.app/api/email-files', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
