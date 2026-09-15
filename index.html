@@ -164,27 +164,31 @@ nav a{text-decoration:none}
 .crumb{
   color:#fff;
   font-size:13px;
-  margin-bottom:94px;
+  margin-bottom:58px;
 }
 .crumb .dot{color:var(--pink)}
 .hero h1{
-  font-size:60px;
+  font-size:52px;
   line-height:1.08;
   font-weight:400;
   letter-spacing:.01em;
-  margin:0 0 20px;
+  margin:0 0 18px;
+  max-width:500px;
 }
 .hero h1 span{color:var(--pink)}
 .hero-rule{
   width:50px;height:2px;background:var(--pink);margin:20px 0 24px;
-}
 .hero-copy{
-  font-size:15px;
-  line-height:1.55;
+  font-size:16px;
+  line-height:1.65;
   color:#f1edf4;
-  max-width:325px;
-  margin-bottom:20px;
+  max-width:410px;
+  margin:0 0 16px;
   text-shadow:0 1px 12px rgba(0,0,0,.22);
+}
+
+.hero-copy-wrap{
+  margin-bottom:24px;
 }
 .actions{display:flex;flex-direction:column;gap:14px;width:270px}
 .btn{
@@ -218,7 +222,7 @@ nav a{text-decoration:none}
 /* ---------- hero pricing preview ---------- */
 .hero-pricing{
   align-self:start;
-  margin:158px 12px 0 28px;
+margin:132px 12px 0 28px;
   position:relative;
   border:1px solid rgba(239,131,194,.58);
   background:linear-gradient(
@@ -584,16 +588,26 @@ footer{
     </nav>
   </header>
 
-  <section class="hero" id="about">
-    <div class="hero-left">
-      <div class="crumb"><span class="dot">●</span> 01 / <span style="color:var(--pink)">HOME</span></div>
-      <h1>YOUR BUSINESS<br>YOUR WEBSITE.<br><span>WITHOUT THE HASSLE.</span></h1>
-      <div class="hero-rule"></div>
-      <p class="hero-copy">Getting a website up can feel like more work than it should be, especially when you’re already trying to run your business. And having someone build it for you can get expensive quickly. I make that part easier by building affordable websites around what your business actually needs.
-      </p>
-      <div class="actions">
-        <a class="btn primary" href="intake.html">TELL ME WHAT YOU NEED →</a>
-        <a class="btn" href="examples.html">SEE EXAMPLES</a>
+ <h1>YOUR BUSINESS<br>YOUR WEBSITE.<br><span>WITHOUT THE HASSLE.</span></h1>
+
+<div class="hero-rule"></div>
+
+<div class="hero-copy-wrap">
+  <p class="hero-copy">
+    Getting a website up can feel like more work than it should be,
+    especially when you’re already trying to run your business.
+  </p>
+
+  <p class="hero-copy">
+    And having someone build it for you can get expensive quickly.
+    I make that part easier by building affordable websites around
+    what your business actually needs.
+  </p>
+</div>
+
+<div class="actions">
+  <a class="btn primary" href="intake.html">GET YOUR WEBSITE →</a>
+</div>
       </div>
     </div>
     <aside class="hero-pricing" aria-labelledby="pricing-preview-title">
