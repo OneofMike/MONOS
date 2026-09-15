@@ -333,174 +333,245 @@ footer {
   <div class="shell">
     <div class="topbar">
       <div class="brand"><span class="dot">●</span> MONOS</div>
-      <div class="tagline">SOLUTIONS BUILT AROUND<br>EXACTLY WHAT YOU NEED.</div>
+      <div class="tagline">AFFORDABLE WEBSITES.<br>BUILT AROUND YOUR BUSINESS.</div>
     </div>
 
     <div class="layout">
       <aside class="sidebar">
         <div class="side-head">● &nbsp;INTAKE</div>
-        <h1 class="side-title">LET’S GET<br><span>STARTED.</span></h1>
-        <div class="side-copy">A few questions so I can understand what you need and figure out the right solution for you.</div>
+        <h1 class="side-title">LET’S BUILD<br><span>YOUR WEBSITE.</span></h1>
+        <div class="side-copy">A few questions so I can understand your business, what you want on your site, and how you want it to look.</div>
         <div class="side-rule"></div>
         <div class="progress-title">YOUR PROGRESS</div>
         <div class="progress">
           <div class="pstep active"><span class="b"></span><span>YOUR DETAILS</span></div>
-          <div class="pstep"><span class="b"></span><span>01 THE PROBLEM</span></div>
-          <div class="pstep"><span class="b"></span><span>02 WHAT’S HARD</span></div>
-          <div class="pstep"><span class="b"></span><span>03 WHAT WOULD HELP</span></div>
-          <div class="pstep"><span class="b"></span><span>04 WHAT YOU HAVE</span></div>
-          <div class="pstep"><span class="b"></span><span>05 THE OUTCOME</span></div>
-          <div class="pstep"><span class="b"></span><span>06 HOW YOU’LL USE IT</span></div>
-          <div class="pstep"><span class="b"></span><span>07 YOUR PREFERENCES</span></div>
+          <div class="pstep"><span class="b"></span><span>01 YOUR BUSINESS</span></div>
+          <div class="pstep"><span class="b"></span><span>02 WHAT YOU OFFER</span></div>
+          <div class="pstep"><span class="b"></span><span>03 WEBSITE CONTENT</span></div>
+          <div class="pstep"><span class="b"></span><span>04 LOOK + FEEL</span></div>
+          <div class="pstep"><span class="b"></span><span>05 FEATURES</span></div>
+          <div class="pstep"><span class="b"></span><span>06 WHAT YOU HAVE</span></div>
+          <div class="pstep"><span class="b"></span><span>07 FINAL DETAILS</span></div>
           <div class="pstep"><span class="b"></span><span>REVIEW & SEND</span></div>
         </div>
       </aside>
 
       <main class="main">
         <section class="card">
-  <div class="num">●</div>
-  <div class="content">
-    <h2>FIRST, WHO AM I BUILDING THIS FOR?</h2>
-    <div class="sub">Your contact information.</div>
+          <div class="num">●</div>
+          <div class="content">
+            <h2>FIRST, WHO AM I BUILDING THIS FOR?</h2>
+            <div class="sub">Your contact information.</div>
 
-    <div class="field-label">First name</div>
-    <input id="firstName" type="text" placeholder="First name">
+            <div class="field-label">First name</div>
+            <input id="firstName" type="text" placeholder="First name">
 
-    <div class="field-label">Last name</div>
-    <input id="lastName" type="text" placeholder="Last name">
+            <div class="field-label">Last name</div>
+            <input id="lastName" type="text" placeholder="Last name">
 
-    <div class="field-label">Email</div>
-    <input id="email" type="email" placeholder="you@example.com">
-  </div>
-</section>
-          <section class="card">
+            <div class="field-label">Email</div>
+            <input id="email" type="email" placeholder="you@example.com">
 
+            <div class="field-label">Instagram (Optional)</div>
+            <input id="contactInstagram" type="text" placeholder="@yourbusiness or profile link">
+
+            <div class="field-label">Facebook (Optional)</div>
+            <input id="contactFacebook" type="text" placeholder="Facebook page link">
+          </div>
+        </section>
+
+        <section class="card">
           <div class="num">01</div>
           <div class="content">
-            <h2>WHAT DO YOU NEED HELP MAKING SENSE OF?</h2>
-            <div class="sub">Tell me about it in your own words.</div>
-           <textarea id="problem" style="min-height:120px;" placeholder="Type your answer here..."></textarea>
+            <h2>TELL ME ABOUT YOUR BUSINESS.</h2>
+            <div class="sub">The basics I need to understand what I’m building.</div>
+
+            <div class="field-label">Business name</div>
+            <input id="businessName" type="text" placeholder="Your business name">
+
+            <div class="field-label">Industry / type of business</div>
+            <input id="industry" type="text" placeholder="Example: Bakery, salon, cleaning service...">
+
+            <div class="field-label">What does your business do?</div>
+            <textarea id="businessDescription" style="min-height:120px;" placeholder="Tell me about your business in your own words..."></textarea>
+
+            <div class="field-label">Do you already have a website?</div>
+            <div class="options single" data-group="existingWebsite">
+              <button class="opt"><span class="icon">✓</span>Yes</button>
+              <button class="opt"><span class="icon">○</span>No</button>
+            </div>
+
+            <div class="field-label">If yes, add the link. (Optional)</div>
+            <input id="existingWebsiteUrl" type="text" placeholder="https://...">
+
+            <div class="field-label">Business phone number (Optional)</div>
+            <input id="businessPhone" type="text" placeholder="(000) 000-0000">
+
+            <div class="field-label">Business email (Optional)</div>
+            <input id="businessEmail" type="email" placeholder="hello@yourbusiness.com">
+
+            <div class="field-label">Location or service area (Optional)</div>
+            <input id="businessLocation" type="text" placeholder="Physical address, city, areas you serve, or online only">
+
+            <div class="field-label">Business hours or availability (Optional)</div>
+            <input id="businessHours" type="text" placeholder="Example: Mon–Fri 9–5, by appointment, or online only">
+
+            <div class="field-label">Business social links or online profiles (Optional)</div>
+            <textarea id="businessSocials" style="min-height:90px;" placeholder="Instagram, Facebook, TikTok, LinkedIn, etc."></textarea>
           </div>
         </section>
 
         <section class="card">
           <div class="num">02</div>
           <div class="content">
-            <h2>WHAT’S MAKING IT DIFFICULT RIGHT NOW?</h2>
-            <div class="sub">Select all that apply.</div>
-      
-         <div class="options" data-group="difficult">
-  <button class="opt"><span class="icon">◌</span>Information is everywhere</button>
-  <button class="opt"><span class="icon">⚖</span>Hard to compare things</button>
-  <button class="opt"><span class="icon">◉</span>Too much to keep track of</button>
-  <button class="opt"><span class="icon">⌛</span>Taking too much of my time</button>
-  <button class="opt"><span class="icon">⟳</span>Repetitive work</button>
-  <button class="opt"><span class="icon">?</span>Hard to make decisions</button>
-  <button class="opt"><span class="icon">◷</span>Something I’ve been putting off</button>
-  <button class="opt"><span class="icon">△</span>Current setup isn’t working</button>
-  <button class="opt"><span class="icon">•••</span>Something else</button>
-</div>
+            <h2>WHAT DO YOU OFFER?</h2>
+            <div class="sub">Tell me what customers should be able to learn about.</div>
+
+            <div class="field-label">What products or services should be shown on the website?</div>
+            <textarea id="offerings" style="min-height:120px;" placeholder="List or describe your products, services, packages, etc..."></textarea>
+
+            <div class="field-label">Do you want pricing shown?</div>
+            <div class="options single" data-group="showPricing">
+              <button class="opt">Yes</button>
+              <button class="opt">No</button>
+              <button class="opt">Some pricing</button>
+            </div>
+
+            <div class="field-label">Should products or services be displayed separately?</div>
+            <div class="options single" data-group="separateOfferings">
+              <button class="opt">Yes</button>
+              <button class="opt">No</button>
+              <button class="opt">Not sure</button>
+            </div>
+          </div>
         </section>
 
         <section class="card">
           <div class="num">03</div>
           <div class="content">
-            <h2>IF I COULD MAKE THIS EASIER FOR YOU,<br>WHAT WOULD YOU WANT TO BE ABLE TO DO?</h2>
-            <div class="sub">What would success look like for you?</div>
-           <textarea id="success" style="min-height:120px;" placeholder="Type your answer here..."></textarea>
+            <h2>WHAT SHOULD BE ON YOUR WEBSITE?</h2>
+            <div class="sub">Select everything you think you may need.</div>
+
+            <div class="options" data-group="pages">
+              <button class="opt"><span class="icon">⌂</span>Home</button>
+              <button class="opt"><span class="icon">◉</span>About</button>
+              <button class="opt"><span class="icon">▦</span>Services</button>
+              <button class="opt"><span class="icon">▣</span>Products</button>
+              <button class="opt"><span class="icon">$</span>Pricing</button>
+              <button class="opt"><span class="icon">▧</span>Gallery / Portfolio</button>
+              <button class="opt"><span class="icon">★</span>Testimonials</button>
+              <button class="opt"><span class="icon">?</span>FAQ</button>
+              <button class="opt"><span class="icon">✉</span>Contact</button>
+              <button class="opt"><span class="icon">◎</span>Social Links</button>
+              <button class="opt"><span class="icon">◷</span>Booking / Appointment Link</button>
+              <button class="opt"><span class="icon">•••</span>Something Else</button>
+              <button class="opt"><span class="icon">○</span>Not Sure — You Decide</button>
+            </div>
           </div>
         </section>
 
         <section class="card">
           <div class="num">04</div>
           <div class="content">
-            <h2>WHAT DO YOU ALREADY HAVE, IF ANYTHING?</h2>
-            <div class="sub">Select all that apply.</div>
-            <div class="options" data-group="materials">
-              <button class="opt"><span class="icon">▤</span>Notes / Ideas</button>
-          <button class="opt"><span class="icon">▦</span>Spreadsheets / Data</button>
-          <button class="opt"><span class="icon">▧</span>Screenshots / Photos</button>
-          <button class="opt"><span class="icon">▥</span>Documents / Files</button>
-          <button class="opt"><span class="icon">◎</span>Websites / Links</button>
-          <button class="opt"><span class="icon">✉</span>Emails / Messages</button>
-          <button class="opt"><span class="icon">◔</span>Information in my head</button>
-          <button class="opt"><span class="icon">○</span>Nothing yet — starting from scratch</button>
-          <button class="opt"><span class="icon">•••</span>Something else</button>
+            <h2>HOW DO YOU WANT IT TO LOOK?</h2>
+            <div class="sub">Choose any styles that feel right for your business.</div>
+
+            <div class="options" data-group="style">
+              <button class="opt">Clean / Minimal</button>
+              <button class="opt">Modern</button>
+              <button class="opt">Bold</button>
+              <button class="opt">Elegant</button>
+              <button class="opt">Luxury</button>
+              <button class="opt">Fun / Colorful</button>
+              <button class="opt">Dark</button>
+              <button class="opt">Professional</button>
+              <button class="opt">No Preference — You Decide</button>
             </div>
-            <div class="field-label">Where is this information currently stored?</div>
-            <textarea id="storage" style="min-height:120px;" placeholder="Type your answer here..."></textarea>
+
+            <div class="field-label">Do you have any colors, websites, or styles you like?</div>
+            <textarea id="styleNotes" style="min-height:110px;" placeholder="Add colors, inspiration links, references, or describe the look you want..."></textarea>
           </div>
         </section>
 
         <section class="card">
           <div class="num">05</div>
           <div class="content">
-            <h2>WHAT WOULD YOU LIKE TO GET OUT OF THIS?</h2>
-            <div class="sub">Select all that apply.</div>
-            <div class="options" data-group="actions">
-  <button class="opt"><span class="icon">▦</span>Get Organized</button>
-  <button class="opt"><span class="icon">⌕</span>Find / Research Something</button>
-  <button class="opt"><span class="icon">⚖</span>Compare Options</button>
-  <button class="opt"><span class="icon">☆</span>See What’s Important</button>
-  <button class="opt"><span class="icon">✓</span>Make a Decision</button>
-  <button class="opt"><span class="icon">⌁</span>Keep Track of Progress</button>
-  <button class="opt"><span class="icon">▣</span>See Dates / Deadlines</button>
-  <button class="opt"><span class="icon">◷</span>Save Time</button>
-  <button class="opt"><span class="icon">→</span>Finish Something I’ve Been Putting Off</button>
-  <button class="opt"><span class="icon">◉</span>I’m not sure — you figure it out</button>
-</div>
+            <h2>WHAT SHOULD PEOPLE BE ABLE TO DO?</h2>
+            <div class="sub">Select the actions you want visitors to take.</div>
+
+            <div class="options" data-group="features">
+              <button class="opt"><span class="icon">✉</span>Contact Me</button>
+              <button class="opt"><span class="icon">☎</span>Call Me</button>
+              <button class="opt"><span class="icon">@</span>Email Me</button>
+              <button class="opt"><span class="icon">◷</span>Book an Appointment</button>
+              <button class="opt"><span class="icon">▦</span>View My Services</button>
+              <button class="opt"><span class="icon">▣</span>View My Products</button>
+              <button class="opt"><span class="icon">$</span>See Pricing</button>
+              <button class="opt"><span class="icon">◎</span>Visit My Social Media</button>
+              <button class="opt"><span class="icon">▤</span>Fill Out a Form</button>
+              <button class="opt"><span class="icon">◇</span>Buy Something</button>
+              <button class="opt"><span class="icon">•••</span>Something Else</button>
+              <button class="opt"><span class="icon">○</span>I’m Not Sure</button>
+            </div>
           </div>
         </section>
 
         <section class="card">
           <div class="num">06</div>
           <div class="content">
-            <h2>HOW WILL YOU MOSTLY USE THE END RESULT?</h2>
-            <div class="sub">Select all that apply.</div>
-            <div class="options single" data-group="device">
-              <button class="opt"><span class="icon">▯</span>Phone</button>
-              <button class="opt"><span class="icon">▱</span>Computer</button>
-              <button class="opt"><span class="icon">▯▯</span>Both</button>
+            <h2>WHAT DO YOU ALREADY HAVE?</h2>
+            <div class="sub">Select anything you can provide for the website.</div>
+
+            <div class="options" data-group="materials">
+              <button class="opt"><span class="icon">◇</span>Logo</button>
+              <button class="opt"><span class="icon">●</span>Business Colors</button>
+              <button class="opt"><span class="icon">▤</span>Business Description</button>
+              <button class="opt"><span class="icon">▦</span>Service / Product Descriptions</button>
+              <button class="opt"><span class="icon">$</span>Prices</button>
+              <button class="opt"><span class="icon">▧</span>Photos</button>
+              <button class="opt"><span class="icon">▣</span>Product Photos</button>
+              <button class="opt"><span class="icon">★</span>Testimonials</button>
+              <button class="opt"><span class="icon">◎</span>Social Media</button>
+              <button class="opt"><span class="icon">⌁</span>Domain Name</button>
+              <button class="opt"><span class="icon">▱</span>Existing Website</button>
+              <button class="opt"><span class="icon">○</span>Nothing Yet</button>
+              <button class="opt"><span class="icon">•••</span>Something Else</button>
             </div>
-            <div class="field-label">Who is this for?</div>
-            <div class="options single" data-group="users">
-              <button class="opt"><span class="icon">♙</span>Just me</button>
-              <button class="opt"><span class="icon">♙♙</span>Other people too</button>
-            </div>
+
+            <div class="field-label">Have files that might help? (Optional)</div>
+            <label class="upload" for="fileInput">⇧ &nbsp; Upload logos, photos, documents, or other files</label>
+            <input id="fileInput" type="file" multiple accept="image/*,.pdf,.csv,.xlsx,.xls,.doc,.docx,.txt">
+            <div id="fileName" class="file-name"></div>
           </div>
         </section>
 
-        
-            
-           <section class="card">
-  <div class="num">07</div>
-  <div class="content">
-    <h2>HOW WOULD YOU LIKE THE END RESULT?</h2>
-    <div class="sub">Select anything that matters to you.</div>
+        <section class="card">
+          <div class="num">07</div>
+          <div class="content">
+            <h2>FINAL DETAILS.</h2>
+            <div class="sub">Anything else that will help me understand the build.</div>
 
-    <div class="options" data-group="style">
-      <button class="opt">Simple / Straightforward</button>
-      <button class="opt">Detailed / In-Depth</button>
-      <button class="opt">Visual</button>
-      <button class="opt">Easy to Update</button>
-      <button class="opt">Easy to Share</button>
-      <button class="opt">Something I Can Keep Using</button>
-      <button class="opt">Just Handle It For Me</button>
-      <button class="opt">No Preference — You Decide</button>
-    </div>
+            <div class="field-label">Is there anything else you want included on the website?</div>
+            <textarea id="finalDetails" style="min-height:110px;" placeholder="Add anything else you want me to know..."></textarea>
 
-    <div class="field-label">Anything else you want me to know? (Optional)</div>
-    <textarea id="inspiration" style="min-height:100px;" placeholder="Add any preferences, ideas, links, or other details here..."></textarea>
+            <div class="field-label">When would you ideally like the website ready?</div>
+            <div class="options single" data-group="timeline">
+              <button class="opt">As Soon As Possible</button>
+              <button class="opt">Within 1 Week</button>
+              <button class="opt">Within 2 Weeks</button>
+              <button class="opt">Within a Month</button>
+              <button class="opt">No Specific Deadline</button>
+            </div>
 
-    <div class="field-label">Have anything that might help? (Optional)</div>
-    <label class="upload" for="fileInput">⇧ &nbsp; Upload images or files (optional)</label>
-    <input id="fileInput" type="file" multiple accept="image/*,.pdf,.csv,.xlsx,.xls,.doc,.docx,.txt">
-    <div id="fileName" class="file-name"></div>
-  </div>
-</section>
+            <div class="field-label">Anything you’re unsure about? (Optional)</div>
+            <textarea id="uncertainties" style="min-height:90px;" placeholder="If you’re unsure about pages, content, style, features, or anything else, add it here..."></textarea>
+          </div>
+        </section>
+
         <div class="footerrow">
           <div class="note"><span class="dot">●</span> &nbsp; I’LL REVIEW YOUR ANSWERS AND FOLLOW UP<br>&nbsp;&nbsp;&nbsp;IF I NEED ANYTHING ELSE.</div>
           <button class="send" id="sendBtn">SEND IT TO ME →<small>REVIEW YOUR ANSWERS ON THE NEXT STEP</small></button>
+        </div>
         </div>
       </main>
     </div>
@@ -527,25 +598,145 @@ fileInput.addEventListener('change',()=>{
   fileName.textContent=!fileInput.files.length?'':fileInput.files.length===1?fileInput.files[0].name:`${fileInput.files.length} files selected`;
 });
 const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)].map(x=>x.innerText.trim());
-document.getElementById('sendBtn').addEventListener('click', async () => {
-  const payload = {
- submissionId: crypto.randomUUID(),
-    firstName: document.getElementById('firstName').value.trim(),
-lastName: document.getElementById('lastName').value.trim(),
-email: document.getElementById('email').value.trim(),
-    problem: document.getElementById('problem').value.trim(),
-difficult: vals('difficult'),
-success: document.getElementById('success').value.trim(),
-    materials: vals('materials'),
-    storage: document.getElementById('storage').value.trim(),
-    actions: vals('actions'),
-    device: vals('device')[0] || '',
-    users: vals('users')[0] || '',
-    style: vals('style'),
-    files: [...fileInput.files].map(f => f.name)
+
+const fileToBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const result = String(reader.result || '');
+    resolve(result.includes(',') ? result.split(',')[1] : result);
+  };
+  reader.onerror = reject;
+  reader.readAsDataURL(file);
+});
+
+const compressImageForEmail = file => new Promise((resolve, reject) => {
+  if (!file.type.startsWith('image/') || file.size <= 2500000) {
+    resolve(file);
+    return;
+  }
+
+  const img = new Image();
+  const objectUrl = URL.createObjectURL(file);
+
+  img.onload = () => {
+    try {
+      const maxSide = 1600;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxSide || height > maxSide) {
+        const scale = Math.min(maxSide / width, maxSide / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(blob => {
+        URL.revokeObjectURL(objectUrl);
+
+        if (!blob) {
+          reject(new Error('Could not prepare image'));
+          return;
+        }
+
+        const safeName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        resolve(new File([blob], safeName, { type:'image/jpeg' }));
+      }, 'image/jpeg', 0.82);
+
+    } catch (err) {
+      URL.revokeObjectURL(objectUrl);
+      reject(err);
+    }
   };
 
-  localStorage.setItem('systemFieldIntake', JSON.stringify(payload));
+  img.onerror = () => {
+    URL.revokeObjectURL(objectUrl);
+    reject(new Error('Could not read image'));
+  };
+
+  img.src = objectUrl;
+});
+
+async function emailUploadedFiles(payload) {
+  if (!fileInput.files.length) return;
+
+  for (const originalFile of [...fileInput.files]) {
+    const file = await compressImageForEmail(originalFile);
+
+    if (file.size > 3200000) {
+      throw new Error(`${file.name} is too large to email. Please keep individual files under about 3 MB.`);
+    }
+
+    const content = await fileToBase64(file);
+
+    const response = await fetch('/api/email-files', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        clientName: `${payload.firstName} ${payload.lastName}`.trim(),
+        clientEmail: payload.email,
+        businessName: payload.businessName,
+        fileName: file.name,
+        fileType: file.type || 'application/octet-stream',
+        content
+      })
+    });
+
+    if (!response.ok) {
+      const detail = await response.text().catch(() => '');
+      throw new Error(detail || `Could not email ${file.name}`);
+    }
+  }
+}
+
+document.getElementById('sendBtn').addEventListener('click', async () => {
+  const payload = {
+    submissionId: crypto.randomUUID(),
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    contactInstagram: document.getElementById('contactInstagram').value.trim(),
+    contactFacebook: document.getElementById('contactFacebook').value.trim(),
+
+    businessName: document.getElementById('businessName').value.trim(),
+    industry: document.getElementById('industry').value.trim(),
+    businessDescription: document.getElementById('businessDescription').value.trim(),
+    existingWebsite: vals('existingWebsite')[0] || '',
+    existingWebsiteUrl: document.getElementById('existingWebsiteUrl').value.trim(),
+    businessPhone: document.getElementById('businessPhone').value.trim(),
+    businessEmail: document.getElementById('businessEmail').value.trim(),
+    businessLocation: document.getElementById('businessLocation').value.trim(),
+    businessHours: document.getElementById('businessHours').value.trim(),
+    businessSocials: document.getElementById('businessSocials').value.trim(),
+
+    offerings: document.getElementById('offerings').value.trim(),
+    showPricing: vals('showPricing')[0] || '',
+    separateOfferings: vals('separateOfferings')[0] || '',
+
+    pages: vals('pages'),
+
+    style: vals('style'),
+    styleNotes: document.getElementById('styleNotes').value.trim(),
+
+    features: vals('features'),
+
+    materials: vals('materials'),
+    files: [...fileInput.files].map(f => f.name),
+
+    finalDetails: document.getElementById('finalDetails').value.trim(),
+    timeline: vals('timeline')[0] || '',
+    uncertainties: document.getElementById('uncertainties').value.trim()
+  };
+
+  localStorage.setItem('monosWebsiteIntake', JSON.stringify(payload));
 
   try {
     const response = await fetch(
@@ -563,7 +754,14 @@ success: document.getElementById('success').value.trim(),
       throw new Error('Submission failed');
     }
 
+    if (fileInput.files.length) {
+      await emailUploadedFiles(payload);
+    }
+
     const t = document.getElementById('toast');
+    t.textContent = fileInput.files.length
+      ? 'Answers saved and files sent.'
+      : 'Answers saved.';
     t.classList.add('show');
 
     setTimeout(() => {
@@ -572,11 +770,10 @@ success: document.getElementById('success').value.trim(),
 
   } catch (error) {
     console.error('Intake submission failed:', error);
-    alert('Something went wrong submitting your request. Please try again.');
+    alert(error.message || 'Something went wrong submitting your request. Please try again.');
   }
 });
 </script>
-  </script>
 
 <footer>
   <div>
@@ -591,13 +788,11 @@ success: document.getElementById('success').value.trim(),
   </div>
 
   <div class="footer-right">
-    BUILT AROUND YOUR SITUATION.
+    AFFORDABLE WEBSITES.<br>BUILT AROUND YOUR BUSINESS.
     <br>
     <a class="footer-cta" href="intake.html">GET STARTED →</a>
   </div>
 </footer>
 
-</body>
-</html>
 </body>
 </html>
