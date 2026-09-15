@@ -598,105 +598,6 @@ fileInput.addEventListener('change',()=>{
   fileName.textContent=!fileInput.files.length?'':fileInput.files.length===1?fileInput.files[0].name:`${fileInput.files.length} files selected`;
 });
 const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)].map(x=>x.innerText.trim());
-
-const fileToBase64 = file => new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    const result = String(reader.result || '');
-    resolve(result.includes(',') ? result.split(',')[1] : result);
-  };
-  reader.onerror = reject;
-  reader.readAsDataURL(file);
-});
-
-const compressImageForEmail = file => new Promise((resolve, reject) => {
-  if (!file.type.startsWith('image/') || file.size <= 2500000) {
-    resolve(file);
-    return;
-  }
-
-  const img = new Image();
-  const objectUrl = URL.createObjectURL(file);
-
-  img.onload = () => {
-    try {
-      const maxSide = 1600;
-      let width = img.width;
-      let height = img.height;
-
-      if (width > maxSide || height > maxSide) {
-        const scale = Math.min(maxSide / width, maxSide / height);
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
-      }
-
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      canvas.toBlob(blob => {
-        URL.revokeObjectURL(objectUrl);
-
-        if (!blob) {
-          reject(new Error('Could not prepare image'));
-          return;
-        }
-
-        const safeName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
-        resolve(new File([blob], safeName, { type:'image/jpeg' }));
-      }, 'image/jpeg', 0.82);
-
-    } catch (err) {
-      URL.revokeObjectURL(objectUrl);
-      reject(err);
-    }
-  };
-
-  img.onerror = () => {
-    URL.revokeObjectURL(objectUrl);
-    reject(new Error('Could not read image'));
-  };
-
-  img.src = objectUrl;
-});
-
-async function emailUploadedFiles(payload) {
-  if (!fileInput.files.length) return;
-
-  for (const originalFile of [...fileInput.files]) {
-    const file = await compressImageForEmail(originalFile);
-
-    if (file.size > 3200000) {
-      throw new Error(`${file.name} is too large to email. Please keep individual files under about 3 MB.`);
-    }
-
-    const content = await fileToBase64(file);
-
-  const response = await fetch('https://monos-beta.vercel.app/api/email-files', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        clientName: `${payload.firstName} ${payload.lastName}`.trim(),
-        clientEmail: payload.email,
-        businessName: payload.businessName,
-        fileName: file.name,
-        fileType: file.type || 'application/octet-stream',
-        content
-      })
-    });
-
-    if (!response.ok) {
-      const detail = await response.text().catch(() => '');
-      throw new Error(detail || `Could not email ${file.name}`);
-    }
-  }
-}
-
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const payload = {
     submissionId: crypto.randomUUID(),
@@ -754,14 +655,7 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
       throw new Error('Submission failed');
     }
 
-    if (fileInput.files.length) {
-      await emailUploadedFiles(payload);
-    }
-
     const t = document.getElementById('toast');
-    t.textContent = fileInput.files.length
-      ? 'Answers saved and files sent.'
-      : 'Answers saved.';
     t.classList.add('show');
 
     setTimeout(() => {
@@ -770,7 +664,7 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
 
   } catch (error) {
     console.error('Intake submission failed:', error);
-    alert(error.message || 'Something went wrong submitting your request. Please try again.');
+    alert('Something went wrong submitting your request. Please try again.');
   }
 });
 </script>
