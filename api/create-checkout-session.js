@@ -26,17 +26,17 @@ export default async function handler(req, res) {
     const { tier } = req.body;
 
     const tiers = {
-      CORE: {
-        amount: 5000,
-        label: 'CORE'
-      },
-      SYSTEM: {
+      STARTER: {
         amount: 10000,
-        label: 'SYSTEM'
+        label: 'STARTER'
       },
-      COMMAND: {
+      BUSINESS: {
         amount: 15000,
-        label: 'COMMAND'
+        label: 'BUSINESS'
+      },
+      COMPLETE: {
+        amount: 20000,
+        label: 'COMPLETE'
       }
     };
 
@@ -77,10 +77,10 @@ export default async function handler(req, res) {
       });
     }
 
-   return res.status(200).json({
-  clientSecret: paymentIntent.client_secret,
-  paymentIntentId: paymentIntent.id
-});
+    return res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id
+    });
 
   } catch (error) {
     console.error(error);
