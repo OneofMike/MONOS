@@ -596,11 +596,6 @@ document.querySelectorAll('.options').forEach(group=>{
     });
   });
 });
-const fileInput=document.getElementById('fileInput');
-const fileName=document.getElementById('fileName');
-fileInput.addEventListener('change',()=>{
-  fileName.textContent=!fileInput.files.length?'':fileInput.files.length===1?fileInput.files[0].name:`${fileInput.files.length} files selected`;
-});
 const vals=g=>[...document.querySelectorAll(`[data-group="${g}"] .opt.selected`)].map(x=>x.innerText.trim());
 document.getElementById('sendBtn').addEventListener('click', async () => {
   const payload = {
