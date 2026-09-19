@@ -26,14 +26,27 @@ export default async function handler(req, res) {
     const airtableToken = process.env.AIRTABLE_TOKEN;
     const airtableBaseId = process.env.AIRTABLE_BASE_ID;
     const cleaningTableId = process.env.AIRTABLE_CLEANING_TABLE_ID;
+    const eventTableId = process.env.AIRTABLE_EVENT_TABLE_ID;
 
-    if (!airtableToken || !airtableBaseId || !cleaningTableId) {
+    if (
+      !airtableToken ||
+      !airtableBaseId ||
+      !cleaningTableId ||
+      !eventTableId
+    ) {
       return res.status(500).json({
         error: 'Airtable is not configured'
       });
     }
 
     const data = req.body || {};
+
+    const isEvent =
+      data.industry === 'Event Planning / Balloon Decor';
+
+    const selectedTableId = isEvent
+      ? eventTableId
+      : cleaningTableId;
 
     // ----------------------------
     // PAYMENT UPDATE
@@ -74,33 +87,52 @@ export default async function handler(req, res) {
         });
       }
 
-      // Find the matching Airtable record by Submission ID
+      /*
+       * Search BOTH intake tables.
+       * This lets payment updates work regardless of which
+       * intake the customer originally submitted.
+       */
       const formula = encodeURIComponent(
         `{Submission ID}="${submissionId.replace(/"/g, '\\"')}"`
       );
 
-      const searchResponse = await fetch(
-        `https://api.airtable.com/v0/${airtableBaseId}/${cleaningTableId}?filterByFormula=${formula}&maxRecords=1`,
-        {
-          headers: {
-            Authorization: `Bearer ${airtableToken}`
+      const tablesToSearch = [
+        cleaningTableId,
+        eventTableId
+      ];
+
+      let record = null;
+      let paymentTableId = null;
+
+      for (const tableId of tablesToSearch) {
+        const searchResponse = await fetch(
+          `https://api.airtable.com/v0/${airtableBaseId}/${tableId}?filterByFormula=${formula}&maxRecords=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${airtableToken}`
+            }
           }
+        );
+
+        if (!searchResponse.ok) {
+          const text = await searchResponse.text();
+
+          return res.status(502).json({
+            error: 'Could not find Airtable submission',
+            details: text
+          });
         }
-      );
 
-      if (!searchResponse.ok) {
-        const text = await searchResponse.text();
+        const searchData = await searchResponse.json();
 
-        return res.status(502).json({
-          error: 'Could not find Airtable submission',
-          details: text
-        });
+        if (searchData.records?.[0]) {
+          record = searchData.records[0];
+          paymentTableId = tableId;
+          break;
+        }
       }
 
-      const searchData = await searchResponse.json();
-      const record = searchData.records?.[0];
-
-      if (!record) {
+      if (!record || !paymentTableId) {
         return res.status(404).json({
           error: 'Submission not found in Airtable'
         });
@@ -110,7 +142,6 @@ export default async function handler(req, res) {
         'Payment Status': data.paymentStatus || 'Paid'
       };
 
-      // These are optional and will only be sent if the fields exist in Airtable.
       if (data.package) {
         updateFields['Package'] = data.package;
       }
@@ -128,7 +159,7 @@ export default async function handler(req, res) {
       }
 
       const updateResponse = await fetch(
-        `https://api.airtable.com/v0/${airtableBaseId}/${cleaningTableId}/${record.id}`,
+        `https://api.airtable.com/v0/${airtableBaseId}/${paymentTableId}/${record.id}`,
         {
           method: 'PATCH',
           headers: {
@@ -157,99 +188,200 @@ export default async function handler(req, res) {
     }
 
     // ----------------------------
-    // CLEANING INTAKE SUBMISSION
+    // EVENT + BALLOON INTAKE
     // ----------------------------
-    const fields = {
-      'Submission ID': data.submissionId || '',
-      'First Name': data.firstName || '',
-      'Last Name': data.lastName || '',
+    let fields;
 
-      'Business Name': data.businessName || '',
-      'Business Phone': data.businessPhone || '',
-      'Business Email': data.businessEmail || '',
+    if (isEvent) {
+      fields = {
+        'Submission ID': data.submissionId || '',
+        'Industry': data.industry || '',
 
-      'Instagram': data.contactInstagram || '',
-      'Facebook': data.contactFacebook || '',
+        'First Name': data.firstName || '',
+        'Last Name': data.lastName || '',
+        'Business Phone': data.businessPhone || '',
+        'Business Email': data.businessEmail || '',
 
-      'Business Type': data.businessType || '',
+        'Instagram': data.contactInstagram || '',
+        'Facebook': data.contactFacebook || '',
 
-      'Business Highlights': Array.isArray(data.businessHighlights)
-        ? data.businessHighlights
-        : [],
+        'Business Name': data.businessName || '',
+        'Business Type': data.businessType || '',
 
-      'Service Areas': Array.isArray(data.serviceAreas)
-        ? data.serviceAreas.join(', ')
-        : '',
+        'Business Highlights': Array.isArray(data.businessHighlights)
+          ? data.businessHighlights.join(', ')
+          : '',
 
-      'Business Hours': Array.isArray(data.businessHours)
-        ? data.businessHours
-            .map(item => `${item.day}: ${item.start} - ${item.end}`)
-            .join('\n')
-        : '',
+        'Service Areas': Array.isArray(data.serviceAreas)
+          ? data.serviceAreas.join(', ')
+          : '',
 
-      'Insured': data.insured || '',
+        'Travel Range': data.travelRange || '',
 
-      'Services': Array.isArray(data.services)
-        ? data.services
-        : [],
+        'Business Hours': Array.isArray(data.businessHours)
+          ? data.businessHours
+              .map(item => `${item.day}: ${item.start} - ${item.end}`)
+              .join('\n')
+          : '',
 
-      'Recurring Frequency': Array.isArray(data.recurringFrequency)
-        ? data.recurringFrequency
-        : [],
+        'Services': Array.isArray(data.services)
+          ? data.services.join(', ')
+          : '',
 
-      'Service Details': data.serviceDetails || '',
+        'Event Types': Array.isArray(data.eventTypes)
+          ? data.eventTypes.join(', ')
+          : '',
 
-      'Pricing Display': data.pricingDisplay || '',
+        'Service Details': data.serviceDetails || '',
 
-      'Pricing Method': Array.isArray(data.pricingMethod)
-        ? data.pricingMethod
-        : [],
+        'Pricing Display': data.pricingDisplay || '',
 
-      'Pricing Details': data.pricingDetails || '',
+        'Pricing Method': Array.isArray(data.pricingMethod)
+          ? data.pricingMethod.join(', ')
+          : '',
 
-      'Deposit Required': data.depositRequired || '',
+        'Pricing Details': data.pricingDetails || '',
+        'Deposit Required': data.depositRequired || '',
 
-      'Booking Flow': data.bookingFlow || '',
+        'Booking Flow': data.bookingFlow || '',
 
-      'Customer Info Requested': Array.isArray(data.customerInfo)
-        ? data.customerInfo
-        : [],
+        'Customer Info': Array.isArray(data.customerInfo)
+          ? data.customerInfo.join(', ')
+          : '',
 
-      'Show Availability': data.showAvailability || '',
+        'Show Availability': data.showAvailability || '',
+        'Existing Booking System':
+          data.existingBookingSystem || '',
+        'Booking System': data.bookingSystem || '',
 
-      'Existing Booking System': data.existingBookingSystem || '',
+        'Event Factors': Array.isArray(data.eventFactors)
+          ? data.eventFactors.join(', ')
+          : '',
 
-      'Booking System': data.bookingSystem || '',
+        'Event Environment': data.eventEnvironment || '',
+        'Delivery Setup': data.deliverySetup || '',
+        'Breakdown Pickup': data.breakdownPickup || '',
 
-      'Website Sections': Array.isArray(data.pages)
-        ? data.pages
-        : [],
+        'Pages': Array.isArray(data.pages)
+          ? data.pages.join(', ')
+          : '',
 
-      'Tagline': data.tagline || '',
+        'Tagline': data.tagline || '',
 
-      'Style': Array.isArray(data.style)
-        ? data.style
-        : [],
+        'Style': Array.isArray(data.style)
+          ? data.style.join(', ')
+          : '',
 
-      'Style Notes': data.styleNotes || '',
+        'Style Notes': data.styleNotes || '',
 
-      'Materials': Array.isArray(data.materials)
-        ? data.materials
-        : [],
+        'Materials': Array.isArray(data.materials)
+          ? data.materials.join(', ')
+          : '',
 
-      'Trust Points': Array.isArray(data.trustPoints)
-        ? data.trustPoints
-        : [],
+        'Trust Points': Array.isArray(data.trustPoints)
+          ? data.trustPoints.join(', ')
+          : '',
 
-      'Final Details': data.finalDetails || '',
+        'Final Details': data.finalDetails || ''
+      };
+    }
 
-      'Payment Status': 'Pending',
+    // ----------------------------
+    // CLEANING INTAKE
+    // ----------------------------
+    else {
+      fields = {
+        'Submission ID': data.submissionId || '',
+        'First Name': data.firstName || '',
+        'Last Name': data.lastName || '',
 
-      'Submission Date': new Date().toISOString()
-    };
+        'Business Name': data.businessName || '',
+        'Business Phone': data.businessPhone || '',
+        'Business Email': data.businessEmail || '',
 
+        'Instagram': data.contactInstagram || '',
+        'Facebook': data.contactFacebook || '',
+
+        'Business Type': data.businessType || '',
+
+        'Business Highlights': Array.isArray(data.businessHighlights)
+          ? data.businessHighlights
+          : [],
+
+        'Service Areas': Array.isArray(data.serviceAreas)
+          ? data.serviceAreas.join(', ')
+          : '',
+
+        'Business Hours': Array.isArray(data.businessHours)
+          ? data.businessHours
+              .map(item => `${item.day}: ${item.start} - ${item.end}`)
+              .join('\n')
+          : '',
+
+        'Insured': data.insured || '',
+
+        'Services': Array.isArray(data.services)
+          ? data.services
+          : [],
+
+        'Recurring Frequency':
+          Array.isArray(data.recurringFrequency)
+            ? data.recurringFrequency
+            : [],
+
+        'Service Details': data.serviceDetails || '',
+        'Pricing Display': data.pricingDisplay || '',
+
+        'Pricing Method': Array.isArray(data.pricingMethod)
+          ? data.pricingMethod
+          : [],
+
+        'Pricing Details': data.pricingDetails || '',
+        'Deposit Required': data.depositRequired || '',
+        'Booking Flow': data.bookingFlow || '',
+
+        'Customer Info Requested':
+          Array.isArray(data.customerInfo)
+            ? data.customerInfo
+            : [],
+
+        'Show Availability': data.showAvailability || '',
+        'Existing Booking System':
+          data.existingBookingSystem || '',
+        'Booking System': data.bookingSystem || '',
+
+        'Website Sections': Array.isArray(data.pages)
+          ? data.pages
+          : [],
+
+        'Tagline': data.tagline || '',
+
+        'Style': Array.isArray(data.style)
+          ? data.style
+          : [],
+
+        'Style Notes': data.styleNotes || '',
+
+        'Materials': Array.isArray(data.materials)
+          ? data.materials
+          : [],
+
+        'Trust Points': Array.isArray(data.trustPoints)
+          ? data.trustPoints
+          : [],
+
+        'Final Details': data.finalDetails || '',
+
+        'Payment Status': 'Pending',
+        'Submission Date': new Date().toISOString()
+      };
+    }
+
+    // ----------------------------
+    // CREATE AIRTABLE RECORD
+    // ----------------------------
     const airtableResponse = await fetch(
-      `https://api.airtable.com/v0/${airtableBaseId}/${cleaningTableId}`,
+      `https://api.airtable.com/v0/${airtableBaseId}/${selectedTableId}`,
       {
         method: 'POST',
         headers: {
@@ -257,13 +389,13 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-  records: [
-    {
-      fields
-    }
-  ],
-  typecast: true
-})
+          records: [
+            {
+              fields
+            }
+          ],
+          typecast: true
+        })
       }
     );
 
