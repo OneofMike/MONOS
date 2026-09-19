@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MONOS — Choose Your Business Type</title>
+<style>
+:root{
+  --bg:#07152d;
+  --bg2:#0b1d3d;
+  --panel:rgba(6,17,39,.78);
+  --panel2:rgba(8,20,44,.92);
+  --line:rgba(228,134,199,.46);
+  --line-soft:rgba(255,255,255,.18);
+  --text:#f4f3f7;
+  --muted:#c7c3cf;
+  --pink:#ef83c2;
+  --pink2:#f5a2d1;
+  --purple:#a78bd2;
+  --cyan:#39a8dd;
+  --green:#7de2c5;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  background:#07152d;
+  color:var(--text);
+  font-family:"Courier New",Courier,monospace;
+  overflow-x:hidden;
+}
+
+a,button{font:inherit}
+a{color:inherit}
+
+.scene{
+  position:fixed;
+  inset:0;
+  z-index:-5;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 82% 8%,rgba(245,171,221,.40),transparent 22%),
+    radial-gradient(circle at 50% 35%,rgba(244,117,196,.20),transparent 20%),
+    linear-gradient(180deg,#0b1830 0%,#10284d 47%,#0a1d3c 100%);
+}
+.scene:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(4,11,27,.68),transparent 24%,transparent 74%,rgba(6,13,31,.20));
+}
+.city{position:absolute;bottom:0;width:32%;height:86%;opacity:.68}
+.city.left{left:-5%}
+.city.right{right:-5%;transform:scaleX(-1)}
+.tower{
+  position:absolute;bottom:0;left:var(--x);width:var(--w);height:var(--h);
+  border:1px solid rgba(120,148,208,.14);
+  border-radius:45% 45% 7% 7% / 6% 6% 2% 2%;
+  background:linear-gradient(90deg,rgba(5,14,33,.98),rgba(24,44,83,.94) 48%,rgba(69,47,102,.72) 74%,rgba(8,20,43,.98));
+  box-shadow:inset 14px 0 26px rgba(63,166,220,.06),inset -12px 0 30px rgba(239,111,191,.08),0 0 26px rgba(47,128,180,.08);
+}
+.tower:before{
+  content:"";position:absolute;left:50%;top:-78px;transform:translateX(-50%);
+  width:3px;height:86px;background:linear-gradient(180deg,rgba(249,180,222,.95),rgba(117,82,177,.48));
+  box-shadow:0 0 16px rgba(245,130,199,.42)
+}
+.tower:after{
+  content:"";position:absolute;left:-18%;width:136%;height:22px;bottom:var(--ring);
+  border-radius:50%;border:1px solid rgba(111,150,208,.18);
+  background:linear-gradient(180deg,rgba(43,60,104,.74),rgba(12,25,51,.92));
+}
+.t1{--x:0%;--w:27%;--h:56%;--ring:24%}
+.t2{--x:20%;--w:25%;--h:75%;--ring:38%}
+.t3{--x:42%;--w:19%;--h:63%;--ring:52%}
+.t4{--x:59%;--w:21%;--h:48%;--ring:29%}
+.t5{--x:77%;--w:18%;--h:70%;--ring:44%}
+.haze{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 57% 45%,rgba(250,152,214,.24),transparent 28%),
+    radial-gradient(ellipse at 26% 75%,rgba(236,89,179,.15),transparent 26%);
+  filter:blur(18px);
+}
+.scan{
+  position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.012) 0 1px,transparent 1px 4px);
+  mix-blend-mode:soft-light;z-index:50
+}
+
+.page{
+  width:min(1120px,100%);
+  min-height:100vh;
+  margin:0 auto;
+  padding:0 34px 38px;
+  position:relative;
+}
+.page:before,.page:after{
+  content:"";position:absolute;top:0;bottom:0;width:1px;
+  background:rgba(255,255,255,.13);pointer-events:none
+}
+.page:before{left:14px}
+.page:after{right:14px}
+
+header{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.24);
+  position:relative;z-index:3;
+}
+.brand{font-weight:700;letter-spacing:.02em;font-size:16px;text-decoration:none}
+.dot{color:var(--pink);margin-right:9px}
+.back{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:12px;
+}
+.back:hover{color:var(--pink)}
+
+.hero{
+  text-align:center;
+  max-width:790px;
+  margin:0 auto;
+  padding:72px 0 42px;
+}
+.kicker{
+  color:var(--pink);
+  font-size:11px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+h1{
+  margin:0;
+  font-size:clamp(38px,6vw,68px);
+  line-height:1;
+  font-weight:400;
+  letter-spacing:-.03em;
+}
+h1 span{color:var(--pink)}
+.lead{
+  max-width:680px;
+  margin:24px auto 0;
+  color:#d8d1df;
+  font-size:14px;
+  line-height:1.75;
+}
+.route-note{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:22px;
+  border:1px solid rgba(239,131,194,.28);
+  background:rgba(239,131,194,.05);
+  padding:10px 13px;
+  color:#d9d3df;
+  font-size:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  max-width:920px;
+  margin:0 auto;
+}
+
+.industry-card{
+  position:relative;
+  min-height:255px;
+  border:1px solid rgba(228,134,199,.42);
+  background:linear-gradient(145deg,rgba(7,21,49,.91),rgba(15,28,67,.89));
+  padding:25px;
+  text-decoration:none;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  backdrop-filter:blur(8px);
+  display:flex;
+  flex-direction:column;
+}
+.industry-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--pink);
+  box-shadow:0 18px 42px rgba(2,8,28,.28);
+}
+.industry-card:before{
+  content:"";
+  position:absolute;top:-1px;right:-1px;width:30px;height:30px;
+  background:var(--pink);
+  clip-path:polygon(100% 0,100% 100%,0 0);
+  opacity:.8;
+}
+.card-code{
+  color:var(--pink);
+  font-size:10px;
+  letter-spacing:.1em;
+  margin-bottom:18px;
+}
+.icon{
+  font-size:27px;
+  margin-bottom:18px;
+}
+.industry-card h2{
+  margin:0 0 10px;
+  font-size:23px;
+  line-height:1.2;
+  font-weight:400;
+}
+.industry-card p{
+  margin:0 0 22px;
+  color:#beb7c8;
+  font-size:12px;
+  line-height:1.65;
+  max-width:100%;
+}
+.card-bottom{
+  margin-top:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+  font-size:10px;
+  line-height:1.35;
+}
+.card-bottom span:first-child{color:#d8d2de}
+.arrow{color:var(--pink);font-size:17px}
+
+.select-cta{
+  margin-top:16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:48px;
+  padding:13px 18px;
+  background:var(--pink);
+  color:#101426;
+  border:1px solid var(--pink);
+  text-decoration:none;
+  font-weight:700;
+  font-size:12px;
+  box-shadow:0 12px 30px rgba(239,131,194,.16);
+  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+}
+.select-cta:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.04);
+  box-shadow:0 16px 36px rgba(239,131,194,.22);
+}
+
+.helper{
+  max-width:920px;
+  margin:24px auto 0;
+  padding:17px 20px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(7,16,36,.50);
+  color:#bdb7c7;
+  font-size:11px;
+  line-height:1.65;
+  text-align:center;
+}
+.helper strong{color:#eee9f0;font-weight:400}
+
+footer{
+  max-width:920px;
+  margin:54px auto 0;
+  padding:18px 0;
+  border-top:1px solid rgba(255,255,255,.16);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#aaa4b5;
+  font-size:10px;
+}
+
+@media(max-width:720px){
+  .page{padding:0 14px 28px}
+  .page:before{left:4px}.page:after{right:4px}
+  header{min-height:62px;padding:0 5px}
+  .brand{font-size:14px}
+  .hero{padding:48px 8px 30px}
+  .lead{font-size:12px}
+  .grid{grid-template-columns:1fr;gap:11px;padding:0 6px}
+  .industry-card{min-height:235px;padding:21px}
+  .industry-card h2{font-size:21px}
+  .industry-card p{font-size:11px;line-height:1.6;margin-bottom:20px}
+  .card-bottom{font-size:9px}
+  .helper{margin:18px 6px 0}
+  footer{margin:42px 6px 0;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+<div class="scene" aria-hidden="true">
+  <div class="city left">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div>
+  </div>
+  <div class="city right">
+    <div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div>
+  </div>
+  <div class="haze"></div>
+</div>
+<div class="scan"></div>
+
+<main class="page">
+  <header>
+    <a class="brand" href="index.html"><span class="dot">●</span>MONOS</a>
+    <a class="back" href="index.html">← BACK TO HOME</a>
+  </header>
+
+  <section class="hero">
+    <div class="kicker">LET'S BUILD AROUND YOUR BUSINESS</div>
+    <h1>What type of business<br><span>do you run?</span></h1>
+    <p class="lead">
+      Choose the option that best matches your business.
+    </p>
+    <div class="route-note">01 · CHOOSE INDUSTRY &nbsp;→&nbsp; 02 · INTAKE &nbsp;→&nbsp; 03 · REVIEW + CHECKOUT</div>
+  </section>
+
+  <section class="grid" aria-label="Business type selection">
+    <article class="industry-card" data-industry="Cleaning Business">
+      <div class="card-code">INDUSTRY / 01</div>
+      <div class="icon">✦</div>
+      <h2>Cleaner / Cleaning Business</h2>
+      <p>
+        For solo cleaners and small cleaning companies offering residential,
+        commercial, recurring, deep clean, move-in/out, Airbnb, or organization services.
+      </p>
+      <div class="card-bottom"><span></span><span class="arrow">→</span></div>
+      <a class="select-cta" href="intake.html?industry=cleaning">Choose Cleaning Business →</a>
+    </article>
+
+    <article class="industry-card" data-industry="Event Planner / Balloon Decor">
+      <div class="card-code">INDUSTRY / 02</div>
+      <div class="icon">◇</div>
+      <h2>Event Planner / Balloon Decor</h2>
+      <p>
+        For balloon artists, decorators, event planners, party setup businesses,
+        and other event-based services.
+      </p>
+      <div class="card-bottom"><span></span><span class="arrow">→</span></div>
+      <a class="select-cta" href="intake.html?industry=events">Choose Event / Balloon →</a>
+    </article>
+
+    <article class="industry-card" data-industry="Treat / Baking Business">
+      <div class="card-code">INDUSTRY / 03</div>
+      <div class="icon">□</div>
+      <h2>Treat / Baking Business</h2>
+      <p>
+        For bakers, custom treat makers, dessert businesses, specialty food brands,
+        and home-based order businesses.
+      </p>
+      <div class="card-bottom"><span></span><span class="arrow">→</span></div>
+      <a class="select-cta" href="intake.html?industry=treats">Choose Treat / Baking →</a>
+    </article>
+
+    <article class="industry-card" data-industry="Other Small Business">
+      <div class="card-code">INDUSTRY / 04</div>
+      <div class="icon">+</div>
+      <h2>Other Small Business</h2>
+      <p>
+        Don’t see your business type here? Use the general intake and tell us
+        exactly what you do and what you want your website to accomplish.
+      </p>
+      <div class="card-bottom"><span></span><span class="arrow">→</span></div>
+      <a class="select-cta" href="intake.html?industry=other">Choose Other Business →</a>
+    </article>
+  </section>
+
+  <div class="helper">
+    <strong>Why I ask:</strong> Different businesses need different information, features, and website setups.
+    Choosing your industry helps me keep the intake focused on what actually matters for your business, so the process stays shorter, clearer, and easier to complete.
+  </div>
+
+  <footer>
+    <span>AFFORDABLE WEBSITES. BUILT AROUND YOUR BUSINESS.</span>
+    <span>MONOS · </span>
+  </footer>
+</main>
+
+<script>
+document.querySelectorAll('.industry-card').forEach(card=>{
+  const button = card.querySelector('.select-cta');
+  if(button){
+    button.addEventListener('click',()=>{
+      localStorage.setItem('monosIndustry', card.dataset.industry);
+    });
+  }
+});
+</script>
+</body>
+</html>
