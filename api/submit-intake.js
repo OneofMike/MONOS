@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     const data = req.body || {};
 
     const isEvent =
-      data.industry === 'Event Planning / Balloon Decor';
+     data.industry === 'Event Planner / Balloon Decor';
 
     const selectedTableId = isEvent
       ? eventTableId
