@@ -401,7 +401,7 @@ export default async function handler(req, res) {
 
     if (!airtableResponse.ok) {
       const text = await airtableResponse.text();
-
+      console.error('AIRTABLE ERROR:', text);
       return res.status(502).json({
         error: 'Airtable request failed',
         details: text
