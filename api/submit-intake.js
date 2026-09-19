@@ -23,97 +23,263 @@ export default async function handler(req, res) {
   }
 
   try {
-    const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    const airtableToken = process.env.AIRTABLE_TOKEN;
+    const airtableBaseId = process.env.AIRTABLE_BASE_ID;
+    const cleaningTableId = process.env.AIRTABLE_CLEANING_TABLE_ID;
 
-    if (!webhookUrl) {
+    if (!airtableToken || !airtableBaseId || !cleaningTableId) {
       return res.status(500).json({
-        error: 'Google Sheets webhook is not configured'
+        error: 'Airtable is not configured'
       });
     }
 
-   
-const data = req.body || {};
+    const data = req.body || {};
 
-let payload;
+    // ----------------------------
+    // PAYMENT UPDATE
+    // ----------------------------
+    if (data.action === 'payment_update') {
+      let name = '';
+      let email = '';
 
-if (data.action === 'payment_update') {
-  let name = '';
-  let email = '';
+      if (data.paymentIntentId && process.env.STRIPE_SECRET_KEY) {
+        const stripeResponse = await fetch(
+          `https://api.stripe.com/v1/payment_intents/${data.paymentIntentId}?expand[]=payment_method`,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`
+            }
+          }
+        );
 
-  if (data.paymentIntentId && process.env.STRIPE_SECRET_KEY) {
-    const stripeResponse = await fetch(
-      `https://api.stripe.com/v1/payment_intents/${data.paymentIntentId}?expand[]=payment_method`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`
+        if (stripeResponse.ok) {
+          const paymentIntent = await stripeResponse.json();
+
+          const billingDetails =
+            paymentIntent.payment_method?.billing_details || {};
+
+          name = billingDetails.name || '';
+          email =
+            billingDetails.email ||
+            paymentIntent.receipt_email ||
+            '';
         }
+      }
+
+      const submissionId = data.submissionId || '';
+
+      if (!submissionId) {
+        return res.status(400).json({
+          error: 'Submission ID is required'
+        });
+      }
+
+      // Find the matching Airtable record by Submission ID
+      const formula = encodeURIComponent(
+        `{Submission ID}="${submissionId.replace(/"/g, '\\"')}"`
+      );
+
+      const searchResponse = await fetch(
+        `https://api.airtable.com/v0/${airtableBaseId}/${cleaningTableId}?filterByFormula=${formula}&maxRecords=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${airtableToken}`
+          }
+        }
+      );
+
+      if (!searchResponse.ok) {
+        const text = await searchResponse.text();
+
+        return res.status(502).json({
+          error: 'Could not find Airtable submission',
+          details: text
+        });
+      }
+
+      const searchData = await searchResponse.json();
+      const record = searchData.records?.[0];
+
+      if (!record) {
+        return res.status(404).json({
+          error: 'Submission not found in Airtable'
+        });
+      }
+
+      const updateFields = {
+        'Payment Status': data.paymentStatus || 'Paid'
+      };
+
+      // These are optional and will only be sent if the fields exist in Airtable.
+      if (data.package) {
+        updateFields['Package'] = data.package;
+      }
+
+      if (data.paymentIntentId) {
+        updateFields['Payment Intent ID'] = data.paymentIntentId;
+      }
+
+      if (name) {
+        updateFields['Billing Name'] = name;
+      }
+
+      if (email) {
+        updateFields['Billing Email'] = email;
+      }
+
+      const updateResponse = await fetch(
+        `https://api.airtable.com/v0/${airtableBaseId}/${cleaningTableId}/${record.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${airtableToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            fields: updateFields
+          })
+        }
+      );
+
+      if (!updateResponse.ok) {
+        const text = await updateResponse.text();
+
+        return res.status(502).json({
+          error: 'Airtable payment update failed',
+          details: text
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        updated: true
+      });
+    }
+
+    // ----------------------------
+    // CLEANING INTAKE SUBMISSION
+    // ----------------------------
+    const fields = {
+      'Submission ID': data.submissionId || '',
+      'First Name': data.firstName || '',
+      'Last Name': data.lastName || '',
+
+      'Business Name': data.businessName || '',
+      'Business Phone': data.businessPhone || '',
+      'Business Email': data.businessEmail || '',
+
+      'Instagram': data.contactInstagram || '',
+      'Facebook': data.contactFacebook || '',
+
+      'Business Type': data.businessType || '',
+
+      'Business Highlights': Array.isArray(data.businessHighlights)
+        ? data.businessHighlights
+        : [],
+
+      'Service Areas': Array.isArray(data.serviceAreas)
+        ? data.serviceAreas.join(', ')
+        : '',
+
+      'Business Hours': Array.isArray(data.businessHours)
+        ? data.businessHours
+            .map(item => `${item.day}: ${item.start} - ${item.end}`)
+            .join('\n')
+        : '',
+
+      'Insured': data.insured || '',
+
+      'Services': Array.isArray(data.services)
+        ? data.services
+        : [],
+
+      'Recurring Frequency': Array.isArray(data.recurringFrequency)
+        ? data.recurringFrequency
+        : [],
+
+      'Service Details': data.serviceDetails || '',
+
+      'Pricing Display': data.pricingDisplay || '',
+
+      'Pricing Method': Array.isArray(data.pricingMethod)
+        ? data.pricingMethod
+        : [],
+
+      'Pricing Details': data.pricingDetails || '',
+
+      'Deposit Required': data.depositRequired || '',
+
+      'Booking Flow': data.bookingFlow || '',
+
+      'Customer Info Requested': Array.isArray(data.customerInfo)
+        ? data.customerInfo
+        : [],
+
+      'Show Availability': data.showAvailability || '',
+
+      'Existing Booking System': data.existingBookingSystem || '',
+
+      'Booking System': data.bookingSystem || '',
+
+      'Website Sections': Array.isArray(data.pages)
+        ? data.pages
+        : [],
+
+      'Tagline': data.tagline || '',
+
+      'Style': Array.isArray(data.style)
+        ? data.style
+        : [],
+
+      'Style Notes': data.styleNotes || '',
+
+      'Materials': Array.isArray(data.materials)
+        ? data.materials
+        : [],
+
+      'Trust Points': Array.isArray(data.trustPoints)
+        ? data.trustPoints
+        : [],
+
+      'Final Details': data.finalDetails || '',
+
+      'Payment Status': 'Pending',
+
+      'Submission Date': new Date().toISOString()
+    };
+
+    const airtableResponse = await fetch(
+      `https://api.airtable.com/v0/${airtableBaseId}/${cleaningTableId}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${airtableToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          records: [
+            {
+              fields
+            }
+          ]
+        })
       }
     );
 
-    if (stripeResponse.ok) {
-      const paymentIntent = await stripeResponse.json();
-
-      const billingDetails =
-        paymentIntent.payment_method?.billing_details || {};
-
-      name = billingDetails.name || '';
-      email =
-        billingDetails.email ||
-        paymentIntent.receipt_email ||
-        '';
-    }
-  }
-
-  payload = {
-    action: 'payment_update',
-    submissionId: data.submissionId || '',
-    name,
-    email,
-    package: data.package || '',
-    paymentStatus: data.paymentStatus || 'Paid',
-    paymentIntentId: data.paymentIntentId || ''
-  };
-
-} else {
-  payload = {
-    submissionId: data.submissionId || '',
-    firstName: data.firstName || '',
-lastName: data.lastName || '',
-email: data.email || '',
-    problem: data.problem || '',
-    helpType: data.helpType || '',
-    difficult: Array.isArray(data.difficult) ? data.difficult : [],
-    success: data.success || '',
-    materials: Array.isArray(data.materials) ? data.materials : [],
-    storage: data.storage || '',
-    actions: Array.isArray(data.actions) ? data.actions : [],
-    device: data.device || '',
-    users: data.users || '',
-    style: Array.isArray(data.style) ? data.style : [],
-    files: Array.isArray(data.files) ? data.files : []
-  };
-}
-   
-    const googleResponse = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify(payload),
-      redirect: 'follow'
-    });
-
-    if (!googleResponse.ok) {
-      const text = await googleResponse.text();
+    if (!airtableResponse.ok) {
+      const text = await airtableResponse.text();
 
       return res.status(502).json({
-        error: 'Google Sheets request failed',
+        error: 'Airtable request failed',
         details: text
       });
     }
 
+    const airtableData = await airtableResponse.json();
+
     return res.status(200).json({
-      success: true
+      success: true,
+      recordId: airtableData.records?.[0]?.id || null
     });
 
   } catch (error) {
