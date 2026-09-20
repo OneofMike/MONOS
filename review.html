@@ -509,7 +509,18 @@ if (intake?.submissionId) {
     console.error('Payment sheet update failed:', err);
   }
 }
-    window.location.href = 'confirmation.html';}else{
+   const industry = localStorage.getItem('monosIndustry');
+
+if(industry === 'Cleaning Business'){
+  window.location.href = 'cleaning-intake.html';
+}else if(industry === 'Event Planner / Balloon Decor'){
+  window.location.href = 'event-services-intake.html';
+}else if(industry === 'Treat / Baking Business'){
+  window.location.href = 'intake.html?industry=treats';
+}else{
+  window.location.href = 'intake.html?industry=other';
+}
+}else{
     message.textContent = 'Payment is being processed.';
     btn.disabled = false;
     btn.textContent = 'COMPLETE PAYMENT →';
