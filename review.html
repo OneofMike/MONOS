@@ -151,7 +151,8 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   .continue:disabled{opacity:.45;cursor:not-allowed}
   @media(max-width:900px){.tiers{grid-template-columns:1fr}.tier{min-height:0}.answer-grid{grid-template-columns:1fr}}
   @media(max-width:600px){.compact-top{padding:30px 8px 14px}.compact-shell{padding:6px 8px 0}.summary-card{padding:19px}.pricing-head h2{font-size:27px}.selection-bar{align-items:stretch;flex-direction:column}.continue{width:100%}}
-  .tiers{display:block;width:100%;}
+  .compact-shell{width:100%;max-width:none;margin-left:auto;margin-right:auto;box-sizing:border-box;}
+.tiers{display:block;width:100%;max-width:none;margin:0;}
 .tier{width:100%;max-width:none;margin:0;box-sizing:border-box;}
 </style>
 <script src="https://js.stripe.com/v3/"></script>
