@@ -290,16 +290,7 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   </div>
 
 </section>
-      COMPLETE PAYMENT →
-    </button>
-
-    <div
-      id="paymentMessage"
-      style="margin-top:14px; font-size:12px;"
-    ></div>
-
-  </div>
-</section>
+     
   <footer>
     <div><span class="dot">●</span> MONOS — AFFORDABLE WEBSITES BUILT AROUND YOUR BUSINESS.</div>
     <div>REVIEW + WEBSITE SELECTION</div>
@@ -320,7 +311,9 @@ function selectTier(card){
     price:Number(card.dataset.price)
   };
   localStorage.setItem('monosWebsiteSelectedTier',JSON.stringify(choice));
+ if(selectionText){
   selectionText.textContent=`${choice.code} — ${choice.tier} — $${choice.price}`;
+}
 
 }
 
