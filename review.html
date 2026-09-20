@@ -245,52 +245,52 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
         0 0 12px rgba(239,131,194,.18),
         inset 0 0 18px rgba(239,131,194,.04) !important;
 }
-/* YOUR WEBSITE INCLUDES */
+/* WEBSITE INCLUDES — CLEAN LIST */
 .feature-group{
-  max-width:1000px !important;
   width:100% !important;
-  margin:0 auto !important;
-  padding-top:30px !important;
-  border-top:1px solid rgba(255,255,255,.18) !important;
+  max-width:620px !important;
+  margin:42px auto 34px !important;
+  padding:0 28px !important;
 
   display:flex !important;
-  flex-wrap:wrap !important;
-  justify-content:center !important;
+  flex-direction:column !important;
   align-items:stretch !important;
-  gap:18px !important;
+  gap:24px !important;
 
-  text-align:center !important;
-  font-size:0 !important;
-}
-
-
+  border:0 !important;
+  text-align:left !important;
+  font-size:16px !important;
 }
 
 .feature{
   display:flex !important;
-  flex:0 0 calc(33.333% - 18px) !important;
-  width:auto !important;
-  max-width:280px !important;
-  min-width:200px !important;
-  min-height:110px !important;
-  margin:0 !important;
-  padding:18px !important;
-
   align-items:center !important;
-  justify-content:center !important;
+  justify-content:flex-start !important;
+  gap:20px !important;
 
-  border:1px solid rgba(239,131,194,.35) !important;
-  background:rgba(13,31,63,.55) !important;
+  width:100% !important;
+  max-width:none !important;
+  min-width:0 !important;
+  min-height:0 !important;
 
-  font-size:15px !important;
+  margin:0 !important;
+  padding:0 !important;
+
+  border:0 !important;
+  background:none !important;
+
+  font-size:16px !important;
   line-height:1.5 !important;
-  letter-spacing:0 !important;
-  text-align:center !important;
+  text-align:left !important;
 }
 
-/* HIDE OLD + SIGNS */
+/* SMALL PINK MARKER */
 .feature .plus{
-  display:none !important;
+  display:block !important;
+  color:var(--pink) !important;
+  font-size:22px !important;
+  line-height:1 !important;
+  flex:0 0 auto !important;
 }
 
 /* FINAL NOTE */
@@ -320,12 +320,7 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   padding:20px !important;
 }
 
-/* HIDE ONLY THE 5 FEATURE BOXES ON MOBILE */
-@media screen and (max-width:600px){
-  .tier .feature{
-    display:none !important;
- }
-}
+
   /* MOBILE SALES MESSAGE */
 @media screen and (max-width:600px){
   .tier-desc{
@@ -339,7 +334,28 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
     text-align:center !important;
   }
 }
+@media screen and (max-width:600px){
 
+  .feature-group{
+    max-width:360px !important;
+    margin:32px auto 30px !important;
+    padding:0 14px !important;
+    gap:22px !important;
+  }
+
+  .feature{
+    display:flex !important;
+    font-size:15px !important;
+    line-height:1.5 !important;
+    gap:16px !important;
+  }
+
+  .feature .plus{
+    display:block !important;
+    font-size:20px !important;
+  }
+
+}
 </style>
 <script src="https://js.stripe.com/v3/"></script>
 </head>
@@ -386,13 +402,6 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
     <div class="tier-price">$100</div>
     <div class="tier-note">ONE-TIME WEBSITE BUILD</div>
 
-    <p class="tier-desc">
-  Give your business one professional place where customers can see what you offer,
-  learn about your work, and feel confident reaching out.
-  <br><br>
-  Stand out beyond social media, look more established, and make it easier for
-  interested customers to become actual clients.
-</p>
 
     <div class="feature-group">
 
