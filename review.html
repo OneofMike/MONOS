@@ -327,8 +327,16 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
 @media screen and (max-width:600px){
   .tier .feature{
     display:none !important;
+    /* HIDE "YOUR WEBSITE INCLUDES" HEADING ON MOBILE */
+    }
+@media screen and (max-width:600px){
+  .tier .feature-group{
+    font-size:0 !important;
+    padding-top:0 !important;
+    border-top:none !important;
   }
 }
+  
 
 </style>
 <script src="https://js.stripe.com/v3/"></script>
