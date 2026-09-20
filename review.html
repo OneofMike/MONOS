@@ -212,37 +212,53 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
 
 /* YOUR WEBSITE INCLUDES */
 .feature-group{
+  max-width:1000px !important;
+  width:100% !important;
   margin:0 auto !important;
   padding-top:30px !important;
   border-top:1px solid rgba(255,255,255,.18) !important;
+
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  align-items:stretch !important;
+  gap:18px !important;
+
+  text-align:center !important;
+  font-size:0 !important;
+}
+
+.feature-group::before{
+  content:"YOUR WEBSITE INCLUDES";
+  display:block !important;
+  flex-basis:100% !important;
+  width:100% !important;
+  margin-bottom:10px !important;
+
   font-size:15px !important;
   letter-spacing:.12em !important;
   text-align:center !important;
-  max-width:900px !important;
-}
-
-.feature-group::after{
-  content:"";
-  display:block;
-  clear:both;
 }
 
 .feature{
-  display:inline-flex !important;
+  display:flex !important;
+  flex:0 0 calc(33.333% - 18px) !important;
+  width:auto !important;
+  max-width:280px !important;
+  min-width:200px !important;
+  min-height:110px !important;
+  margin:0 !important;
+  padding:18px !important;
+
   align-items:center !important;
   justify-content:center !important;
-  vertical-align:top !important;
-
-  width:28% !important;
-  min-height:110px !important;
-  margin:22px 1.5% 0 !important;
-  padding:18px 18px !important;
 
   border:1px solid rgba(239,131,194,.35) !important;
   background:rgba(13,31,63,.55) !important;
 
   font-size:15px !important;
   line-height:1.5 !important;
+  letter-spacing:0 !important;
   text-align:center !important;
 }
 
@@ -322,7 +338,7 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   customers to become actual clients.
     </p>
 
-    <div class="feature-group">YOUR WEBSITE INCLUDES</div>
+    <div class="feature-group">
 
     <div class="feature">
       <span class="plus">+</span>
