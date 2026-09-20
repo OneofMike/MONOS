@@ -232,10 +232,11 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
 
 /* MAIN SALES MESSAGE */
 .tier-desc{
-  max-width:850px !important;
-  margin:0 auto 40px !important;
+  max-width:900px !important;
+  margin:38px auto 46px !important;
+  padding:0 24px !important;
   font-size:18px !important;
-  line-height:1.8 !important;
+  line-height:1.65 !important;
   text-align:center !important;
 }
 
@@ -318,16 +319,21 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
 @media screen and (max-width:600px){
   .tier .feature{
     display:none !important;
-    /* HIDE "YOUR WEBSITE INCLUDES" HEADING ON MOBILE */
-    }
+ }
+}
+  /* MOBILE SALES MESSAGE */
 @media screen and (max-width:600px){
-  .tier .feature-group{
-    font-size:0 !important;
-    padding-top:0 !important;
-    border-top:none !important;
+  .tier-desc{
+    width:100% !important;
+    max-width:520px !important;
+    margin:30px auto 38px !important;
+    padding:0 12px !important;
+    font-size:16px !important;
+    line-height:1.6 !important;
+    letter-spacing:0 !important;
+    text-align:center !important;
   }
 }
-  
 
 </style>
 <script src="https://js.stripe.com/v3/"></script>
