@@ -27,18 +27,9 @@ export default async function handler(req, res) {
 
     const tiers = {
       STARTER: {
-        amount: 10000,
+        amount: 1,
         label: 'STARTER'
-      },
-      BUSINESS: {
-        amount: 15000,
-        label: 'BUSINESS'
-      },
-      COMPLETE: {
-        amount: 20000,
-        label: 'COMPLETE'
-      }
-    };
+    
 
     const selected = tiers[tier];
 
