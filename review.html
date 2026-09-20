@@ -115,7 +115,16 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   .pricing-head .kicker{font-size:11px;color:var(--pink);margin-bottom:8px}
   .pricing-head h2{font-size:32px;font-weight:400;margin:0 0 8px}
   .pricing-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
-  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .tiers{
+  display:flex;
+  justify-content:center;
+  width:100%;
+}
+
+.tiers .tier{
+  width:100%;
+  max-width:620px;
+}
   .tier{border:1px solid var(--line);background:linear-gradient(180deg,rgba(8,18,40,.9),rgba(13,24,51,.86));padding:22px;display:flex;flex-direction:column;min-height:650px;backdrop-filter:blur(9px)}
   .tier.recommended{box-shadow:0 0 0 1px rgba(239,131,194,.18) inset}
   .tier-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -169,103 +178,80 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
   <section class="compact-shell">
   
 
-   
+   <div class="tiers">
 
-    <div class="pricing-head">
-      <div class="kicker">● CHOOSE YOUR WEBSITE BUILD</div>
-      <h2>HOW MUCH DOES YOUR WEBSITE NEED?</h2>
-      <p>Choose based on the amount of content, structure, and customization your site needs.</p>
-    </div>
+  <article class="tier recommended"
+    data-code="SITE//01"
+    data-tier="STARTER"
+    data-price="100">
 
- <div class="tiers">
-
-  <article class="tier" data-code="SITE//01" data-tier="STARTER" data-price="100">
     <div class="tier-top">
       <div>
-        <div class="tier-code">SITE//01</div>
-        <h3>STARTER</h3>
+        <div class="tier-code">MONOS//WEBSITE</div>
+        <h3>CUSTOM WEBSITE</h3>
       </div>
+
+      <div class="rec">ONE-TIME</div>
     </div>
 
     <div class="tier-price">$100</div>
     <div class="tier-note">ONE-TIME WEBSITE BUILD</div>
 
     <p class="tier-desc">
-      For a simple business website that gives customers the essentials and a clear place to find you online.
+      A custom website designed around your business, services,
+      branding, and the way you want your business presented.
     </p>
 
-    <div class="best-for">
-      <strong>BEST FOR:</strong> New businesses, solo businesses, simple service businesses, and straightforward online presence.
+    <div class="feature-group">YOUR WEBSITE INCLUDES</div>
+
+    <div class="feature">
+      <span class="plus">+</span>
+      <span>Custom design built around your business</span>
     </div>
 
-    <div class="feature-group">GOOD FIT WHEN YOU NEED</div>
+    <div class="feature">
+      <span class="plus">+</span>
+      <span>Your services or products organized clearly</span>
+    </div>
 
-    <div class="feature"><span class="plus">+</span><span>A clean custom website built around your business</span></div>
-    <div class="feature"><span class="plus">+</span><span>Your core business information organized clearly</span></div>
-    <div class="feature"><span class="plus">+</span><span>Services or products presented simply</span></div>
-    <div class="feature"><span class="plus">+</span><span>Contact information and social links</span></div>
-    <div class="feature"><span class="plus">+</span><span>Mobile-ready layout</span></div>
+    <div class="feature">
+      <span class="plus">+</span>
+      <span>Your branding, colors, and visual direction</span>
+    </div>
+
+    <div class="feature">
+      <span class="plus">+</span>
+      <span>Contact information and social links</span>
+    </div>
+
+    <div class="feature">
+      <span class="plus">+</span>
+      <span>Mobile-ready design</span>
+    </div>
 
     <div class="tier-confidence">
-      <strong>GOOD TO KNOW:</strong> STARTER is best when the site is focused and does not need a large amount of content or extra functionality.
+      After checkout, you'll complete a short setup form so we can
+      build the website around your business.
     </div>
 
-    <button class="purchase" type="button">CHOOSE STARTER →</button>
+    <button class="purchase" type="button">
+      GET MY WEBSITE — $100 →
+    </button>
+
   </article>
 
-
-  <article class="tier recommended" data-code="SITE//02" data-tier="BUSINESS" data-price="150">
-    <div class="tier-top">
-      <div>
-        <div class="tier-code">SITE//02</div>
-        <h3>BUSINESS</h3>
-      </div>
-      <div class="pricing-head">
-  <div class="kicker">● YOUR WEBSITE</div>
-  <h2>ONE WEBSITE. ONE PRICE.</h2>
-  <p>Everything you need to give your business a professional place online.</p>
 </div>
-    <div class="tier-note">ONE-TIME WEBSITE BUILD</div>
 
-    <article class="tier recommended" data-code="SITE//01" data-tier="STARTER" data-price="100">
-  <div class="tier-top">
-    <div>
-      <div class="tier-code">MONOS//WEBSITE</div>
-      <h3>CUSTOM WEBSITE</h3>
-    </div>
-    <div class="rec">ONE-TIME</div>
-  </div>
 
-  <div class="tier-price">$100</div>
-  <div class="tier-note">ONE-TIME WEBSITE BUILD</div>
+<section class="checkout-wrap" id="stripeCheckout">
 
-  <p class="tier-desc">
-    A custom website designed around your business, services, branding, and the way you want your business presented.
-  </p>
+  <div class="checkout-main">
 
-  <div class="feature-group">YOUR WEBSITE INCLUDES</div>
+    <h2 class="checkout-title">COMPLETE YOUR WEBSITE PURCHASE.</h2>
 
-  <div class="feature"><span class="plus">+</span><span>Custom design built around your business</span></div>
-  <div class="feature"><span class="plus">+</span><span>Your services or products organized clearly</span></div>
-  <div class="feature"><span class="plus">+</span><span>Your branding, colors, and visual direction</span></div>
-  <div class="feature"><span class="plus">+</span><span>Contact information and social links</span></div>
-  <div class="feature"><span class="plus">+</span><span>Mobile-ready design</span></div>
-
-  <div class="tier-confidence">
-    After checkout, you'll complete a short setup form so we can build the website around your business.
-  </div>
-
-  <button class="purchase" type="button">GET MY WEBSITE — $100 →</button>
-</article>
-
-    <p class="tier-desc">
-      For a website with more content, more moving parts, or additional customization beyond a standard starter build.
+    <p class="checkout-sub">
+      Secure checkout for your MONOS custom website.
     </p>
-
-    <div class="best-for">
-    
-      TOTAL: <span id="stripeAmount">$0</span>
-    </div>
 
     <div id="payment-element" style="margin-bottom:20px;"></div>
 
@@ -275,6 +261,35 @@ footer{margin:26px 6px 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.1
       type="button"
       style="width:100%;"
     >
+      COMPLETE PAYMENT →
+    </button>
+
+    <div
+      id="paymentMessage"
+      style="margin-top:14px;font-size:12px;"
+    ></div>
+
+  </div>
+
+  <div class="checkout-side">
+
+    <div class="order-line">
+      <span>CUSTOM WEBSITE</span>
+      <span>$100</span>
+    </div>
+
+    <div class="order-total">
+      <span>TOTAL</span>
+      <span id="stripeAmount">$100</span>
+    </div>
+
+    <div class="demo-note">
+      One-time website build. After payment, you'll continue to your business setup form.
+    </div>
+
+  </div>
+
+</section>
       COMPLETE PAYMENT →
     </button>
 
