@@ -1,1 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>MONOS — Checkout Generator</title>
+
+<style>
+:root{
+  --pink:#ef7abd;
+  --pink2:#f4a0cf;
+  --text:#f3eff7;
+  --muted:#b9b2c5;
+  --line:rgba(190,180,206,.28);
+  --bg:#081229;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 72% 8%,rgba(190,120,207,.26),transparent 25%),
+    radial-gradient(circle at 12% 48%,rgba(241,112,186,.14),transparent 28%),
+    linear-gradient(180deg,#091329 0%,#121a38 48%,#08142b 100%);
+  font-family:"Courier New",Courier,monospace;
+}
+
+.shell{
+  width:min(680px,100%);
+  margin:0 auto;
+  padding:28px 18px 70px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:22px;
+  border-bottom:1px solid rgba(239,122,189,.18);
+}
+
+.brand{
+  font-size:15px;
+  font-weight:700;
+}
+
+.dot{color:var(--pink)}
+
+.internal{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.intro{
+  margin:70px 0 35px;
+}
+
+.eyebrow{
+  color:var(--pink);
+  font-size:10px;
+  letter-spacing:.14em;
+  margin-bottom:14px;
+}
+
+h1{
+  margin:0 0 14px;
+  font-size:clamp(34px,7vw,52px);
+  line-height:1;
+  font-weight:400;
+  letter-spacing:-.04em;
+}
+
+h1 span{color:var(--pink)}
+
+.sub{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+.panel{
+  border:1px solid rgba(239,122,189,.48);
+  background:rgba(10,19,41,.82);
+  padding:30px;
+  box-shadow:0 25px 80px rgba(0,0,0,.22);
+}
+
+.field{
+  margin-bottom:22px;
+}
+
+label{
+  display:block;
+  color:var(--pink2);
+  font-size:10px;
+  letter-spacing:.1em;
+  margin-bottom:9px;
+}
+
+input,
+select{
+  width:100%;
+  border:1px solid var(--line);
+  background:rgba(8,15,31,.65);
+  color:var(--text);
+  padding:15px;
+  font-family:inherit;
+  font-size:13px;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--pink);
+}
+
+button{
+  width:100%;
+  border:0;
+  background:linear-gradient(90deg,#e96fb7,#f08bc7);
+  color:#111329;
+  padding:18px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.result{
+  display:none;
+  margin-top:22px;
+  border:1px solid rgba(239,122,189,.38);
+  background:rgba(239,122,189,.045);
+  padding:20px;
+}
+
+.result.show{
+  display:block;
+}
+
+.ready{
+  color:#9ce0c9;
+  font-size:10px;
+  letter-spacing:.1em;
+  margin-bottom:12px;
+}
+
+.url{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+  margin-bottom:15px;
+}
+
+.copy{
+  background:transparent;
+  border:1px solid var(--pink);
+  color:var(--pink2);
+}
+
+.copy.copied{
+  color:#9ce0c9;
+  border-color:#9ce0c9;
+}
+
+@media(max-width:600px){
+  .shell{padding:18px 12px 45px}
+  .intro{margin:48px 4px 28px}
+  .panel{padding:22px 18px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="dot">●</span> MONOS
+    </div>
+
+    <div class="internal">
+      INTERNAL TOOL
+    </div>
+  </div>
+
+  <div class="intro">
+    <div class="eyebrow">MONOS // SALES</div>
+
+    <h1>
+      CREATE CLIENT<br>
+      <span>CHECKOUT.</span>
+    </h1>
+
+    <div class="sub">
+      Generate a personalized checkout link for an outreach client.
+    </div>
+  </div>
+
+  <div class="panel">
+
+    <div class="field">
+      <label>CONTACT NAME</label>
+      <input
+        id="clientName"
+        type="text"
+        placeholder="Ashley"
+      >
+    </div>
+
+    <div class="field">
+      <label>BUSINESS NAME</label>
+      <input
+        id="businessName"
+        type="text"
+        placeholder="Ashley's Cleaning"
+      >
+    </div>
+
+    <div class="field">
+      <label>INDUSTRY</label>
+
+      <select id="industry">
+        <option value="cleaning">Cleaning Business</option>
+        <option value="events">Event Planner / Balloon Decor</option>
+        <option value="treats">Treat / Baking Business</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <button id="generateButton" type="button">
+      GENERATE CHECKOUT LINK →
+    </button>
+
+    <div class="result" id="result">
+
+      <div class="ready">
+        CHECKOUT READY ✓
+      </div>
+
+      <div class="url" id="generatedUrl"></div>
+
+      <button
+        class="copy"
+        id="copyButton"
+        type="button"
+      >
+        COPY LINK
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const generateButton =
+  document.getElementById('generateButton');
+
+const copyButton =
+  document.getElementById('copyButton');
+
+const result =
+  document.getElementById('result');
+
+const generatedUrl =
+  document.getElementById('generatedUrl');
+
+
+generateButton.addEventListener('click',()=>{
+
+  const name =
+    document.getElementById('clientName').value.trim();
+
+  const business =
+    document.getElementById('businessName').value.trim();
+
+  const industry =
+    document.getElementById('industry').value;
+
+
+  if(!name || !business){
+    alert('Enter the contact name and business name.');
+    return;
+  }
+
+
+  const url =
+    new URL(
+      '/checkout.html',
+      window.location.origin
+    );
+
+
+  url.searchParams.set(
+    'name',
+    name
+  );
+
+  url.searchParams.set(
+    'business',
+    business
+  );
+
+  url.searchParams.set(
+    'industry',
+    industry
+  );
+
+
+  generatedUrl.textContent =
+    url.toString();
+
+  result.classList.add('show');
+
+  copyButton.textContent =
+    'COPY LINK';
+
+  copyButton.classList.remove(
+    'copied'
+  );
+
+});
+
+
+copyButton.addEventListener('click',async()=>{
+
+  const url =
+    generatedUrl.textContent;
+
+  await navigator.clipboard.writeText(url);
+
+  copyButton.textContent =
+    'COPIED ✓';
+
+  copyButton.classList.add(
+    'copied'
+  );
+
+});
+
+</script>
+
+</body>
+</html>
