@@ -877,134 +877,134 @@ body{
 
 
 <script>
+const params = new URLSearchParams(window.location.search);
+const clientName = (params.get('name') || '').trim();
+const businessName = (params.get('business') || '').trim();
+const industry = (params.get('industry') || '').trim().toLowerCase();
 
-/*
-  PERSONALIZED CHECKOUT V1
-
-  Example URL structure:
-
-  checkout.html?name=CLIENT&business=BUSINESS&industry=cleaning
-
-  The price is NOT read from the URL.
-*/
-
-const params =
-  new URLSearchParams(window.location.search);
-
-const clientName =
-  (params.get('name') || '').trim();
-
-const businessName =
-  (params.get('business') || '').trim();
-
-const industry =
-  (params.get('industry') || '').trim().toLowerCase();
-
-
-/* BUSINESS NAME */
-
-if(businessName){
-
-  document.getElementById(
-    'businessName'
-  ).textContent = businessName;
-
+if (businessName) {
+  document.getElementById('businessName').textContent = businessName;
 }
 
+const checkoutClient = { name:clientName, business:businessName, industry };
+localStorage.setItem('monosPersonalizedCheckout', JSON.stringify(checkoutClient));
 
-/* SAVE PERSONALIZATION FOR NEXT STEPS */
+let stripe;
+let elements;
+let paymentElement;
+let currentPaymentIntentId = null;
 
-const checkoutClient = {
-  name: clientName,
-  business: businessName,
-  industry: industry
-};
-
-localStorage.setItem(
-  'monosPersonalizedCheckout',
-  JSON.stringify(checkoutClient)
-);
-
-
-/*
-  PAYMENT CONNECTION COMES NEXT.
-
-  For now this verifies the redesigned checkout
-  and personalization without changing your
-  existing working payment system.
-*/
-async function loadPayment() {
-  const response = await fetch(
-    'https://monos-beta.vercel.app/api/create-checkout-session',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        tier: 'STARTER'
-      })
+async function startStripeCheckout(){
+  if(currentPaymentIntentId){
+    try{
+      await fetch('https://monos-beta.vercel.app/api/cancel-payment-intent',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({paymentIntentId:currentPaymentIntentId})
+      });
+    }catch(error){
+      console.error('Unable to cancel previous payment:',error);
     }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok || !data.clientSecret) {
-    throw new Error(data.error || 'Unable to start checkout');
+    currentPaymentIntentId=null;
   }
 
-  currentPaymentIntentId = data.paymentIntentId;
-    if(!stripe){
-     stripe = Stripe('pk_live_51SZR11JY6klL7p4Gtkp6BeMzi5FIETBSfGD0BiAMzoNbTIo7Q50EHgyohkgkKDQRUN3PGLIJdwVPGtSBtfC0gXyI00TfXtjgBR');
-    }
+  if(paymentElement){
+    paymentElement.destroy();
+    paymentElement=null;
+  }
 
-    if(paymentElement){
-      paymentElement.destroy();
-    }
-
-    elements = stripe.elements({
-      clientSecret:data.clientSecret,
-      appearance:{
-        theme:'night'
+  try{
+    const response=await fetch(
+      'https://monos-beta.vercel.app/api/create-checkout-session',
+      {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({tier:'STARTER'})
       }
-    });
+    );
 
-    paymentElement = elements.create('payment');
-    paymentElement.mount('#payment-element');
-}
-const checkoutButton = document.getElementById('checkoutButton');
-const paymentPanel = document.getElementById('paymentPanel');
+    const data=await response.json();
+    currentPaymentIntentId=data.paymentIntentId;
 
-checkoutButton.addEventListener('click', async () => {
-    checkoutButton.style.display = 'none';
-    paymentPanel.style.display = 'block';
-
-    await loadPayment();
-
-    paymentPanel.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-    });
-});
-const payButton = document.getElementById('payButton');
-const paymentMessage = document.getElementById('paymentMessage');
-
-payButton.addEventListener('click', async () => {
-  paymentMessage.textContent = '';
-  payButton.disabled = true;
-  payButton.textContent = 'PROCESSING...';
-
-  const { error } = await stripe.confirmPayment({
-    elements,
-    confirmParams: {
-      return_url: window.location.origin + '/payment-success.html'
+    if(!response.ok || !data.clientSecret){
+      throw new Error(data.error || 'Unable to start checkout');
     }
+
+    if(!stripe){
+      stripe=Stripe('pk_live_51SZR11JY6klL7p4Gtkp6BeMzi5FIETBSfGD0BiAMzoNbTIo7Q50EHgyohkgkKDQRUN3PGLIJdwVPGtSBtfC0gXyI00TfXtjgBR');
+    }
+
+    elements=stripe.elements({
+      clientSecret:data.clientSecret,
+      appearance:{theme:'night'}
+    });
+
+    paymentElement=elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+  }catch(error){
+    console.error(error);
+    document.getElementById('paymentMessage').textContent =
+      error.message || 'Unable to load payment. Please try again.';
+  }
+}
+
+const checkoutButton=document.getElementById('checkoutButton');
+const paymentPanel=document.getElementById('paymentPanel');
+const payButton=document.getElementById('payButton');
+const paymentMessage=document.getElementById('paymentMessage');
+
+checkoutButton.addEventListener('click',async()=>{
+  checkoutButton.disabled=true;
+  checkoutButton.textContent='LOADING PAYMENT...';
+  paymentMessage.textContent='';
+  paymentPanel.style.display='block';
+
+  await startStripeCheckout();
+
+  if(stripe && elements && paymentElement){
+    checkoutButton.style.display='none';
+    paymentPanel.scrollIntoView({behavior:'smooth',block:'center'});
+  }else{
+    checkoutButton.disabled=false;
+    checkoutButton.textContent='CONTINUE TO PAYMENT — $100 →';
+  }
+});
+
+payButton.addEventListener('click',async()=>{
+  if(!stripe || !elements){
+    paymentMessage.textContent='Payment form is not ready yet.';
+    return;
+  }
+
+  payButton.disabled=true;
+  payButton.textContent='PROCESSING...';
+  paymentMessage.textContent='';
+
+  const {error,paymentIntent}=await stripe.confirmPayment({
+    elements,
+    redirect:'if_required'
   });
 
-  if (error) {
-    paymentMessage.textContent = error.message;
-    payButton.disabled = false;
-    payButton.textContent = 'PAY $100 →';
+  if(error){
+    paymentMessage.textContent=error.message;
+    payButton.disabled=false;
+    payButton.textContent='PAY $100 →';
+    return;
+  }
+
+  if(paymentIntent && paymentIntent.status==='succeeded'){
+    paymentMessage.textContent='PAYMENT SUCCESSFUL ✓';
+    payButton.textContent='PAYMENT COMPLETE ✓';
+
+    localStorage.setItem(
+      'monosWebsitePaymentStatus',
+      JSON.stringify({paid:true,paymentIntent:paymentIntent.id})
+    );
+  }else{
+    paymentMessage.textContent='Payment is being processed.';
+    payButton.disabled=false;
+    payButton.textContent='PAY $100 →';
   }
 });
 </script>
