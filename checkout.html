@@ -603,10 +603,12 @@ body{
        
       </div>
 
-      <h1>
-        YOUR WEBSITE IS<br>
-        <span>READY TO MOVE FORWARD.</span>
-      </h1>
+   <h1>
+  THANK YOU, <span id="clientName">THERE</span>.<br>
+  <span class="business-thanks">
+    Your website for <span id="heroBusinessName">your business</span> is ready to get started.
+  </span>
+</h1>
 
       <div class="business-line">
         Prepared for
@@ -901,10 +903,13 @@ async function startStripeCheckout(){
     currentPaymentIntentId=null;
   }
 
-  if(paymentElement){
-    paymentElement.destroy();
-    paymentElement=null;
-  }
+  if (clientName) {
+  document.getElementById('clientName').textContent = clientName.toUpperCase();
+}
+
+if (businessName) {
+  document.getElementById('heroBusinessName').textContent = businessName;
+}
 
   try{
     const response=await fetch(
