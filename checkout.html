@@ -933,6 +933,40 @@ localStorage.setItem(
   and personalization without changing your
   existing working payment system.
 */
+{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          tier:choice.tier
+        })
+      }
+    );
+
+    const data = await response.json();
+currentPaymentIntentId = data.paymentIntentId;
+    if(!response.ok || !data.clientSecret){
+      throw new Error(data.error || 'Unable to start checkout');
+    }
+
+    if(!stripe){
+     stripe = Stripe('pk_live_51SZR11JY6klL7p4Gtkp6BeMzi5FIETBSfGD0BiAMzoNbTIo7Q50EHgyohkgkKDQRUN3PGLIJdwVPGtSBtfC0gXyI00TfXtjgBR');
+    }
+
+    if(paymentElement){
+      paymentElement.destroy();
+    }
+
+    elements = stripe.elements({
+      clientSecret:data.clientSecret,
+      appearance:{
+        theme:'night'
+      }
+    });
+
+    paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
 
 const checkoutButton = document.getElementById('checkoutButton');
 const paymentPanel = document.getElementById('paymentPanel');
