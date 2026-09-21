@@ -834,7 +834,23 @@ body{
       >
         CONTINUE TO PAYMENT — $100 →
       </button>
+<div id="paymentPanel" style="display:none; margin-top:18px;">
+  <div id="payment-element"></div>
 
+  <button
+    id="payButton"
+    class="checkout-btn"
+    type="button"
+    style="margin-top:18px;"
+  >
+    PAY $100 →
+  </button>
+
+  <div
+    id="paymentMessage"
+    style="margin-top:14px; text-align:center; font-size:11px;"
+  ></div>
+</div>
       <div class="payment-note">
         ONE PAYMENT &nbsp;•&nbsp; 
       </div>
@@ -918,15 +934,18 @@ localStorage.setItem(
   existing working payment system.
 */
 
-document.getElementById(
-  'checkoutButton'
-).addEventListener('click', () => {
+const checkoutButton = document.getElementById('checkoutButton');
+const paymentPanel = document.getElementById('paymentPanel');
 
-  alert(
-    'Checkout design is ready. Stripe connection is the next step.'
-  );
+checkoutButton.addEventListener('click', () => {
+  checkoutButton.style.display = 'none';
+  paymentPanel.style.display = 'block';
 
-});
+  paymentPanel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
+});;
 
 </script>
 
