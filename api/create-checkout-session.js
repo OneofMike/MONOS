@@ -27,7 +27,7 @@ export default async function handler(req, res) {
 
     const tiers = {
       STARTER: {
-        amount: 10000,
+        amount: 50,
         label: 'STARTER'
       }
     };
