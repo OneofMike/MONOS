@@ -880,7 +880,19 @@ const industry = (params.get('industry') || '').trim().toLowerCase();
 if (businessName) {
   document.getElementById('businessName').textContent = businessName;
 }
+if (businessName) {
+  document.getElementById('businessName').textContent = businessName;
+}
 
+if (clientName) {
+  document.getElementById('clientName').textContent = clientName.toUpperCase();
+}
+
+if (businessName) {
+  document.getElementById('heroBusinessName').textContent = businessName;
+}
+
+const checkoutClient = { name:clientName, business:businessName, industry };
 const checkoutClient = { name:clientName, business:businessName, industry };
 localStorage.setItem('monosPersonalizedCheckout', JSON.stringify(checkoutClient));
 
@@ -903,13 +915,7 @@ async function startStripeCheckout(){
     currentPaymentIntentId=null;
   }
 
-  if (clientName) {
-  document.getElementById('clientName').textContent = clientName.toUpperCase();
-}
-
-if (businessName) {
-  document.getElementById('heroBusinessName').textContent = businessName;
-}
+ 
 
   try{
     const response=await fetch(
@@ -995,10 +1001,7 @@ if (industry === 'cleaning') {
 ) {
   window.location.href = 'event-services-intake.html';
 }
-
 } else {
-    );
-  }else{
     paymentMessage.textContent='Payment is being processed.';
     payButton.disabled=false;
     payButton.textContent='PAY $100 →';
