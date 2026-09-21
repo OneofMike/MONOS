@@ -934,12 +934,15 @@ localStorage.setItem(
   existing working payment system.
 */
 {
+          const response = await fetch(
+      'https://monos-beta.vercel.app/api/create-checkout-session',
+      {
         method:'POST',
         headers:{
           'Content-Type':'application/json'
         },
         body:JSON.stringify({
-          tier:choice.tier
+          tier: 'STARTER'
         })
       }
     );
