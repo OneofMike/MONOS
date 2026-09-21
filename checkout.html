@@ -933,26 +933,27 @@ localStorage.setItem(
   and personalization without changing your
   existing working payment system.
 */
-{
-          const response = await fetch(
-      'https://monos-beta.vercel.app/api/create-checkout-session',
-      {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-          tier: 'STARTER'
-        })
-      }
-    );
-
-    const data = await response.json();
-currentPaymentIntentId = data.paymentIntentId;
-    if(!response.ok || !data.clientSecret){
-      throw new Error(data.error || 'Unable to start checkout');
+async function loadPayment() {
+  const response = await fetch(
+    'https://monos-beta.vercel.app/api/create-checkout-session',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tier: 'STARTER'
+      })
     }
+  );
 
+  const data = await response.json();
+
+  if (!response.ok || !data.clientSecret) {
+    throw new Error(data.error || 'Unable to start checkout');
+  }
+
+  currentPaymentIntentId = data.paymentIntentId;
     if(!stripe){
      stripe = Stripe('pk_live_51SZR11JY6klL7p4Gtkp6BeMzi5FIETBSfGD0BiAMzoNbTIo7Q50EHgyohkgkKDQRUN3PGLIJdwVPGtSBtfC0gXyI00TfXtjgBR');
     }
@@ -970,19 +971,21 @@ currentPaymentIntentId = data.paymentIntentId;
 
     paymentElement = elements.create('payment');
     paymentElement.mount('#payment-element');
-
+}
 const checkoutButton = document.getElementById('checkoutButton');
 const paymentPanel = document.getElementById('paymentPanel');
 
-checkoutButton.addEventListener('click', () => {
-  checkoutButton.style.display = 'none';
-  paymentPanel.style.display = 'block';
+checkoutButton.addEventListener('click', async () => {
+    checkoutButton.style.display = 'none';
+    paymentPanel.style.display = 'block';
 
-  paymentPanel.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center'
-  });
-});;
+    await loadPayment();
+
+    paymentPanel.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+    });
+});
 const payButton = document.getElementById('payButton');
 const paymentMessage = document.getElementById('paymentMessage');
 
