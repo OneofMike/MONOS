@@ -983,7 +983,27 @@ checkoutButton.addEventListener('click', () => {
     block: 'center'
   });
 });;
+const payButton = document.getElementById('payButton');
+const paymentMessage = document.getElementById('paymentMessage');
 
+payButton.addEventListener('click', async () => {
+  paymentMessage.textContent = '';
+  payButton.disabled = true;
+  payButton.textContent = 'PROCESSING...';
+
+  const { error } = await stripe.confirmPayment({
+    elements,
+    confirmParams: {
+      return_url: window.location.origin + '/payment-success.html'
+    }
+  });
+
+  if (error) {
+    paymentMessage.textContent = error.message;
+    payButton.disabled = false;
+    payButton.textContent = 'PAY $100 →';
+  }
+});
 </script>
 
 </body>
