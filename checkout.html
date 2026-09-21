@@ -880,9 +880,7 @@ const industry = (params.get('industry') || '').trim().toLowerCase();
 if (businessName) {
   document.getElementById('businessName').textContent = businessName;
 }
-if (businessName) {
-  document.getElementById('businessName').textContent = businessName;
-}
+
 
 if (clientName) {
   document.getElementById('clientName').textContent = clientName.toUpperCase();
@@ -892,7 +890,7 @@ if (businessName) {
   document.getElementById('heroBusinessName').textContent = businessName;
 }
 
-const checkoutClient = { name:clientName, business:businessName, industry };
+
 const checkoutClient = { name:clientName, business:businessName, industry };
 localStorage.setItem('monosPersonalizedCheckout', JSON.stringify(checkoutClient));
 
@@ -958,7 +956,7 @@ const paymentPanel=document.getElementById('paymentPanel');
 const payButton=document.getElementById('payButton');
 const paymentMessage=document.getElementById('paymentMessage');
 
-startStripeCheckout();
+
 
 payButton.addEventListener('click',async()=>{
   if(!stripe || !elements){
