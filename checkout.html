@@ -827,15 +827,8 @@ body{
 
     <div class="cta-wrap">
 
-      <button
-        class="checkout-btn"
-        id="checkoutButton"
-        type="button"
-      >
-        CONTINUE TO PAYMENT — $100 →
-      </button>
-<div id="paymentPanel" style="display:none; margin-top:18px;">
-  <div id="payment-element"></div>
+  <div id="paymentPanel" style="margin-top:18px;">
+    <div id="payment-element"></div>
 
   <button
     id="payButton"
@@ -949,27 +942,12 @@ async function startStripeCheckout(){
   }
 }
 
-const checkoutButton=document.getElementById('checkoutButton');
+startStripeCheckout();
 const paymentPanel=document.getElementById('paymentPanel');
 const payButton=document.getElementById('payButton');
 const paymentMessage=document.getElementById('paymentMessage');
 
-checkoutButton.addEventListener('click',async()=>{
-  checkoutButton.disabled=true;
-  checkoutButton.textContent='LOADING PAYMENT...';
-  paymentMessage.textContent='';
-  paymentPanel.style.display='block';
-
-  await startStripeCheckout();
-
-  if(stripe && elements && paymentElement){
-    checkoutButton.style.display='none';
-    paymentPanel.scrollIntoView({behavior:'smooth',block:'center'});
-  }else{
-    checkoutButton.disabled=false;
-    checkoutButton.textContent='CONTINUE TO PAYMENT — $100 →';
-  }
-});
+startStripeCheckout();
 
 payButton.addEventListener('click',async()=>{
   if(!stripe || !elements){
