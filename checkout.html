@@ -983,6 +983,20 @@ payButton.addEventListener('click',async()=>{
     localStorage.setItem(
       'monosWebsitePaymentStatus',
       JSON.stringify({paid:true,paymentIntent:paymentIntent.id})
+      );
+
+if (industry === 'cleaning') {
+  window.location.href = 'cleaning-intake.html';
+} else if (
+  industry === 'event' ||
+  industry === 'events' ||
+  industry === 'balloon' ||
+  industry === 'event-planning'
+) {
+  window.location.href = 'event-services-intake.html';
+}
+
+} else {
     );
   }else{
     paymentMessage.textContent='Payment is being processed.';
