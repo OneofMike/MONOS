@@ -991,13 +991,12 @@ payButton.addEventListener('click',async()=>{
 
 if (industry === 'cleaning') {
   window.location.href = 'cleaning-intake.html';
-} else if (
-  industry === 'event' ||
-  industry === 'events' ||
-  industry === 'balloon' ||
-  industry === 'event-planning'
-) {
+
+} else if (industry === 'events') {
   window.location.href = 'event-services-intake.html';
+
+} else if (industry === 'treats') {
+  window.location.href = 'treat-intake.html';
 }
 } else {
     paymentMessage.textContent='Payment is being processed.';
