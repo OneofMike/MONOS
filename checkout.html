@@ -641,7 +641,7 @@ body{
         <div class="price-wrap">
 
           <div class="price">
-            $100
+            $50
           </div>
 
           <div class="price-note">
@@ -795,7 +795,7 @@ body{
           </div>
 
           <div class="total-price">
-            $100
+            $50
           </div>
 
         </div>
@@ -838,7 +838,7 @@ body{
     type="button"
     style="margin-top:18px;"
   >
-    PAY $100 →
+    PAY $50 →
   </button>
 
   <div
@@ -976,7 +976,7 @@ payButton.addEventListener('click',async()=>{
   if(error){
     paymentMessage.textContent=error.message;
     payButton.disabled=false;
-    payButton.textContent='PAY $100 →';
+    payButton.textContent='PAY $50 →';
     return;
   }
 
@@ -1003,7 +1003,7 @@ if (industry === 'cleaning') {
 }
     paymentMessage.textContent='Payment is being processed.';
     payButton.disabled=false;
-    payButton.textContent='PAY $100 →';
+    payButton.textContent='PAY $50 →';
   }
 });
 </script>
