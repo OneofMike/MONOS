@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MONOS | Project Guide</title>
+<style>
+:root{--bg:#07152d;--bg2:#0b1d3d;--panel:rgba(6,17,39,.78);--line:rgba(228,134,199,.46);--text:#f4f3f7;--muted:#c7c3cf;--pink:#ef83c2;--purple:#a78bd2;--cyan:#39a8dd}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#07152d;color:var(--text);font-family:"Courier New",Courier,monospace;overflow-x:hidden}button,input{font:inherit}
+.scene{position:fixed;inset:0;z-index:-5;overflow:hidden;background:radial-gradient(circle at 82% 8%,rgba(245,171,221,.40),transparent 22%),radial-gradient(circle at 50% 35%,rgba(244,117,196,.20),transparent 20%),linear-gradient(180deg,#0b1830 0%,#10284d 47%,#0a1d3c 100%)}
+.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,11,27,.66),transparent 24%,transparent 74%,rgba(6,13,31,.18))}
+.city{position:absolute;bottom:0;width:32%;height:86%;opacity:.9}.city.left{left:-5%}.city.right{right:-5%;transform:scaleX(-1)}
+.tower{position:absolute;bottom:0;left:var(--x);width:var(--w);height:var(--h);border:1px solid rgba(120,148,208,.14);border-radius:45% 45% 7% 7% / 6% 6% 2% 2%;background:linear-gradient(90deg,rgba(5,14,33,.98),rgba(24,44,83,.94) 48%,rgba(69,47,102,.72) 74%,rgba(8,20,43,.98));box-shadow:inset 14px 0 26px rgba(63,166,220,.06),inset -12px 0 30px rgba(239,111,191,.08),0 0 26px rgba(47,128,180,.08)}
+.tower:before{content:"";position:absolute;left:50%;top:-78px;transform:translateX(-50%);width:3px;height:86px;background:linear-gradient(180deg,rgba(249,180,222,.95),rgba(117,82,177,.48));box-shadow:0 0 16px rgba(245,130,199,.42)}
+.tower:after{content:"";position:absolute;left:-18%;width:136%;height:22px;bottom:var(--ring);border-radius:50%;border:1px solid rgba(111,150,208,.18);background:linear-gradient(180deg,rgba(43,60,104,.74),rgba(12,25,51,.92))}
+.t1{--x:0%;--w:27%;--h:56%;--ring:24%}.t2{--x:20%;--w:25%;--h:75%;--ring:38%}.t3{--x:42%;--w:19%;--h:63%;--ring:52%}.t4{--x:59%;--w:21%;--h:48%;--ring:29%}.t5{--x:77%;--w:18%;--h:70%;--ring:44%}
+.water{position:absolute;left:17%;right:0;bottom:0;height:42%;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(38,128,182,.18),rgba(7,21,45,.78)),repeating-linear-gradient(90deg,transparent 0 12%,rgba(47,167,219,.08) 12.3%,transparent 13% 25%,rgba(237,91,182,.06) 25.4%,transparent 26%);border-top:1px solid rgba(76,174,222,.15)}
+.haze{position:absolute;inset:0;background:radial-gradient(ellipse at 57% 45%,rgba(250,152,214,.27),transparent 28%),radial-gradient(ellipse at 26% 75%,rgba(236,89,179,.16),transparent 26%);filter:blur(18px)}
+.page{width:min(1040px,100%);margin:0 auto;min-height:100vh;position:relative;padding:0 34px 40px}.page:before,.page:after{content:"";position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none}.page:before{left:14px}.page:after{right:14px}
+header{min-height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.24);position:relative;z-index:3}.brand{font-weight:700;letter-spacing:.02em;font-size:16px}.brand .dot{color:var(--pink);margin-right:9px}.status{border:1px solid rgba(239,122,189,.48);padding:10px 16px;background:rgba(239,122,189,.06);font-size:11px;color:#eee9f0}
+.hero{position:relative;z-index:2;padding:68px 18px 34px;max-width:850px}.crumb{display:flex;align-items:center;gap:8px;color:#fff;font-size:12px;letter-spacing:.06em;margin-bottom:32px}.crumb .dot{color:var(--pink)}.kicker{color:var(--pink);font-size:12px;letter-spacing:.14em;margin-bottom:18px}h1{margin:0;max-width:800px;font-size:62px;line-height:1;letter-spacing:-.025em;font-weight:400}h1 span{color:var(--pink)}.divider{display:flex;align-items:center;gap:12px;margin:28px 0 26px}.divider:before{content:"";width:58px;height:2px;background:var(--pink)}.divider:after{content:"";width:7px;height:7px;border:1px solid var(--pink);transform:rotate(45deg)}
+.intro{border:1px solid var(--line);background:rgba(6,16,37,.72);padding:24px;max-width:720px;box-shadow:0 0 18px rgba(239,131,194,.08)}.intro p{margin:0;color:#eeeaf2;font-size:15px;line-height:1.7}.intro p+p{margin-top:10px}
+.section{position:relative;z-index:2;padding:34px 18px 18px}.section-title{display:flex;align-items:center;gap:12px;font-size:13px;margin-bottom:20px}.section-title .dot{color:var(--pink)}.section-title:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,rgba(237,132,194,.55),rgba(255,255,255,.18))}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{min-height:260px;border:1px solid var(--line);background:rgba(6,16,37,.78);padding:28px 24px 24px;backdrop-filter:blur(6px);position:relative}.step-num{font-size:28px;color:var(--pink);margin-bottom:22px}.step-num span{color:#868098}.step h3{font-size:16px;font-weight:400;margin:0 0 12px}.step p{margin:0;color:#d5d0dd;font-size:13px;line-height:1.62}.step .tiny{position:absolute;left:24px;right:24px;bottom:22px;padding-top:13px;border-top:1px solid rgba(255,255,255,.12);font-size:10px;color:#aaa7b6;letter-spacing:.05em}
+.project-card{border:1px solid rgba(239,131,194,.68);background:linear-gradient(145deg,rgba(7,21,49,.94),rgba(15,28,67,.94));box-shadow:0 28px 70px rgba(2,8,28,.24),inset 0 0 42px rgba(75,139,215,.05);padding:28px}.project-card h2{margin:0 0 8px;font-size:25px;font-weight:400}.project-card .sub{color:#c9c4d0;font-size:13px;line-height:1.6;margin:0 0 22px}.project-list{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.item{min-height:178px;border:1px solid rgba(228,134,199,.46);background:rgba(6,16,37,.74);padding:20px 16px 16px;display:flex;flex-direction:column;transition:.18s ease}.item:hover{transform:translateY(-2px);background:rgba(16,27,54,.88);box-shadow:0 0 22px rgba(239,123,189,.08)}.item-icon{font-size:22px;color:var(--pink);margin-bottom:18px;line-height:1}.item:nth-child(2) .item-icon{color:var(--purple)}.item:nth-child(3) .item-icon{color:var(--cyan)}.item:nth-child(4) .item-icon{color:var(--pink)}.item strong{display:block;font-size:11px;font-weight:400;color:#fff;margin-bottom:9px;letter-spacing:.01em}.item span{font-size:10px;color:#bbb6c5;line-height:1.55}.item-arrow{margin-top:auto;padding-top:14px;color:var(--pink);font-size:16px}.note{margin-top:18px;padding:14px 16px;border-left:2px solid var(--pink);background:rgba(239,131,194,.055);color:#ddd7e2;font-size:12px;line-height:1.55}
+.confirm-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch}.confirm-copy,.confirm-box{border:1px solid var(--line);background:rgba(6,16,37,.80);padding:26px}.confirm-copy h2,.confirm-box h2{margin:0 0 12px;font-size:22px;font-weight:400}.confirm-copy p,.confirm-box p{margin:0;color:#d5d0dd;font-size:13px;line-height:1.62}.confirm-box label{display:block;color:var(--pink);font-size:11px;letter-spacing:.09em;margin:20px 0 8px}.confirm-box input{width:100%;border:1px solid rgba(255,255,255,.22);background:rgba(2,10,25,.44);color:white;padding:14px 13px;outline:none}.confirm-box input:focus{border-color:var(--pink)}.confirm-btn{margin-top:14px;width:100%;border:1px solid var(--pink);background:var(--pink);color:#101426;padding:15px 18px;font-weight:700;cursor:pointer}.confirm-btn:hover{filter:brightness(1.04)}.confirmation{display:none;margin-top:14px;padding:12px 13px;border:1px solid rgba(57,168,221,.42);background:rgba(57,168,221,.08);color:#e9f8ff;font-size:12px;line-height:1.5}
+footer{position:relative;z-index:2;border:1px solid rgba(255,255,255,.25);margin:30px 18px 0;padding:18px 20px;display:flex;justify-content:space-between;gap:20px;color:#aaa7b6;font-size:12px;line-height:1.55}.footer-right{text-align:right;color:#ddd8e2}.pink{color:var(--pink)}
+@media(max-width:800px){h1{font-size:52px}.steps{grid-template-columns:1fr}.step{min-height:auto}.step .tiny{position:static;margin-top:22px}.project-list{grid-template-columns:repeat(2,1fr)}.confirm-wrap{grid-template-columns:1fr}}
+@media(max-width:600px){.page{padding:0 12px 20px}.page:before{left:4px}.page:after{right:4px}header{min-height:60px;padding:0 4px}.brand{font-size:14px}.status{padding:8px 10px;font-size:9px}.hero{padding:36px 8px 22px}h1{font-size:40px;line-height:1.03}.intro{padding:20px 18px}.intro p{font-size:13px}.section{padding:26px 8px 14px}.step,.project-card,.confirm-copy,.confirm-box{padding:22px 18px}.project-list{grid-template-columns:1fr 1fr;gap:8px}.item{min-height:168px;padding:17px 13px 13px}.item-icon{font-size:20px;margin-bottom:15px}.item strong{font-size:10px}.item span{font-size:9px}footer{margin:24px 8px 0;flex-direction:column}.footer-right{text-align:left}.city{width:58%;opacity:.68}.water{left:0}}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true"><div class="city left"><div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div></div><div class="city right"><div class="tower t1"></div><div class="tower t2"></div><div class="tower t3"></div><div class="tower t4"></div><div class="tower t5"></div></div><div class="water"></div><div class="haze"></div></div>
+<main class="page">
+<header><div class="brand"><span class="dot">●</span>MONOS</div><div class="status">PROJECT GUIDE / 001</div></header>
+<section class="hero">
+<div class="crumb"><span class="dot">●</span><span>WELCOME / GETTING STARTED</span></div>
+<div class="kicker">YOUR MONOS PROJECT GUIDE</div>
+<h1>HI <span id="heroName">CLIENT</span>.<br><span>HERE'S WHAT HAPPENS NEXT.</span></h1>
+<div class="divider"></div>
+<div class="intro"><p>Thanks for reaching out about a website for <strong id="introBusiness">BUSINESS</strong>.</p><p>This quick guide shows you exactly what happens from here, what I’ll need from you, and how your website moves from idea to finished first version.</p></div>
+</section>
+<section class="section">
+<div class="section-title"><span class="dot">●</span>YOUR PROJECT PROCESS</div>
+<div class="steps">
+<article class="step"><div class="step-num">01 <span>/</span></div><h3>CONFIRM + CHECKOUT</h3><p>Once you’re ready to move forward, I’ll send your <strong>$100 checkout link</strong>. Payment officially starts your project.</p><div class="tiny">ONE-TIME WEBSITE PRICE</div></article>
+<article class="step"><div class="step-num">02 <span>/</span></div><h3>COMPLETE YOUR INTAKE</h3><p>After payment, you’ll receive a short intake form where you’ll answer a few questions about your business, services, contact information, photos, branding, social links, and anything you’d like included on the website.</p><div class="tiny">YOU SEND THE DETAILS — I ORGANIZE THEM</div></article>
+<article class="step"><div class="step-num">03 <span>/</span></div><h3>I BUILD + YOU REVIEW</h3><p>I’ll use everything you send to design the first version around your business. You’ll review it, send any final adjustments, and we’ll get it ready to go live.</p><div class="tiny">BUILT FOR YOUR BUSINESS</div></article>
+</div></section>
+<section class="section"><div class="section-title"><span class="dot">●</span>WHAT YOU'RE GETTING</div>
+<div class="project-card"><h2>A WEBSITE BUILT AROUND <span class="pink" id="projectBusiness">BUSINESS.</span></h2><p class="sub">You don’t need to figure out the layout, structure, or design yourself. I’ll take the information and content you provide and turn it into a polished website that feels consistent with your business.</p>
+<div class="project-list">
+<div class="item"><div class="item-icon">▥</div><strong>CUSTOM DESIGN</strong><span>Designed around your branding, content, and the look of your business.</span><div class="item-arrow">→</div></div>
+<div class="item"><div class="item-icon">▣</div><strong>MOBILE-FRIENDLY</strong><span>Built to look clean and easy to use on phones and desktop.</span><div class="item-arrow">→</div></div>
+<div class="item"><div class="item-icon">✦</div><strong>YOUR BUSINESS INFO</strong><span>Services, photos, contact details, socials, and the information customers need.</span><div class="item-arrow">→</div></div>
+<div class="item"><div class="item-icon">✳</div><strong>REVIEW + ADJUSTMENTS</strong><span>You’ll see the first version before we finish and can tell me what you want adjusted.</span><div class="item-arrow">→</div></div>
+</div>
+<div class="note"><strong>YOU DON’T NEED EVERYTHING FIGURED OUT.</strong><br>If you already have a logo, flyer, colors, photos, or a social page, I can use those as the starting point. If not, I’ll help shape the direction from what you provide.</div></div></section>
+<section class="section" id="confirm"><div class="section-title"><span class="dot">●</span>READY TO MOVE FORWARD?</div>
+<div class="confirm-wrap"><div class="confirm-copy"><h2>THAT'S IT.</h2><p>If the process above makes sense and you’d like to continue, confirm below. Once you’ve finished, just message me and I’ll send over your checkout link.</p></div>
+<div class="confirm-box"><h2>PROJECT CONFIRMATION</h2><p>This isn’t a contract. It simply lets you confirm that you’ve reviewed the process and want to continue to the payment step.</p><label for="clientName">TYPE YOUR NAME</label><input id="clientName" type="text" placeholder="Your name" autocomplete="name"><button class="confirm-btn" type="button" onclick="confirmProject()">CONFIRM & CONTINUE →</button><div class="confirmation" id="confirmation">✓ Confirmed. Message Michael and let him know you’re finished so he can send your checkout link.</div></div></div></section>
+<footer><div><span class="pink">●</span> MONOS<br>Affordable websites built around your business.</div><div class="footer-right">PROJECT GUIDE / <span id="footerBusiness">BUSINESS</span><br><span class="pink">NEXT STEP: CHECKOUT</span></div></footer>
+</main>
+<script>
+const params = new URLSearchParams(window.location.search);
+const clientNameParam = params.get('name') || 'CLIENT';
+const businessNameParam = params.get('business') || 'BUSINESS';
+
+document.getElementById('heroName').textContent = clientNameParam.toUpperCase();
+document.getElementById('introBusiness').textContent = businessNameParam;
+document.getElementById('projectBusiness').textContent = businessNameParam.toUpperCase() + '.';
+document.getElementById('footerBusiness').textContent = businessNameParam.toUpperCase();
+document.getElementById('clientName').placeholder = clientNameParam;
+
+function confirmProject(){
+  const input=document.getElementById('clientName');
+  const box=document.getElementById('confirmation');
+  if(!input.value.trim()){
+    input.focus();
+    input.style.borderColor='#ef83c2';
+    return;
+  }
+  box.style.display='block';
+  input.disabled=true;
+}
+</script>
+</body>
+</html>
