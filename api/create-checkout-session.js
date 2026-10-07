@@ -19,7 +19,9 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({
+      error: 'Method not allowed'
+    });
   }
 
   try {
@@ -27,7 +29,7 @@ export default async function handler(req, res) {
 
     const tiers = {
       STARTER: {
-        amount: 10000,
+        amount: 6900, // $69.00
         label: 'STARTER'
       }
     };
