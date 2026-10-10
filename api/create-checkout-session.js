@@ -4,12 +4,14 @@ export default async function handler(req, res) {
     'https://oneofmike.github.io',
     'https://monos-beta.vercel.app',
     'https://builtbymonos.com',
+    'https://www.builtbymonos.com',
   ];
 
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -26,11 +28,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { tier } = req.body;
+    const { tier } = req.body || {};
 
     const tiers = {
       STARTER: {
-        amount: 12500, // $125.00
+        amount: 12500, // $125.00 in cents
         label: 'STARTER'
       }
     };
@@ -43,45 +45,21 @@ export default async function handler(req, res) {
       });
     }
 
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.status(500).json({
+        error: 'Stripe secret key is not configured'
+      });
+    }
+
     const params = new URLSearchParams();
 
-    params.append('mode', 'payment');
-    params.append('payment_method_types[0]', 'card');
-
-    params.append(
-      'line_items[0][price_data][currency]',
-      'usd'
-    );
-
-    params.append(
-      'line_items[0][price_data][unit_amount]',
-      selected.amount.toString()
-    );
-
-    params.append(
-      'line_items[0][price_data][product_data][name]',
-      'MONOS Custom Website'
-    );
-
-    params.append(
-      'line_items[0][quantity]',
-      '1'
-    );
-
+    params.append('amount', selected.amount.toString());
+    params.append('currency', 'usd');
+    params.append('automatic_payment_methods[enabled]', 'true');
     params.append('metadata[tier]', selected.label);
 
-    params.append(
-      'success_url',
-      'https://builtbymonos.com/payment-success?session_id={CHECKOUT_SESSION_ID}'
-    );
-
-    params.append(
-      'cancel_url',
-      'https://builtbymonos.com/#checkout'
-    );
-
     const stripeResponse = await fetch(
-      'https://api.stripe.com/v1/checkout/sessions',
+      'https://api.stripe.com/v1/payment_intents',
       {
         method: 'POST',
         headers: {
@@ -92,23 +70,23 @@ export default async function handler(req, res) {
       }
     );
 
-    const session = await stripeResponse.json();
+    const paymentIntent = await stripeResponse.json();
 
     if (!stripeResponse.ok) {
-      console.error(session);
+      console.error('Stripe error:', paymentIntent);
 
       return res.status(500).json({
-        error: 'Unable to create checkout session'
+        error: 'Unable to create payment'
       });
     }
 
     return res.status(200).json({
-      checkoutUrl: session.url,
-      sessionId: session.id
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('Checkout error:', error);
 
     return res.status(500).json({
       error: 'Server error'
