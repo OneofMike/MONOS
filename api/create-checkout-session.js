@@ -1,3 +1,4 @@
+
 export default async function handler(req, res) {
   const allowedOrigins = [
     'https://oneofmike.github.io',
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
 
     const tiers = {
       STARTER: {
-        amount: 10000, // $100.00
+        amount: 12500, // $125.00
         label: 'STARTER'
       }
     };
@@ -44,13 +45,43 @@ export default async function handler(req, res) {
 
     const params = new URLSearchParams();
 
-    params.append('amount', selected.amount.toString());
-    params.append('currency', 'usd');
-    params.append('automatic_payment_methods[enabled]', 'true');
+    params.append('mode', 'payment');
+    params.append('payment_method_types[0]', 'card');
+
+    params.append(
+      'line_items[0][price_data][currency]',
+      'usd'
+    );
+
+    params.append(
+      'line_items[0][price_data][unit_amount]',
+      selected.amount.toString()
+    );
+
+    params.append(
+      'line_items[0][price_data][product_data][name]',
+      'MONOS Custom Website'
+    );
+
+    params.append(
+      'line_items[0][quantity]',
+      '1'
+    );
+
     params.append('metadata[tier]', selected.label);
 
+    params.append(
+      'success_url',
+      'https://builtbymonos.com/payment-success?session_id={CHECKOUT_SESSION_ID}'
+    );
+
+    params.append(
+      'cancel_url',
+      'https://builtbymonos.com/#checkout'
+    );
+
     const stripeResponse = await fetch(
-      'https://api.stripe.com/v1/payment_intents',
+      'https://api.stripe.com/v1/checkout/sessions',
       {
         method: 'POST',
         headers: {
@@ -61,19 +92,19 @@ export default async function handler(req, res) {
       }
     );
 
-    const paymentIntent = await stripeResponse.json();
+    const session = await stripeResponse.json();
 
     if (!stripeResponse.ok) {
-      console.error(paymentIntent);
+      console.error(session);
 
       return res.status(500).json({
-        error: 'Unable to create payment'
+        error: 'Unable to create checkout session'
       });
     }
 
     return res.status(200).json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id
+      checkoutUrl: session.url,
+      sessionId: session.id
     });
 
   } catch (error) {
