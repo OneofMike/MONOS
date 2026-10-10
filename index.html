@@ -255,12 +255,8 @@ paymentButton.addEventListener('click',async function () {
     });
     if (result.error) throw new Error(result.error.message);
     if (result.paymentIntent?.status === 'succeeded') {
-      // The old review page routed buyers to industry-specific intake pages.
-      const industry = localStorage.getItem('monosIndustry');
-      const intake = industry === 'Cleaning Business' ? 'cleaning-intake.html' :
-        industry === 'Event Planner / Balloon Decor' ? 'event-services-intake.html' :
-        industry === 'Treat / Baking Business' ? 'intake.html?industry=treats' : 'intake.html?industry=other';
-      window.location.assign(intake);
+      
+      window.location.assign('intake.html');
     } else {
       checkoutError('Payment is processing. Please check your payment confirmation.');
     }
