@@ -3,12 +3,14 @@ export default async function handler(req, res) {
     'https://oneofmike.github.io',
     'https://monos-beta.vercel.app',
     'https://builtbymonos.com',
+    'https://www.builtbymonos.com',
   ];
 
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -19,7 +21,9 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({
+      error: 'Method not allowed'
+    });
   }
 
   try {
@@ -27,12 +31,14 @@ export default async function handler(req, res) {
     const airtableBaseId = process.env.AIRTABLE_BASE_ID;
     const cleaningTableId = process.env.AIRTABLE_CLEANING_TABLE_ID;
     const eventTableId = process.env.AIRTABLE_EVENT_TABLE_ID;
+    const creatorTableId = process.env.AIRTABLE_CREATOR_TABLE_ID;
 
     if (
       !airtableToken ||
       !airtableBaseId ||
       !cleaningTableId ||
-      !eventTableId
+      !eventTableId ||
+      !creatorTableId
     ) {
       return res.status(500).json({
         error: 'Airtable is not configured'
@@ -42,11 +48,16 @@ export default async function handler(req, res) {
     const data = req.body || {};
 
     const isEvent =
-     data.industry === 'Event Planner / Balloon Decor';
+      data.industry === 'Event Planner / Balloon Decor';
+
+    const isCreator =
+      data.industry === 'Content Creator';
 
     const selectedTableId = isEvent
       ? eventTableId
-      : cleaningTableId;
+      : isCreator
+        ? creatorTableId
+        : cleaningTableId;
 
     // ----------------------------
     // PAYMENT UPDATE
@@ -72,6 +83,7 @@ export default async function handler(req, res) {
             paymentIntent.payment_method?.billing_details || {};
 
           name = billingDetails.name || '';
+
           email =
             billingDetails.email ||
             paymentIntent.receipt_email ||
@@ -87,18 +99,14 @@ export default async function handler(req, res) {
         });
       }
 
-      /*
-       * Search BOTH intake tables.
-       * This lets payment updates work regardless of which
-       * intake the customer originally submitted.
-       */
       const formula = encodeURIComponent(
         `{Submission ID}="${submissionId.replace(/"/g, '\\"')}"`
       );
 
       const tablesToSearch = [
         cleaningTableId,
-        eventTableId
+        eventTableId,
+        creatorTableId
       ];
 
       let record = null;
@@ -188,10 +196,13 @@ export default async function handler(req, res) {
     }
 
     // ----------------------------
-    // EVENT + BALLOON INTAKE
+    // BUILD AIRTABLE FIELDS
     // ----------------------------
     let fields;
 
+    // ----------------------------
+    // EVENT + BALLOON INTAKE
+    // ----------------------------
     if (isEvent) {
       fields = {
         'Submission ID': data.submissionId || '',
@@ -233,7 +244,6 @@ export default async function handler(req, res) {
           : '',
 
         'Service Details': data.serviceDetails || '',
-
         'Pricing Display': data.pricingDisplay || '',
 
         'Pricing Method': Array.isArray(data.pricingMethod)
@@ -242,7 +252,6 @@ export default async function handler(req, res) {
 
         'Pricing Details': data.pricingDetails || '',
         'Deposit Required': data.depositRequired || '',
-
         'Booking Flow': data.bookingFlow || '',
 
         'Customer Info': Array.isArray(data.customerInfo)
@@ -283,6 +292,58 @@ export default async function handler(req, res) {
           : '',
 
         'Final Details': data.finalDetails || ''
+      };
+    }
+
+    // ----------------------------
+    // CREATOR INTAKE
+    // ----------------------------
+    else if (isCreator) {
+      fields = {
+        'Submission ID': data.submissionId || '',
+        'Industry': 'Content Creator',
+
+        'First Name': data.firstName || '',
+        'Last Name': data.lastName || '',
+        'Email': data.businessEmail || '',
+
+        'Creator Name': data.creatorName || '',
+        'Creator Brand': data.creatorBrand || '',
+        'Main Creator Profile': data.mainLink || '',
+        'What They Create': data.whatYouCreate || '',
+
+        'Instagram': data.instagram || '',
+        'TikTok': data.tiktok || '',
+        'YouTube': data.youtube || '',
+        'Twitch': data.twitch || '',
+        'X / Twitter': data.twitter || '',
+        'Spotify': data.spotify || '',
+        'Shop / Booking': data.shopOrBooking || '',
+        'Other Link': data.otherLink || '',
+        'Other Links': data.otherLinks || '',
+
+        'Website Content': Array.isArray(data.pages)
+          ? data.pages.join(', ')
+          : '',
+
+        'Must Haves': data.mustHave || '',
+
+        'Website Vibe': Array.isArray(data.style)
+          ? data.style.join(', ')
+          : '',
+
+        'Colors They Like': data.colorsLove || '',
+        'Colors To Avoid': data.colorsAvoid || '',
+        'Inspiration / References': data.styleNotes || '',
+
+        'Domain': data.domain || '',
+        'Preferred Contact Method':
+          data.preferredContactMethod || '',
+
+        'Final Notes': data.finalDetails || '',
+
+        'Payment Status': 'Pending',
+        'Submission Date': new Date().toISOString()
       };
     }
 
@@ -401,7 +462,9 @@ export default async function handler(req, res) {
 
     if (!airtableResponse.ok) {
       const text = await airtableResponse.text();
+
       console.error('AIRTABLE ERROR:', text);
+
       return res.status(502).json({
         error: 'Airtable request failed',
         details: text
