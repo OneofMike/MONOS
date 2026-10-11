@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MONOS — Creator Intake</title>
+<meta name="description" content="Tell MONOS about your creator world so your custom website can be built around you.">
+<style>
+:root{
+  --bg:#0d0b14;
+  --panel:#171320;
+  --panel2:#21182c;
+  --ink:#fff8f4;
+  --muted:#b9afbf;
+  --pink:#ff77b7;
+  --lime:#c9ff63;
+  --sky:#7ad7ff;
+  --lav:#b89cff;
+  --coral:#ff946e;
+  --line:#3a2d48;
+  --shadow:#050408;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 8%,rgba(255,119,183,.14),transparent 24%),
+    radial-gradient(circle at 92% 10%,rgba(122,215,255,.09),transparent 20%),
+    linear-gradient(180deg,#0c0a12,#110d18 55%,#0d0b14);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.13;
+  background-image:radial-gradient(circle,rgba(255,255,255,.35) 1px,transparent 1px);
+  background-size:18px 18px;
+  mask-image:linear-gradient(to bottom,black,transparent 78%);
+}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit}
+.wrap{width:min(980px,calc(100% - 32px));margin:auto}
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 0;border-bottom:1px solid var(--line)
+}
+.brand{
+  font-weight:900;letter-spacing:-.04em;font-size:20px;
+  display:flex;align-items:center;gap:9px
+}
+.brand-mark{
+  width:18px;height:18px;background:var(--pink);
+  box-shadow:5px 5px 0 var(--lav);
+  clip-path:polygon(0 0,70% 0,70% 24%,100% 24%,100% 100%,30% 100%,30% 76%,0 76%)
+}
+.smallcaps{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  text-transform:uppercase;letter-spacing:.13em;font-size:10px;color:var(--muted);font-weight:800
+}
+.hero{padding:70px 0 42px;max-width:780px}
+.hero .eyebrow{color:var(--lime);margin-bottom:16px}
+h1,h2,h3,p{margin-top:0}
+h1{
+  font-size:clamp(42px,7vw,76px);line-height:.97;letter-spacing:-.065em;
+  margin-bottom:22px
+}
+h1 span{color:var(--pink)}
+.hero p{
+  max-width:680px;color:#d3cad8;font-size:17px;line-height:1.7;margin-bottom:0
+}
+main{padding:10px 0 80px}
+.section{
+  margin:0 0 34px;
+  padding-top:26px;
+  border-top:1px solid var(--line)
+}
+.section-head{margin-bottom:20px}
+.section-kicker{color:var(--pink);margin-bottom:9px}
+.section h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.045em;line-height:1.08;margin-bottom:8px}
+.section-head p{color:var(--muted);line-height:1.65;max-width:700px;margin-bottom:0}
+.card{
+  background:linear-gradient(180deg,rgba(33,24,44,.95),rgba(22,18,31,.95));
+  border:1px solid var(--line);
+  box-shadow:7px 7px 0 var(--shadow);
+  padding:24px;margin-bottom:16px
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:block}
+.field span,.label{
+  display:block;font-size:12px;font-weight:800;margin-bottom:8px;color:#f5edf7
+}
+.hint{font-size:11px;color:#948a9b;margin-top:7px;line-height:1.5}
+input,textarea,select{
+  width:100%;color:var(--ink);background:#0f0c16;border:1px solid #4a3a58;
+  padding:14px 14px;outline:none;border-radius:0
+}
+textarea{min-height:125px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,119,183,.12)}
+.platform-grid,.choice-grid,.vibe-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px
+}
+.platform{position:relative}
+.platform label{display:block}
+.platform-name{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:11px;font-weight:900;color:var(--muted);pointer-events:none
+}
+.platform input{padding-left:90px}
+.check{
+  position:relative;display:flex;align-items:flex-start;gap:10px;
+  background:#0f0c16;border:1px solid #493958;padding:14px;cursor:pointer;min-height:60px
+}
+.check input{width:auto;margin-top:2px;accent-color:var(--pink)}
+.check strong{display:block;font-size:13px;margin-bottom:3px}
+.check small{display:block;color:var(--muted);line-height:1.45}
+.vibe{
+  display:flex;align-items:center;gap:9px;background:#0f0c16;border:1px solid #493958;
+  padding:12px 13px;cursor:pointer;font-weight:800;font-size:13px
+}
+.vibe input{width:auto;accent-color:var(--lime)}
+.upload{
+  border:1px dashed #755d8c;background:#120e19;padding:22px;text-align:center
+}
+.upload input{background:transparent;border:0;padding:10px 0;color:var(--muted)}
+.upload strong{display:block;font-size:15px;margin-bottom:6px}
+.upload p{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:0}
+.callout{
+  display:flex;gap:12px;align-items:flex-start;background:#20162a;border:1px solid #583e6f;
+  padding:16px;margin-top:14px
+}
+.callout b{color:var(--lime)}
+.dot{width:10px;height:10px;background:var(--lime);margin-top:5px;box-shadow:3px 3px 0 var(--pink);flex:none}
+.submit-wrap{
+  padding:28px 0 0;
+  border-top:1px solid var(--line);
+  margin-top:38px;
+  text-align:center
+}
+.btn{
+  appearance:none;border:1px solid #ffb2d4;color:#140b12;background:var(--pink);
+  padding:16px 24px;font-weight:900;cursor:pointer;box-shadow:5px 5px 0 #050408;
+  min-width:min(100%,340px)
+}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 #050408}
+.submit-note{
+  color:var(--muted);font-size:12px;line-height:1.6;margin:14px auto 0;max-width:560px
+}
+.done{
+  display:none;text-align:center;padding:70px 20px
+}
+.done.show{display:block}
+.done h2{font-size:clamp(34px,5vw,58px);letter-spacing:-.05em}
+.done p{color:var(--muted);max-width:620px;margin:0 auto 22px;line-height:1.7}
+.pixel-stars{font-family:ui-monospace,monospace;color:var(--lime);letter-spacing:7px;margin-bottom:18px}
+@media(max-width:700px){
+  .hero{padding-top:48px}
+  .grid2,.platform-grid,.choice-grid,.vibe-grid{grid-template-columns:1fr}
+  .card{padding:18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="brand" href="https://builtbymonos.com">
+    <span class="brand-mark" aria-hidden="true"></span>
+    MONOS
+  </a>
+  <span class="smallcaps">creator intake / after payment</span>
+</header>
+
+<section class="hero">
+  <div class="smallcaps eyebrow">YOU’RE IN :)</div>
+  <h1>Now tell me about <span>your world.</span></h1>
+  <p>You don’t need a perfect brand, a finished plan, or every asset ready. Send me what you already have and tell me what you want your site to feel like. I’ll organize the rest.</p>
+</section>
+
+<main>
+<form id="creatorIntake">
+
+  <section class="section">
+    <div class="section-head">
+      <div class="smallcaps section-kicker">01 / YOU + YOUR CREATOR WORLD</div>
+      <h2>Who am I building for?</h2>
+      <p>Just the basics. No creator category required.</p>
+    </div>
+
+    <div class="card grid2">
+      <label class="field"><span>Your name *</span><input name="name" required autocomplete="name"></label>
+      <label class="field"><span>Email *</span><input name="email" type="email" required autocomplete="email"></label>
+      <label class="field"><span>Creator / brand name</span><input name="brand" placeholder="Optional"></label>
+      <label class="field"><span>Main social or profile link *</span><input name="main_link" type="url" required placeholder="https://..."></label>
+    </div>
+
+    <div class="card">
+      <label class="field">
+        <span>What do you create? *</span>
+        <textarea name="what_you_create" required placeholder="Tell me in your own words — gaming streams, beauty videos, reactions, music, lifestyle content, skits, art, something completely different..."></textarea>
+      </label>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="smallcaps section-kicker">02 / WHERE YOU LIVE ONLINE</div>
+      <h2>Where can people find you?</h2>
+      <p>Paste whatever applies. Leave anything you don’t use blank.</p>
+    </div>
+
+    <div class="card platform-grid">
+      <div class="platform"><span class="platform-name">Instagram</span><input name="instagram" placeholder="@yourname"></div>
+      <div class="platform"><span class="platform-name">TikTok</span><input name="tiktok" placeholder="@yourname"></div>
+      <div class="platform"><span class="platform-name">YouTube</span><input name="youtube" placeholder="Channel name or link"></div>
+      <div class="platform"><span class="platform-name">Twitch</span><input name="twitch" placeholder="@yourname"></div>
+      <div class="platform"><span class="platform-name">X / Twitter</span><input name="twitter" placeholder="@yourname"></div>
+      <div class="platform"><span class="platform-name">Spotify</span><input name="spotify" placeholder="Artist name or link"></div>
+      <div class="platform"><span class="platform-name">Shop / Booking</span><input name="shop" placeholder="Paste link"></div>
+      <div class="platform"><span class="platform-name">Other</span><input name="other_link" placeholder="Username or link"></div>
+    </div>
+
+    <div class="card">
+      <label class="field"><span>Anything else you want connected?</span><textarea name="other_links" placeholder="Patreon, Discord, newsletter, portfolio, affiliate links, extra usernames, or anything else."></textarea></label>
+      <div class="hint">Usernames are totally fine. If you already have a link handy, you can paste that instead.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="smallcaps section-kicker">03 / WHAT YOUR SITE SHOULD HOLD</div>
+      <h2>What should people be able to find?</h2>
+      <p>Choose what matters to your world. This is better than forcing you into a creator category.</p>
+    </div>
+
+    <div class="card choice-grid">
+      <label class="check"><input type="checkbox" name="site_content" value="Content / videos"><span><strong>Content / videos</strong><small>Your latest or featured content.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Social links"><span><strong>Social links</strong><small>Everything in one easy place.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="About me"><span><strong>About me</strong><small>Your story, personality, or intro.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Photos / gallery"><span><strong>Photos / gallery</strong><small>Images, shoots, looks, or moments.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Stream schedule"><span><strong>Stream schedule</strong><small>Where and when you go live.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Music / releases"><span><strong>Music / releases</strong><small>Songs, projects, videos, listening links.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Shop / products"><span><strong>Shop / products</strong><small>Merch, products, digital goods.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Booking / contact"><span><strong>Booking / contact</strong><small>Make it easy to reach you.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Brand / collaboration info"><span><strong>Brand / collaboration info</strong><small>Partnerships, press, brand inquiries.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Projects"><span><strong>Projects</strong><small>Anything you’re building outside your feed.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Newsletter / email"><span><strong>Newsletter / email</strong><small>A place for people to stay connected.</small></span></label>
+      <label class="check"><input type="checkbox" name="site_content" value="Something else"><span><strong>Something else</strong><small>If it matters to your world, tell me.</small></span></label>
+    </div>
+
+    <div class="card">
+      <label class="field"><span>Anything you definitely want on the website?</span><textarea name="must_have" placeholder="Specific pages, links, features, sections, calls-to-action, or ideas you already have."></textarea></label>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="smallcaps section-kicker">04 / MAKE IT FEEL LIKE YOU</div>
+      <h2>How should your site feel?</h2>
+      <p>Pick as many as fit. These are directions, not boxes.</p>
+    </div>
+
+    <div class="card vibe-grid">
+      <label class="vibe"><input type="checkbox" name="vibe" value="Cozy"> Cozy</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Bold"> Bold</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Clean"> Clean</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Playful"> Playful</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Dark"> Dark</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Colorful"> Colorful</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Minimal"> Minimal</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Retro"> Retro</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Futuristic"> Futuristic</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Lo-fi"> Lo-fi</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Luxury"> Luxury</label>
+      <label class="vibe"><input type="checkbox" name="vibe" value="Expressive / chaotic"> Expressive / chaotic</label>
+    </div>
+
+    <div class="card grid2">
+      <label class="field"><span>Colors you love</span><input name="colors_love" placeholder="Pink, black, earth tones, neon green..."></label>
+      <label class="field"><span>Colors you do NOT want</span><input name="colors_avoid" placeholder="Optional"></label>
+    </div>
+
+    <div class="card">
+      <label class="field"><span>Visual references you love</span><textarea name="references" placeholder="Paste links to websites, creators, Pinterest boards, posts, moodboards, album art, or anything whose vibe feels right."></textarea></label>
+    </div>
+
+    <div class="card upload">
+      <strong>Email your inspiration pics + visual assets</strong>
+      <p>Send any inspiration photos, screenshots, logos, graphics, cover art, flyers, or other visual references to <a href="mailto:builtbymonos@gmail.com" style="color:var(--pink);font-weight:800">builtbymonos@gmail.com</a>.</p>
+      <div class="hint">Use the same name or email you entered on this form so I can match everything to your project.</div>
+    </div>
+
+    <div class="callout">
+      <span class="dot" aria-hidden="true"></span>
+      <div><b>You do not need to have everything ready.</b><br><span class="hint">Send whatever you already have. I’ll work from there.</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="smallcaps section-kicker">05 / LAST DETAILS</div>
+      <h2>Anything else before I start?</h2>
+      <p>A couple final details and your brief is ready.</p>
+    </div>
+
+    <div class="card grid2">
+      <label class="field"><span>Domain you’d like</span><input name="domain" placeholder="yourname.com"><div class="hint">Leave it blank if you’re not sure. I’ll help you choose.</div></label>
+      <label class="field"><span>Best way to reach you</span><select name="contact_method"><option>Email</option><option>Instagram DM</option><option>Text</option><option>Other</option></select></label>
+    </div>
+
+    <div class="card">
+      <label class="field"><span>Anything else I should know?</span><textarea name="final_notes" placeholder="Anything about your audience, goals, personality, dream site, upcoming launch, or something I didn’t ask."></textarea></label>
+    </div>
+
+    <div class="callout">
+      <span class="dot" aria-hidden="true"></span>
+      <div><b>That’s it.</b><br><span class="hint">I’ll review everything and start putting your world together.</span></div>
+    </div>
+  </section>
+
+  <div class="submit-wrap">
+    <button class="btn" type="submit">SEND MY CREATOR BRIEF →</button>
+    <p class="submit-note">Your answers will be sent securely when you submit.</p>
+  </div>
+</form>
+
+<section class="done" id="done">
+  <div class="pixel-stars">✦ ✦ ✦</div>
+  <h2>Your world is in my hands :)</h2>
+  <p>Your creator brief is ready. I’ll use what you sent to start shaping the site around you.</p>
+  <a class="btn" href="https://builtbymonos.com">Back to MONOS →</a>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+  const form = document.getElementById('creatorIntake');
+  const done = document.getElementById('done');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    if(!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'SENDING…';
+
+    const fd = new FormData(form);
+    const fullName = (fd.get('name') || '').trim();
+    const nameParts = fullName.split(/\s+/).filter(Boolean);
+    const firstName = nameParts.shift() || '';
+    const lastName = nameParts.join(' ');
+
+    const checkedValues = (name) =>
+      [...form.querySelectorAll(`[name="${name}"]:checked`)].map(el => el.value);
+
+    const payload = {
+      submissionId: crypto.randomUUID(),
+      industry: 'Content Creator',
+
+      // Common MONOS intake fields for the existing Airtable backend
+      firstName,
+      lastName,
+      businessName: (fd.get('brand') || fullName || 'Creator').trim(),
+      businessEmail: (fd.get('email') || '').trim(),
+      contactInstagram: (fd.get('instagram') || '').trim(),
+      contactFacebook: '',
+
+      // Creator-specific intake details
+      creatorName: fullName,
+      creatorBrand: (fd.get('brand') || '').trim(),
+      mainLink: (fd.get('main_link') || '').trim(),
+      whatYouCreate: (fd.get('what_you_create') || '').trim(),
+
+      instagram: (fd.get('instagram') || '').trim(),
+      tiktok: (fd.get('tiktok') || '').trim(),
+      youtube: (fd.get('youtube') || '').trim(),
+      twitch: (fd.get('twitch') || '').trim(),
+      twitter: (fd.get('twitter') || '').trim(),
+      spotify: (fd.get('spotify') || '').trim(),
+      shopOrBooking: (fd.get('shop') || '').trim(),
+      otherLink: (fd.get('other_link') || '').trim(),
+      otherLinks: (fd.get('other_links') || '').trim(),
+
+      pages: checkedValues('site_content'),
+      mustHave: (fd.get('must_have') || '').trim(),
+
+      style: checkedValues('vibe'),
+      colorsLove: (fd.get('colors_love') || '').trim(),
+      colorsAvoid: (fd.get('colors_avoid') || '').trim(),
+      styleNotes: (fd.get('references') || '').trim(),
+
+      domain: (fd.get('domain') || '').trim(),
+      preferredContactMethod: (fd.get('contact_method') || '').trim(),
+      finalDetails: (fd.get('final_notes') || '').trim()
+    };
+
+    localStorage.setItem('monosWebsiteIntake', JSON.stringify(payload));
+
+    try {
+      const response = await fetch(
+        'https://monos-beta.vercel.app/api/submit-intake',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if(!response.ok) throw new Error('Submission failed');
+
+      window.location.href = 'confirmation.html';
+    } catch(error) {
+      console.error('Intake submission failed:', error);
+      alert('Something went wrong submitting your creator brief. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    }
+  });
+})();
+</script>
+</body>
+</html>
