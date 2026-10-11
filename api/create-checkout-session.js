@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
     const tiers = {
       STARTER: {
-        amount: 50, // $.50 in cents
+        amount: 15000, // $150.00 in cents
         label: 'STARTER'
       }
     };
