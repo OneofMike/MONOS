@@ -31,14 +31,12 @@ export default async function handler(req, res) {
     const airtableBaseId = process.env.AIRTABLE_BASE_ID;
     const cleaningTableId = process.env.AIRTABLE_CLEANING_TABLE_ID;
     const eventTableId = process.env.AIRTABLE_EVENT_TABLE_ID;
-    const creatorTableId = process.env.AIRTABLE_CREATOR_TABLE_ID;
 
     if (
       !airtableToken ||
       !airtableBaseId ||
       !cleaningTableId ||
-      !eventTableId ||
-      !creatorTableId
+      !eventTableId
     ) {
       return res.status(500).json({
         error: 'Airtable is not configured'
@@ -55,9 +53,7 @@ export default async function handler(req, res) {
 
     const selectedTableId = isEvent
       ? eventTableId
-      : isCreator
-        ? creatorTableId
-        : cleaningTableId;
+      : cleaningTableId;
 
     // ----------------------------
     // PAYMENT UPDATE
@@ -105,8 +101,7 @@ export default async function handler(req, res) {
 
       const tablesToSearch = [
         cleaningTableId,
-        eventTableId,
-        creatorTableId
+        eventTableId
       ];
 
       let record = null;
@@ -158,14 +153,6 @@ export default async function handler(req, res) {
         updateFields['Payment Intent ID'] = data.paymentIntentId;
       }
 
-      if (name) {
-        updateFields['Billing Name'] = name;
-      }
-
-      if (email) {
-        updateFields['Billing Email'] = email;
-      }
-
       const updateResponse = await fetch(
         `https://api.airtable.com/v0/${airtableBaseId}/${paymentTableId}/${record.id}`,
         {
@@ -195,15 +182,64 @@ export default async function handler(req, res) {
       });
     }
 
-    // ----------------------------
-    // BUILD AIRTABLE FIELDS
-    // ----------------------------
     let fields;
 
     // ----------------------------
-    // EVENT + BALLOON INTAKE
+    // CREATOR INTAKE
     // ----------------------------
-    if (isEvent) {
+    if (isCreator) {
+      fields = {
+        'Submission ID': data.submissionId || '',
+        'Industry': 'Content Creator',
+
+        'First Name': data.firstName || '',
+        'Last Name': data.lastName || '',
+        'Email': data.businessEmail || '',
+
+        'Creator Name': data.creatorName || '',
+        'Creator Brand': data.creatorBrand || '',
+        'Main Creator Profile': data.mainLink || '',
+        'What They Create': data.whatYouCreate || '',
+
+        'Instagram': data.instagram || '',
+        'TikTok': data.tiktok || '',
+        'YouTube': data.youtube || '',
+        'Twitch': data.twitch || '',
+        'X / Twitter': data.twitter || '',
+        'Spotify': data.spotify || '',
+        'Shop / Booking': data.shopOrBooking || '',
+        'Other Link': data.otherLink || '',
+        'Other Links': data.otherLinks || '',
+
+        'Website Content': Array.isArray(data.pages)
+          ? data.pages
+          : [],
+
+        'Must Haves': data.mustHave || '',
+
+        'Website Vibe': Array.isArray(data.style)
+          ? data.style
+          : [],
+
+        'Colors They Like': data.colorsLove || '',
+        'Colors To Avoid': data.colorsAvoid || '',
+        'Inspiration / References': data.styleNotes || '',
+
+        'Domain': data.domain || '',
+        'Preferred Contact Method':
+          data.preferredContactMethod || '',
+
+        'Final Notes': data.finalDetails || '',
+
+        'Payment Status': 'Pending',
+        'Submission Date': new Date().toISOString()
+      };
+    }
+
+    // ----------------------------
+    // EVENT INTAKE
+    // ----------------------------
+    else if (isEvent) {
       fields = {
         'Submission ID': data.submissionId || '',
         'Industry': data.industry || '',
@@ -282,159 +318,7 @@ export default async function handler(req, res) {
           : '',
 
         'Style Notes': data.styleNotes || '',
-
-        'Materials': Array.isArray(data.materials)
-          ? data.materials.join(', ')
-          : '',
-
-        'Trust Points': Array.isArray(data.trustPoints)
-          ? data.trustPoints.join(', ')
-          : '',
-
         'Final Details': data.finalDetails || ''
-      };
-    }
-
-    // ----------------------------
-    // CREATOR INTAKE
-    // ----------------------------
-    else if (isCreator) {
-      fields = {
-        'Submission ID': data.submissionId || '',
-        'Industry': 'Content Creator',
-
-        'First Name': data.firstName || '',
-        'Last Name': data.lastName || '',
-        'Email': data.businessEmail || '',
-
-        'Creator Name': data.creatorName || '',
-        'Creator Brand': data.creatorBrand || '',
-        'Main Creator Profile': data.mainLink || '',
-        'What They Create': data.whatYouCreate || '',
-
-        'Instagram': data.instagram || '',
-        'TikTok': data.tiktok || '',
-        'YouTube': data.youtube || '',
-        'Twitch': data.twitch || '',
-        'X / Twitter': data.twitter || '',
-        'Spotify': data.spotify || '',
-        'Shop / Booking': data.shopOrBooking || '',
-        'Other Link': data.otherLink || '',
-        'Other Links': data.otherLinks || '',
-
-        'Website Content': Array.isArray(data.pages)
-          ? data.pages.join(', ')
-          : '',
-
-        'Must Haves': data.mustHave || '',
-
-        'Website Vibe': Array.isArray(data.style)
-          ? data.style.join(', ')
-          : '',
-
-        'Colors They Like': data.colorsLove || '',
-        'Colors To Avoid': data.colorsAvoid || '',
-        'Inspiration / References': data.styleNotes || '',
-
-        'Domain': data.domain || '',
-        'Preferred Contact Method':
-          data.preferredContactMethod || '',
-
-        'Final Notes': data.finalDetails || '',
-
-        'Payment Status': 'Pending',
-        'Submission Date': new Date().toISOString()
-      };
-    }
-
-    // ----------------------------
-    // CLEANING INTAKE
-    // ----------------------------
-    else {
-      fields = {
-        'Submission ID': data.submissionId || '',
-        'First Name': data.firstName || '',
-        'Last Name': data.lastName || '',
-
-        'Business Name': data.businessName || '',
-        'Business Phone': data.businessPhone || '',
-        'Business Email': data.businessEmail || '',
-
-        'Instagram': data.contactInstagram || '',
-        'Facebook': data.contactFacebook || '',
-
-        'Business Type': data.businessType || '',
-
-        'Business Highlights': Array.isArray(data.businessHighlights)
-          ? data.businessHighlights
-          : [],
-
-        'Service Areas': Array.isArray(data.serviceAreas)
-          ? data.serviceAreas.join(', ')
-          : '',
-
-        'Business Hours': Array.isArray(data.businessHours)
-          ? data.businessHours
-              .map(item => `${item.day}: ${item.start} - ${item.end}`)
-              .join('\n')
-          : '',
-
-        'Insured': data.insured || '',
-
-        'Services': Array.isArray(data.services)
-          ? data.services
-          : [],
-
-        'Recurring Frequency':
-          Array.isArray(data.recurringFrequency)
-            ? data.recurringFrequency
-            : [],
-
-        'Service Details': data.serviceDetails || '',
-        'Pricing Display': data.pricingDisplay || '',
-
-        'Pricing Method': Array.isArray(data.pricingMethod)
-          ? data.pricingMethod
-          : [],
-
-        'Pricing Details': data.pricingDetails || '',
-        'Deposit Required': data.depositRequired || '',
-        'Booking Flow': data.bookingFlow || '',
-
-        'Customer Info Requested':
-          Array.isArray(data.customerInfo)
-            ? data.customerInfo
-            : [],
-
-        'Show Availability': data.showAvailability || '',
-        'Existing Booking System':
-          data.existingBookingSystem || '',
-        'Booking System': data.bookingSystem || '',
-
-        'Website Sections': Array.isArray(data.pages)
-          ? data.pages
-          : [],
-
-        'Tagline': data.tagline || '',
-
-        'Style': Array.isArray(data.style)
-          ? data.style
-          : [],
-
-        'Style Notes': data.styleNotes || '',
-
-        'Materials': Array.isArray(data.materials)
-          ? data.materials
-          : [],
-
-        'Trust Points': Array.isArray(data.trustPoints)
-          ? data.trustPoints
-          : [],
-
-        'Final Details': data.finalDetails || '',
-
-        'Payment Status': 'Pending',
-        'Submission Date': new Date().toISOString()
       };
     }
 
